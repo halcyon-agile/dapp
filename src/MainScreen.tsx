@@ -39,7 +39,7 @@ function MainScreen() {
     ]
   );
 
-  const [_, setCurrentTime] = useState<Date>(new Date());
+  const [currentTime, setCurrentTime] = useState<Date>(new Date());
 
   // Refactor later to only fetch once logged in
   useEffect(() => {
@@ -48,20 +48,31 @@ function MainScreen() {
     });
 
     getAttendance().then((data) => {
-      console.log({ data });
       setUser({ ...user, attendance: data });
     });
   }, []);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
+    const currentDateTime = new Date();
+    const nextMinuteStart = new Date(
+      currentDateTime.getFullYear(),
+      currentDateTime.getMonth(),
+      currentDateTime.getDate(),
+      currentDateTime.getHours(),
+      currentDateTime.getMinutes() + 1,
+      0, // Reset seconds to 0
+      0 // Reset milliseconds to 0
+    );
+    const delay = nextMinuteStart.getTime() - currentDateTime.getTime();
+
+    const timeoutId = setTimeout(() => {
       setCurrentTime(new Date());
-    }, 60000); // Update every minute (60,000 milliseconds)
+    }, delay);
 
     return () => {
-      clearInterval(intervalId); // Cleanup the interval on component unmount
+      clearTimeout(timeoutId);
     };
-  }, []);
+  }, [currentTime]);
 
   const stopTask = (id: number) => {
     stopTaskApi(id)
