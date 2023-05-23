@@ -23,6 +23,7 @@ const loginUser = async (
       password,
       device_name: "desktop-app",
     });
+    localStorage.setItem("token", loginResponse.data.token);
     customAxios.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${loginResponse.data.token}`;

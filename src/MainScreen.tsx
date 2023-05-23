@@ -89,8 +89,8 @@ function MainScreen() {
       </div>
 
       <div className="flex flex-col w-full gap-4">
-        {activeTasks.map((data, index) => (
-          <div className="flex w-full">
+        {activeTasks.map((data) => (
+          <div className="flex w-full" key={data.id}>
             <div className="w-full p-3 border rounded">
               <div className="flex justify-between">
                 <p className="font-bold text-base text-gray-900">

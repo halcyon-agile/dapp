@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import { Task } from "./api/getTasks";
 
 type State = {
@@ -13,13 +14,20 @@ type Action = {
   setActiveTasks: (firstName: State["activeTasks"]) => void;
 };
 
-const useStore = create<State & Action>((set) => ({
-  user: undefined,
-  setUser: (user) => set(() => ({ user })),
-  screen: "",
-  setScreen: (screen) => set(() => ({ screen })),
-  activeTasks: [],
-  setActiveTasks: (activeTasks: Task[]) => set(() => ({ activeTasks })),
-}));
+const useStore = create(
+  persist<State & Action>(
+    (set) => ({
+      user: undefined,
+      setUser: (user) => set(() => ({ user })),
+      screen: "",
+      setScreen: (screen) => set(() => ({ screen })),
+      activeTasks: [],
+      setActiveTasks: (activeTasks: Task[]) => set(() => ({ activeTasks })),
+    }),
+    {
+      name: "store",
+    }
+  )
+);
 
 export default useStore;
