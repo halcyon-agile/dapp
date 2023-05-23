@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import useStore from "./store";
 import getActiveTasks from "./api/getActiveTasks";
 import stopTaskApi from "./api/stopTask";
@@ -31,6 +31,8 @@ function MainScreen() {
     ]
   );
 
+  const [currentTime, setCurrentTime] = useState<Date>(new Date());
+
   // Refactor later to only fetch once logged in
   useEffect(() => {
     getActiveTasks().then((tasks) => {
@@ -40,6 +42,14 @@ function MainScreen() {
     getAttendance().then((data) => {
       setUser({ ...user, attendance: data });
     });
+
+    const intervalId = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000); // Update every minute (60,000 milliseconds)
+
+    return () => {
+      clearInterval(intervalId); // Cleanup the interval on component unmount
+    };
   }, []);
 
   const stopTask = (id: number) => {
@@ -180,7 +190,7 @@ function MainScreen() {
           </div>
           <a
             className="flex flex-col items-center"
-            href="http://halcyon-pms-web.test/admin/tasks"
+            href="https://lively-geyser-q53l27l9w5bc.vapor-farm-e1.com/admin/tasks"
             target="_blank"
           >
             <svg
