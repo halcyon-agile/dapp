@@ -17,6 +17,14 @@ function formatHourDifference(startedAt: string) {
   const formattedHours = String(hours).padStart(2, "0");
   const formattedMinutes = String(minutes).padStart(2, "0");
 
+  if (isNaN(Number(formattedHours)) || Number(formattedHours) < 0) {
+    return "00:00";
+  }
+
+  if (isNaN(Number(formattedMinutes)) || Number(formattedMinutes) < 0) {
+    return "00:00";
+  }
+
   return `${formattedHours}:${formattedMinutes}`;
 }
 
@@ -31,7 +39,7 @@ function MainScreen() {
     ]
   );
 
-  const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [_, setCurrentTime] = useState<Date>(new Date());
 
   // Refactor later to only fetch once logged in
   useEffect(() => {
@@ -40,9 +48,12 @@ function MainScreen() {
     });
 
     getAttendance().then((data) => {
+      console.log({ data });
       setUser({ ...user, attendance: data });
     });
+  }, []);
 
+  useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentTime(new Date());
     }, 60000); // Update every minute (60,000 milliseconds)
