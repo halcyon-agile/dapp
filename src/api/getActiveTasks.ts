@@ -1,8 +1,23 @@
 import customAxios from "../lib/customAxios";
 import { AxiosError } from "axios";
-import { Task } from "./getTasks";
+export interface TaskTime {
+  id: number;
+  name: string;
+  started_at: string;
+  ended_at: string;
+  task: {
+    id: number;
+    name: string;
+    started_at: string;
+    ended_at: string;
+    project: {
+      id: number;
+      name: string;
+    };
+  };
+}
 
-const getActiveTasks = async (): Promise<Task[] | AxiosError | any> => {
+const getActiveTasks = async (): Promise<TaskTime[] | AxiosError | any> => {
   try {
     const tasks = await customAxios.get("/api/active-tasks");
     return tasks.data;

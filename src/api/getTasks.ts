@@ -4,6 +4,8 @@ import { AxiosError } from "axios";
 export interface Task {
   id: number;
   name: string;
+  started_at: string;
+  ended_at: string;
   project: {
     id: number;
     name: string;

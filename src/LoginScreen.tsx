@@ -25,11 +25,7 @@ function LoginScreen() {
       const user = await loginUser(form.email, form.password);
       setUser(user);
 
-      if (user.has_active_task_time) {
-        setScreen("MainScreen");
-      } else {
-        setScreen("SelectTasksScreen");
-      }
+      setScreen("MainScreen");
     } catch (error: AxiosError | any) {
       setErrorMessage(
         error?.response?.data?.message || "Something went wrong."

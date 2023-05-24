@@ -4,15 +4,16 @@ import getActiveTasks from "./api/getActiveTasks";
 import stopTaskApi from "./api/stopTask";
 import finishWorkApi from "./api/finishWork";
 import getAttendance from "./api/getAttendance";
+import { sendNotification } from "@tauri-apps/api/notification";
+import { DateTime } from "luxon";
 
 function formatHourDifference(startedAt: string) {
-  const currentDate = new Date();
-  const startedDate = new Date(startedAt);
-  const timeDifference = (currentDate.getTime() -
-    startedDate.getTime()) as number;
+  const currentDate = DateTime.now();
+  const startedDate = DateTime.fromISO(startedAt);
+  const timeDifference = currentDate.diff(startedDate);
 
-  const hours = Math.floor(timeDifference / 3600000); // 1 hour = 3600000 milliseconds
-  const minutes = Math.floor((timeDifference % 3600000) / 60000); // 1 minute = 60000 milliseconds
+  const hours = Math.floor(timeDifference.as("hours"));
+  const minutes = Math.floor(timeDifference.as("minutes") % 60);
 
   const formattedHours = String(hours).padStart(2, "0");
   const formattedMinutes = String(minutes).padStart(2, "0");
@@ -29,15 +30,21 @@ function formatHourDifference(startedAt: string) {
 }
 
 function MainScreen() {
-  const [user, activeTasks, setActiveTasks, setScreen, setUser] = useStore(
-    (state) => [
-      state.user,
-      state.activeTasks,
-      state.setActiveTasks,
-      state.setScreen,
-      state.setUser,
-    ]
-  );
+  const [
+    user,
+    activeTasks,
+    setActiveTasks,
+    setScreen,
+    setUser,
+    notificationPermissionGranted,
+  ] = useStore((state) => [
+    state.user,
+    state.activeTasks,
+    state.setActiveTasks,
+    state.setScreen,
+    state.setUser,
+    state.notificationPermissionGranted,
+  ]);
 
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
 
@@ -45,6 +52,7 @@ function MainScreen() {
   useEffect(() => {
     getActiveTasks().then((tasks) => {
       setActiveTasks(tasks);
+      console.log({ activeTasks });
     });
 
     getAttendance().then((data) => {
@@ -88,6 +96,7 @@ function MainScreen() {
     finishWorkApi()
       .then(() => {
         setUser(undefined);
+        setActiveTasks([]);
         setScreen("LoginScreen");
       })
       .catch((error) => {
@@ -116,35 +125,22 @@ function MainScreen() {
             <div className="w-full p-3 border rounded">
               <div className="flex justify-between">
                 <p className="font-bold text-base text-gray-900">
-                  {data.project.name} - {data.name}
+                  {data?.task?.project?.name} - {data?.task?.name}
                 </p>
-                <button
-                  className="text-red-500 font-bold hover:underline"
-                  onClick={() => stopTask(data.id)}
-                >
-                  Stop Task
-                </button>
-              </div>
-              <div className="w-full pt-3">
-                <div className="flex flex-row w-full items-center py-1">
-                  <p className="flex-1 pr-2 text-xs text-gray-500">12 Days</p>
-                  <div className="flex-[9]">
-                    <div className="h-2.5 rounded-full bg-black grow" />
-                  </div>
-                </div>
-                <div className="flex flex-row w-full items-center py-1">
-                  <p className="flex-1 pr-2 text-xs text-gray-500">8 Days</p>
-                  <div className="flex-[9]">
-                    <div className="h-2.5 w-[80%] rounded-full bg-sky-400" />
-                  </div>
-                </div>
-                <div className="flex flex-row w-full items-center py-1">
-                  <p className="flex-1 pr-2 text-xs text-gray-500">4 Days</p>
-                  <div className="flex-[9]">
-                    <div className="h-2.5 w-[40%] rounded-full bg-green-400" />
-                  </div>
+
+                <div>
+                  <span className="mr-4 font-bold">
+                    {formatHourDifference(data?.started_at)}
+                  </span>
+                  <button
+                    className="text-red-500 font-bold hover:underline"
+                    onClick={() => stopTask(data.id)}
+                  >
+                    Stop Task
+                  </button>
                 </div>
               </div>
+              <div className="w-full pt-3"></div>
             </div>
           </div>
         ))}
@@ -162,7 +158,10 @@ function MainScreen() {
         <button
           className="h-6 rounded-full border border-sky-400 py-1 px-4"
           onClick={() => {
-            setScreen("SelectTasksScreen");
+            if (notificationPermissionGranted) {
+              sendNotification("Tauri is awesome!");
+              sendNotification({ title: "TAURI", body: "Tauri is awesome!" });
+            }
           }}
         >
           <p className="text-sky-400 text-xs text-center">Take a Break</p>
@@ -212,7 +211,7 @@ function MainScreen() {
           </div>
           <a
             className="flex flex-col items-center"
-            href="https://lively-geyser-q53l27l9w5bc.vapor-farm-e1.com/admin/tasks"
+            href="http://halcyon-pms-web.test/admin/tasks"
             target="_blank"
           >
             <svg

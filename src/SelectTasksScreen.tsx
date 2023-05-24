@@ -25,7 +25,7 @@ function SelectTasksScreen() {
         setTasks(
           fetchedTasks.filter(
             (task) =>
-              !activeTasks.find((activeTask) => activeTask.id === task.id)
+              !activeTasks.find((activeTask) => activeTask.task.id === task.id)
           )
         );
       } catch (error: AxiosError | any) {
@@ -40,8 +40,8 @@ function SelectTasksScreen() {
     if (!selectedTask) return;
 
     startTaskApi(selectedTask.id)
-      .then(() => {
-        setActiveTasks([...activeTasks, selectedTask]);
+      .then((taskTime) => {
+        setActiveTasks([...activeTasks, taskTime]);
         setScreen("MainScreen");
       })
       .catch((error: { response: { data: { message: any } } }) => {
