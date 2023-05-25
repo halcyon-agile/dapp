@@ -9,7 +9,7 @@ function LoginScreen() {
     state.setUser,
     state.setScreen,
   ]);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{email: string, password: string}>({
     email: "jerico.pulvera@gmail.com",
     password: "secret",
   });
