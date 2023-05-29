@@ -37,6 +37,15 @@ fn main() {
         })
         .system_tray(system_tray)
         .on_system_tray_event(|app, event| match event {
+            SystemTrayEvent::LeftClick {
+                position: _,
+                size: _,
+                ..
+                } => {
+                    // println!("system tray received a left click");
+                    let window = app.get_window("main").unwrap();
+                    window.show().unwrap();
+                }
             SystemTrayEvent::MenuItemClick { id, .. } => {
               match id.as_str() {
                 "open" => {
