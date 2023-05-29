@@ -46,10 +46,14 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "halcyon-pms-desktop",
+        "title": "Halcyon Agile Project Management System",
         "width": 800,
         "height": 600
       }
-    ]
+    ],
+    "systemTray": {
+      "iconPath": "icons/icon.ico",
+      "iconAsTemplate": true
+    }
   }
 }

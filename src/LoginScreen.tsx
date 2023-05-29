@@ -25,7 +25,8 @@ function LoginScreen() {
       const user = await loginUser(form.email, form.password);
       setUser(user);
 
-      setScreen("MainScreen");
+      // setScreen("MainScreen");
+      setScreen("Main")
     } catch (error: AxiosError | any) {
       setErrorMessage(
         error?.response?.data?.message || "Something went wrong."

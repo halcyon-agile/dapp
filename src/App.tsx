@@ -7,6 +7,7 @@ import {
   isPermissionGranted,
   requestPermission,
 } from "@tauri-apps/api/notification";
+import Main from "./screens/Main";
 
 function App() {
   const [screen, setNotificationPermissionGranted] = useStore((state) => [
@@ -34,6 +35,10 @@ function App() {
 
   if (screen === "MainScreen") {
     return <MainScreen />;
+  }
+
+  if (screen === "Main") {
+    return <Main />
   }
 
   return <LoginScreen />;
