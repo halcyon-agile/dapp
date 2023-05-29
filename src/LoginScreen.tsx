@@ -10,7 +10,7 @@ function LoginScreen() {
     state.setScreen,
   ]);
   const [form, setForm] = useState<{email: string, password: string}>({
-    email: "jerico.pulvera@gmail.com",
+    email: "system.administrator@lively-geyser-q53l27l9w5bc.vapor-farm-e1.com",
     password: "secret",
   });
   const [errorMessage, setErrorMessage] = useState("");
