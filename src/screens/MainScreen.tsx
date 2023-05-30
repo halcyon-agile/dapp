@@ -102,20 +102,25 @@ function MainScreen() {
   };
 
   const finishWork = () => {
-    finishWorkApi()
-      .then(() => {
-        setUser(undefined);
-        setActiveTasks([]);
-        // setScreen("LoginScreen");
-        localStorage.clear();
-        navigate("/login", {
-          replace: true,
-        })
-      })
-      .catch((error) => {
-        console.log("error", error)
-        console.error(error?.response?.data?.message || "Something went wrong");
-      });
+    // to be added back once the API is fixed
+    // finishWorkApi()
+    //   .then(() => {
+    //     setUser(undefined);
+    //     setActiveTasks([]);
+    //     // setScreen("LoginScreen");
+    //     localStorage.clear();
+    //     navigate("/login", {
+    //       replace: true,
+    //     })
+    //   })
+    //   .catch((error) => {
+    //     console.log("error", error)
+    //     console.error(error?.response?.data?.message || "Something went wrong");
+    //   });
+    localStorage.clear();
+    navigate("/login", {
+      replace: true,
+    })
   };
 
   return (
@@ -190,7 +195,8 @@ function MainScreen() {
             //   sendNotification("Tauri is awesome!");
             //   sendNotification({ title: "TAURI", body: "Tauri is awesome!" });
             // }
-            setScreen("TakeABreak")
+            // setScreen("TakeABreak")
+            navigate("/take-a-break")
           }}
         >
           <p className="text-sky-400 text-xs text-center">

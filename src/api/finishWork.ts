@@ -14,7 +14,7 @@ const finishWork = async (): Promise<Attendance | AxiosError | any> => {
     });
 
     delete customAxios.defaults.headers.common["Authorization"];
-
+    
     return attendance.data;
   } catch (error) {
     throw error;
