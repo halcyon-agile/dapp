@@ -1,13 +1,14 @@
-import LoginScreen from "./LoginScreen";
-import SelectTasksScreen from "./SelectTasksScreen";
-import MainScreen from "./MainScreen";
-import useStore from "./store";
 import { useEffect } from "react";
 import {
   isPermissionGranted,
   requestPermission,
 } from "@tauri-apps/api/notification";
-import Main from "./screens/Main";
+import {
+  RouterProvider, redirect,
+} from "react-router-dom"
+
+import useStore from "./store";
+import router from "./lib/router";
 
 function App() {
   const [screen, setNotificationPermissionGranted] = useStore((state) => [
@@ -29,19 +30,9 @@ function App() {
     askPermissions();
   }, [setNotificationPermissionGranted]);
 
-  if (screen === "SelectTasksScreen") {
-    return <SelectTasksScreen />;
-  }
-
-  if (screen === "MainScreen") {
-    return <MainScreen />;
-  }
-
-  if (screen === "Main") {
-    return <Main />
-  }
-
-  return <LoginScreen />;
+  return (
+    <RouterProvider router={router} />
+  )
 }
 
 export default App;

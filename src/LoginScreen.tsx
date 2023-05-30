@@ -20,7 +20,6 @@ function LoginScreen() {
 
   const attemptLogin = async (e: any) => {
     e.preventDefault();
-
     try {
       const user = await loginUser(form.email, form.password);
       setUser(user);

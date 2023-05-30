@@ -1,4 +1,9 @@
+import useStore from "../store";
+
 function TakeABreak() {
+    const [ setScreen ] = useStore((state) => [
+        state.setScreen,
+      ]);
     return (
         <main className="flex min-h-screen flex-col items-center text-black p-5">
             <div className="w-full items-center justify-center">
@@ -37,7 +42,7 @@ function TakeABreak() {
             >
                 <button
                     className="bg-white py-2 border border-sky-400 rounded flex-none text-sky-400 font-medium text-base w-3/12"
-                    // onClick={() => router.back()}
+                    onClick={() => setScreen("Main")}
                 >
                     Cancel
                 </button>

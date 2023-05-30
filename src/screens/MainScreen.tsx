@@ -29,7 +29,7 @@ function formatHourDifference(startedAt: string) {
   return `${formattedHours}:${formattedMinutes}`;
 }
 
-function Main() {
+function MainScreen() {
   const [
     user,
     activeTasks,
@@ -172,10 +172,11 @@ function Main() {
         <button
           className="h-6 rounded-full border border-sky-400 py-1 px-4"
           onClick={() => {
-            if (notificationPermissionGranted) {
-              sendNotification("Tauri is awesome!");
-              sendNotification({ title: "TAURI", body: "Tauri is awesome!" });
-            }
+            // if (notificationPermissionGranted) {
+            //   sendNotification("Tauri is awesome!");
+            //   sendNotification({ title: "TAURI", body: "Tauri is awesome!" });
+            // }
+            setScreen("TakeABreak")
           }}
         >
           <p className="text-sky-400 text-xs text-center">
@@ -241,4 +242,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default MainScreen;

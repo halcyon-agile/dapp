@@ -2,19 +2,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
-
-#[tauri::command]
-fn my_custom_command() {
-    println!("I was invoked from JS!");
-}
-
-use tauri::{CustomMenuItem, SystemTray, SystemTrayMenu, SystemTrayMenuItem, SystemTrayEvent};
-use tauri::Manager;
+use tauri::{CustomMenuItem, SystemTray, SystemTrayMenu, SystemTrayMenuItem, SystemTrayEvent, Manager};
 
 fn main() {
     // here `"quit".to_string()` defines the menu item id, and the second parameter is the menu item label.
@@ -64,7 +52,6 @@ fn main() {
             }
             _ => {}
         })
-        .invoke_handler(tauri::generate_handler![greet, my_custom_command])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
