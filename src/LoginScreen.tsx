@@ -3,9 +3,11 @@ import logo from "./assets/logo.png";
 import useStore from "./store";
 import loginUser from "./api/loginUser";
 import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
 
 function LoginScreen() {
-  const [setUser, setScreen] = useStore((state) => [
+  const navigate = useNavigate();
+  const [setUser] = useStore((state) => [
     state.setUser,
     state.setScreen,
   ]);
@@ -14,6 +16,7 @@ function LoginScreen() {
     password: "secret",
   });
   const [errorMessage, setErrorMessage] = useState("");
+
   useEffect(() => {
     setErrorMessage("");
   }, [form]);
@@ -23,10 +26,11 @@ function LoginScreen() {
     try {
       const user = await loginUser(form.email, form.password);
       setUser(user);
-
-      // setScreen("MainScreen");
-      setScreen("Main")
+      navigate("/", {
+        replace: true,
+      })
     } catch (error: AxiosError | any) {
+      console.log('error', error)
       setErrorMessage(
         error?.response?.data?.message || "Something went wrong."
       );

@@ -6,6 +6,7 @@ import finishWorkApi from "../api/finishWork";
 import getAttendance from "../api/getAttendance";
 import { sendNotification } from "@tauri-apps/api/notification";
 import { DateTime } from "luxon";
+import { redirect, useNavigate } from "react-router-dom";
 
 function formatHourDifference(startedAt: string) {
   const currentDate = DateTime.now();
@@ -30,6 +31,7 @@ function formatHourDifference(startedAt: string) {
 }
 
 function MainScreen() {
+  const navigate = useNavigate();
   const [
     user,
     activeTasks,
@@ -50,6 +52,13 @@ function MainScreen() {
 
   // Refactor later to only fetch once logged in
   useEffect(() => {
+    const userData = localStorage.getItem("token")
+    console.log("userData", userData)
+    if (!userData) {
+      navigate("/login", {
+        replace: true,
+      })
+    }
     getActiveTasks().then((tasks) => {
       setActiveTasks(tasks);
       console.log({ activeTasks });
@@ -97,9 +106,14 @@ function MainScreen() {
       .then(() => {
         setUser(undefined);
         setActiveTasks([]);
-        setScreen("LoginScreen");
+        // setScreen("LoginScreen");
+        localStorage.clear();
+        navigate("/login", {
+          replace: true,
+        })
       })
       .catch((error) => {
+        console.log("error", error)
         console.error(error?.response?.data?.message || "Something went wrong");
       });
   };
