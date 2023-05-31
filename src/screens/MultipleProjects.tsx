@@ -7,6 +7,7 @@ import getAttendance from "../api/getAttendance";
 import { sendNotification } from "@tauri-apps/api/notification";
 import { DateTime } from "luxon";
 import { redirect, useNavigate } from "react-router-dom";
+import { Button } from "../components/ui/button";
 
 function formatHourDifference(startedAt: string) {
   const currentDate = DateTime.now();
@@ -30,15 +31,13 @@ function formatHourDifference(startedAt: string) {
   return `${formattedHours}:${formattedMinutes}`;
 }
 
-function MainScreen() {
+function MultipleProjects() {
   const navigate = useNavigate();
   const [
     user,
     activeTasks,
     setActiveTasks,
-    setScreen,
     setUser,
-    notificationPermissionGranted,
   ] = useStore((state) => [
     state.user,
     state.activeTasks,
@@ -91,94 +90,116 @@ function MainScreen() {
     };
   }, [currentTime]);
 
-  const stopTask = (id: number) => {
-    stopTaskApi(id)
-      .then(() => {
-        setActiveTasks(activeTasks.filter((task) => task.id !== id));
-      })
-      .catch((error) => {
-        console.error(error?.response?.data?.message || "Something went wrong");
-      });
-  };
-
-  const finishWork = () => {
-    // to be added back once the API is fixed
-    // finishWorkApi()
-    //   .then(() => {
-    //     setUser(undefined);
-    //     setActiveTasks([]);
-    //     // setScreen("LoginScreen");
-    //     localStorage.clear();
-    //     navigate("/login", {
-    //       replace: true,
-    //     })
-    //   })
-    //   .catch((error) => {
-    //     console.log("error", error)
-    //     console.error(error?.response?.data?.message || "Something went wrong");
-    //   });
-    localStorage.clear();
-    navigate("/login", {
-      replace: true,
-    })
-  };
+  // const stopTask = (id: number) => {
+  //   stopTaskApi(id)
+  //     .then(() => {
+  //       setActiveTasks(activeTasks.filter((task) => task.id !== id));
+  //     })
+  //     .catch((error) => {
+  //       console.error(error?.response?.data?.message || "Something went wrong");
+  //     });
+  // };
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
-      <div className="items-center justify-center text-sm flex flex-row w-full py-10 flex flex-row">
-        <div className="left-0 top-0 w-full items-center justify-center text-4xl flex-1 flex flex-col">
-          <p className="font-bold text-4xl">
-            {formatHourDifference(user?.attendance?.started_at)}
-          </p>
-          <div className="pr-4" />
-          <p className="text-base text-xs text-gray-500 font-normal">
-            Working Hours
-          </p>
-        </div>
-      </div>
-      <div className="flex w-full">
-        <div className="w-full p-3 border rounded">
-          <p className="font-bold text-base text-gray-900">
-            Project 2 - Task 2.1
-          </p>
-          <div className="w-full pt-3">
-            <div className="flex flex-row w-full items-center py-1">
-              <p className="flex-1 pr-2 text-xs text-gray-500">
-                12 Days
+      <div className="items-center justify-center text-sm flex flex-row w-full flex flex-row">
+        <div className="w-full border rounded-sm">
+          <div className="left-0 top-0 w-full items-center justify-between text-4xl flex-1 flex flex-row align-center py-2 px-4 border-b">
+            <p className="font-semibold text-xl">
+              All
+            </p>
+            <div className="pr-4" />
+            <p className="font-semibold text-xl">
+              {formatHourDifference(user?.attendance?.started_at)}
+            </p>
+          </div>
+          <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4">
+            <div className="flex flex-row justify-start">
+              <p className="font-medium text-xs text-slate-500">
+                Development Project
               </p>
-              <div className="flex-[9]">
-                <div className="h-2.5 rounded-full bg-teal-500 grow" />
-              </div>
             </div>
-            <div className="flex flex-row w-full items-center py-1">
-              <p className="flex-1 pr-2 text-xs text-gray-500">
-                8 Days
+            <div className="flex flex-row align-center justify-between">
+              <p className="font-medium text-base text-gray-700">
+                Project 1 - Task 1.2
               </p>
-              <div className="flex-[9]">
-                <div className="h-2.5 w-[80%] rounded-full bg-green-500" />
-              </div>
+              <p className="font-medium text-base text-gray-700">
+                00:30
+              </p>
             </div>
-            <div className="flex flex-row w-full items-center py-1">
-              <p className="flex-1 pr-2 text-xs text-gray-500">
-                4 Days
-              </p>
-              <div className="flex-[9]">
-                <div className="h-2.5 w-[40%] rounded-full bg-cyan-500" />
+            <div className="flex flex-row align-center justify-between py-4 border-b border-slate-200 border-b border-slate-200">
+              <div className="rounded-full px-4 py-1 bg-green-500 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
+                <p className="font-medium text-xs text-white">
+                  Running
+                </p>
               </div>
+              <Button
+                variant="outline"
+                className="font-medium text-xs"
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+          <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4">
+            <div className="flex flex-row justify-start">
+              <p className="font-medium text-xs text-slate-500">
+                Maintenance
+              </p>
+            </div>
+            <div className="flex flex-row align-center justify-between">
+              <p className="font-medium text-base text-gray-700">
+                Project 2 - Task 2.1
+              </p>
+              <p className="font-medium text-base text-gray-700">
+                00:30
+              </p>
+            </div>
+            <div className="flex flex-row align-center justify-between py-4 border-b border-slate-200 border-b border-slate-200">
+              <div className="rounded-full px-4 py-1 bg-red-600 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
+                <p className="font-medium text-xs text-white">
+                  Stopped
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                className="font-medium text-xs"
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+          <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4">
+            <div className="flex flex-row justify-start">
+              <p className="font-medium text-xs text-slate-500">
+                Outsourced
+              </p>
+            </div>
+            <div className="flex flex-row align-center justify-between">
+              <p className="font-medium text-base text-gray-700">
+                Project 3 - Task 2.1
+              </p>
+              <p className="font-medium text-base text-gray-700">
+                00:30
+              </p>
+            </div>
+            <div className="flex flex-row align-center justify-between py-4 border-b border-slate-200 border-b border-slate-200">
+              <div className="rounded-full px-4 py-1 bg-green-500 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
+                <p className="font-medium text-xs text-white">
+                  Running
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                className="font-medium text-xs"
+              >
+                Close
+              </Button>
             </div>
           </div>
         </div>
       </div>
-      <div className="w-full flex-row items-center justify-between py-5 flex border-b-2">
-        <button
-          className="rounded-md border border-slate-200 py-2 px-4"
-        //   onClick={() => router.push("projects/timer/change-project")}
-          onClick={() => navigate("/select-a-project")}
-        >
-          <p className="text-slate-900 text-xs text-center">
-            Change Project
-          </p>
-        </button>
+      <div className="w-full flex-row items-center py-5 flex border-b-2 gap-3">
         <button
           className="rounded-md border border-slate-200 py-2 px-4"
           onClick={() => navigate("/select-a-project")}
@@ -200,14 +221,6 @@ function MainScreen() {
         >
           <p className="text-slate-900 text-xs text-center">
             Take a Break
-          </p>
-        </button>
-        <button
-          className="rounded-md border border-slate-200 py-2 px-4"
-          onClick={finishWork}
-        >
-          <p className="text-slate-900 text-xs text-center">
-            Finish Work
           </p>
         </button>
       </div>
@@ -269,4 +282,4 @@ function MainScreen() {
   );
 }
 
-export default MainScreen;
+export default MultipleProjects;

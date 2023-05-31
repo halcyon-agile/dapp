@@ -65,7 +65,7 @@ function LoginScreen() {
           <Input
             type="email"
             id="email"
-            className="text-black p-1 rounded-md border px-5 font-normal text-base w-full mt-1.5"
+            className="text-black p-1 rounded-md border px-3 font-normal text-base text-sm w-full mt-1.5"
             autoCapitalize="none"
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             value={form.email}
@@ -76,7 +76,7 @@ function LoginScreen() {
           <Input
             type="password"
             id="password"
-            className="text-black p-1 rounded-md border px-5 font-normal text-base w-full mt-1.5"
+            className="text-black p-1 rounded-md border px-3 font-normal text-base text-sm w-full mt-1.5"
             autoCapitalize="none"
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             value={form.password}

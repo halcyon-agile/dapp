@@ -7,6 +7,7 @@ import {
   MainScreen,
   SelectAProject,
   TakeABreak,
+  MultipleProjects,
 } from "../screens"
 
 const router = createBrowserRouter([
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
     path: "login",
     element: <LoginScreen />,
   },
+  {
+    path: "multiple-projects",
+    element: <MultipleProjects />,
+  }
 ]);
 
 export default router;

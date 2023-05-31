@@ -28,22 +28,27 @@ function SelectAProject() {
   const [selectedProject, setCurrentProject] = useState<null | number>(null);
   return (
     <main className="flex min-h-screen flex-col items-center justify-between text-black p-5 font-inter">
-      <div className="items-center text-sm flex flex-row w-full border-b py-4">
-        <p className="left-0 top-0 w-full text-4xl flex-1 font-bold text-base">
+      <div className="items-center text-sm flex flex-row w-full border-b border-slate-200 py-4">
+        <p className="left-0 top-0 w-full text-xl flex-1 font-semibold">
           Projects
         </p>
       </div>
       <div className="flex flex-col flex-1 bg-white w-full h-full text-black mt-5">
         {data.map((data: any, index: number) => (
-          <button
-            className="border-b p-4 mb-2"
-            key={index}
-            onClick={() => setCurrentProject(index)}
-          >
-            <p className={`left-0 top-0 w-full text-1xl flex-1 text-left font-normal text-base ${selectedProject === index ? "text-sky-400" : "text-gray-500"}`}>
-              {data.name} - {data.task}
-            </p>
-          </button>
+          <div className="w-full border-b py-2">
+            <button
+              className={`py-1.5 px-2 w-full rounded-md flex flex-row align-center justify-between ${selectedProject === index && "bg-slate-100"}`}
+              key={index}
+              onClick={() => setCurrentProject(index)}
+            >
+              <p className={`left-0 top-0 w-full text-1xl flex-1 text-left font-normal text-base text-slate-700`}>
+                {data.name} - {data.task}
+              </p>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#334155" className="w-3 h-3">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </button>
+          </div>
         ))}
         <div
           className="w-full items-center justify-center flex py-6"
@@ -58,6 +63,7 @@ function SelectAProject() {
           <button
             className="bg-sky-400 py-2 rounded flex-none text-white font-medium text-base w-3/12"
             // onClick={() => router.push("projects/timer")}
+            onClick={() => navigate("/multiple-projects")}
           >
             Okay
           </button>
