@@ -1,6 +1,11 @@
+import {
+    useNavigate,
+} from "react-router-dom"
+
 import useStore from "../store";
 
 function TakeABreak() {
+    const navigate = useNavigate();
     const [ setScreen ] = useStore((state) => [
         state.setScreen,
       ]);
@@ -42,7 +47,7 @@ function TakeABreak() {
             >
                 <button
                     className="bg-white py-2 border border-sky-400 rounded flex-none text-sky-400 font-medium text-base w-3/12"
-                    onClick={() => setScreen("Main")}
+                    onClick={() => navigate(-1)}
                 >
                     Cancel
                 </button>

@@ -22,7 +22,7 @@ function formatHourDifference(startedAt: string) {
   if (isNaN(Number(formattedHours)) || Number(formattedHours) < 0) {
     return "00:00";
   }
-
+ 
   if (isNaN(Number(formattedMinutes)) || Number(formattedMinutes) < 0) {
     return "00:00";
   }
@@ -173,6 +173,7 @@ function MainScreen() {
         <button
           className="h-6 rounded-full border border-sky-400 py-1 px-4"
         //   onClick={() => router.push("projects/timer/change-project")}
+          onClick={() => navigate("/select-a-project")}
         >
           <p className="text-sky-400 text-xs text-center">
             Change Project

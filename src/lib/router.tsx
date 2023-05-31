@@ -5,6 +5,7 @@ import {
 import {
   LoginScreen,
   MainScreen,
+  SelectAProject,
   TakeABreak,
 } from "../screens"
 
@@ -12,12 +13,14 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <MainScreen />,
-    children: [
-      {
-        path: "take-a-break",
-        element: <TakeABreak />
-      }
-    ]
+  },
+  {
+    path: "take-a-break",
+    element: <TakeABreak />
+  },
+  {
+    path: "select-a-project",
+    element: <SelectAProject />
   },
   {
     path: "login",
