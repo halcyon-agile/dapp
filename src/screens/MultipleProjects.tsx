@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
 import useStore from "../store";
 import getActiveTasks from "../api/getActiveTasks";
-import stopTaskApi from "../api/stopTask";
-import finishWorkApi from "../api/finishWork";
 import getAttendance from "../api/getAttendance";
-import { sendNotification } from "@tauri-apps/api/notification";
 import { DateTime } from "luxon";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 
 function formatHourDifference(startedAt: string) {
@@ -90,19 +87,9 @@ function MultipleProjects() {
     };
   }, [currentTime]);
 
-  // const stopTask = (id: number) => {
-  //   stopTaskApi(id)
-  //     .then(() => {
-  //       setActiveTasks(activeTasks.filter((task) => task.id !== id));
-  //     })
-  //     .catch((error) => {
-  //       console.error(error?.response?.data?.message || "Something went wrong");
-  //     });
-  // };
-
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
-      <div className="items-center justify-center text-sm flex flex-row w-full flex flex-row">
+      <div className="items-center justify-center text-sm flex flex-row w-full">
         <div className="w-full border rounded-sm">
           <div className="left-0 top-0 w-full items-center justify-between text-4xl flex-1 flex flex-row align-center py-2 px-4 border-b">
             <p className="font-semibold text-xl">
@@ -127,7 +114,7 @@ function MultipleProjects() {
                 00:30
               </p>
             </div>
-            <div className="flex flex-row align-center justify-between py-4 border-b border-slate-200 border-b border-slate-200">
+            <div className="flex flex-row align-center justify-between py-4 border-b border-slate-200">
               <div className="rounded-full px-4 py-1 bg-green-500 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
                 <p className="font-medium text-xs text-white">
                   Running
@@ -136,6 +123,7 @@ function MultipleProjects() {
               <Button
                 variant="outline"
                 className="font-medium text-xs"
+                onClick={() => navigate("/attribute-hour")}
               >
                 Close
               </Button>
@@ -155,7 +143,7 @@ function MultipleProjects() {
                 00:30
               </p>
             </div>
-            <div className="flex flex-row align-center justify-between py-4 border-b border-slate-200 border-b border-slate-200">
+            <div className="flex flex-row align-center justify-between py-4 border-b border-slate-200">
               <div className="rounded-full px-4 py-1 bg-red-600 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
                 <p className="font-medium text-xs text-white">
                   Stopped
@@ -164,6 +152,7 @@ function MultipleProjects() {
               <Button
                 variant="outline"
                 className="font-medium text-xs"
+                onClick={() => navigate("/attribute-hour")}
               >
                 Close
               </Button>
@@ -183,7 +172,7 @@ function MultipleProjects() {
                 00:30
               </p>
             </div>
-            <div className="flex flex-row align-center justify-between py-4 border-b border-slate-200 border-b border-slate-200">
+            <div className="flex flex-row align-center justify-between py-4">
               <div className="rounded-full px-4 py-1 bg-green-500 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
                 <p className="font-medium text-xs text-white">
                   Running
@@ -192,6 +181,7 @@ function MultipleProjects() {
               <Button
                 variant="outline"
                 className="font-medium text-xs"
+                onClick={() => navigate("/attribute-hour")}
               >
                 Close
               </Button>

@@ -4,6 +4,9 @@ import MainScreen from "./MainScreen";
 import TakeABreak from "./TakeABreak";
 import SelectAProject from "./SelectAProject";
 import MultipleProjects from "./MultipleProjects";
+import AttributeHour from "./AttributeHour";
+import BreakReason from "./BreakReason";
+import BreakTimer from "./BreakTimer";
 
 export {
   LoginScreen,
@@ -11,4 +14,7 @@ export {
   TakeABreak,
   SelectAProject,
   MultipleProjects,
+  AttributeHour,
+  BreakReason,
+  BreakTimer,
 }

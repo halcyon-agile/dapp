@@ -8,12 +8,19 @@ import {
   SelectAProject,
   TakeABreak,
   MultipleProjects,
+  AttributeHour,
+  BreakReason,
+  BreakTimer,
 } from "../screens"
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainScreen />,
+  },
+  {
+    path: "login",
+    element: <LoginScreen />,
   },
   {
     path: "take-a-break",
@@ -24,12 +31,20 @@ const router = createBrowserRouter([
     element: <SelectAProject />
   },
   {
-    path: "login",
-    element: <LoginScreen />,
-  },
-  {
     path: "multiple-projects",
     element: <MultipleProjects />,
+  },
+  {
+    path: "attribute-hour",
+    element: <AttributeHour />,
+  },
+  {
+    path: "break-reason",
+    element: <BreakReason />
+  },
+  {
+    path: "break-timer",
+    element: <BreakTimer />
   }
 ]);
 

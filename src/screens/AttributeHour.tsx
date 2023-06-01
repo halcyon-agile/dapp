@@ -1,10 +1,12 @@
+import React from "react"
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 
-function TakeABreak() {
+function AttributeHour() {
   const navigate = useNavigate()
   const [form, setForm] = useState<{hour: number | null, minute: number | null}>({
     hour: null,
@@ -14,11 +16,14 @@ function TakeABreak() {
     <main className="flex min-h-screen flex-col items-center text-black p-5">
       <div className="text-sm w-full">
         <p className="font-semibold text-lg text-gray-900">
-          How long will your break be?
+          How long do you want to attribute?
         </p>
       </div>
       <div className="w-full p-4 mt-3.5 border rounded-sm border-slate-200">
-        <div className="flex flex-row justify-between gap-4">
+        <p className="font-medium text-base text-gray-700">
+          Project 2 - Task 2.1
+        </p>
+        <div className="mt-4 pt-4 border-t border-slate-200 flex flex-row justify-between gap-4">
           <div className="flex-col flex-1 gap-1.5">
             <p className="font-medium text-sm text-slate-900">
               Hour
@@ -59,7 +64,7 @@ function TakeABreak() {
         </Button>
         <Button
           className="bg-cyan-500"
-          onClick={() => navigate("/break-reason")}
+          onClick={() => navigate(-1)}
         >
           Okay
         </Button>
@@ -68,4 +73,4 @@ function TakeABreak() {
   )
 }
 
-export default TakeABreak;
+export default AttributeHour;
