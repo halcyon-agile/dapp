@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { DateTime } from "luxon";
+import moment from "moment";
+
 import useStore from "../store";
 import getActiveTasks from "../api/getActiveTasks";
 import getAttendance from "../api/getAttendance";
-import { DateTime } from "luxon";
-import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
+import Timer from "../components/ui/timer";
 
 function formatHourDifference(startedAt: string) {
   const currentDate = DateTime.now();
@@ -24,8 +27,8 @@ function formatHourDifference(startedAt: string) {
   if (isNaN(Number(formattedMinutes)) || Number(formattedMinutes) < 0) {
     return "00:00";
   }
-
-  return `${formattedHours}:${formattedMinutes}`;
+  // return `${formattedHours}:${formattedMinutes}`;
+  return moment(startedAt).toNow(true)
 }
 
 function MultipleProjects() {
@@ -57,7 +60,7 @@ function MultipleProjects() {
     }
     getActiveTasks().then((tasks) => {
       setActiveTasks(tasks);
-      console.log({ activeTasks });
+      // console.log({ activeTasks });
     });
 
     getAttendance().then((data) => {
@@ -122,35 +125,38 @@ function MultipleProjects() {
               {formatHourDifference(user?.attendance?.started_at)}
             </p>
           </div>
-          <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4">
-            <div className="flex flex-row justify-start">
-              <p className="font-medium text-xs text-slate-500">
-                Development Project
-              </p>
-            </div>
-            <div className="flex flex-row align-center justify-between">
-              <p className="font-medium text-base text-gray-700">
-                Project 1 - Task 1.2
-              </p>
-              <p className="font-medium text-base text-gray-700">
-                00:30
-              </p>
-            </div>
-            <div className="flex flex-row align-center justify-between py-4 border-b border-slate-200">
-              <div className="rounded-full px-4 py-1 bg-green-500 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
-                <p className="font-medium text-xs text-white">
-                  Running
+          {activeTasks.map((data: any) => (  
+            <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4">
+              <div className="flex flex-row justify-start">
+                <p className="font-medium text-xs text-slate-500">
+                  {data.type}
                 </p>
               </div>
-              <Button
-                variant="outline"
-                className="font-medium text-xs"
-                onClick={() => navigate("/attribute-hour")}
-              >
-                Close
-              </Button>
+              <div className="flex flex-row align-center justify-between">
+                <p className="font-medium text-base text-gray-700">
+                  {data.task.project.name} - {data.task.name}
+                </p>
+                <Timer started_at={`${data.started_at}`} />
+                {/* <p className="font-medium text-base text-gray-700">
+                  {formatHourDifference(data.started_at)}
+                </p> */}
+              </div>
+              <div className="flex flex-row align-center justify-between py-4 border-b border-slate-200">
+                <div className="rounded-full px-4 py-1 bg-green-500 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
+                  <p className="font-medium text-xs text-white">
+                    Running
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  className="font-medium text-xs"
+                  onClick={() => navigate("/attribute-hour")}
+                >
+                  Close
+                </Button>
+              </div>
             </div>
-          </div>
+          ))}
           <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4">
             <div className="flex flex-row justify-start">
               <p className="font-medium text-xs text-slate-500">
