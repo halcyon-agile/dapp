@@ -129,24 +129,32 @@ function MultipleProjects() {
             <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4">
               <div className="flex flex-row justify-start">
                 <p className="font-medium text-xs text-slate-500">
-                  {data.type}
+                  {data?.type}
                 </p>
               </div>
               <div className="flex flex-row align-center justify-between">
                 <p className="font-medium text-base text-gray-700">
-                  {data.task.project.name} - {data.task.name}
+                  {data?.task?.project?.name} - {data?.task?.name}
                 </p>
-                <Timer started_at={`${data.started_at}`} />
+                <Timer started_at={data?.started_at} />
                 {/* <p className="font-medium text-base text-gray-700">
                   {formatHourDifference(data.started_at)}
                 </p> */}
               </div>
               <div className="flex flex-row align-center justify-between py-4 border-b border-slate-200">
-                <div className="rounded-full px-4 py-1 bg-green-500 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
-                  <p className="font-medium text-xs text-white">
-                    Running
-                  </p>
-                </div>
+                  {data?.ended_at === null ? (
+                    <div className="rounded-full px-4 py-1 bg-green-500 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
+                      <p className="font-medium text-xs text-white">
+                        Running
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="rounded-full px-4 py-1 bg-red-600 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
+                      <p className="font-medium text-xs text-white">
+                        Stopped
+                      </p>
+                    </div>
+                  )}
                 <Button
                   variant="outline"
                   className="font-medium text-xs"
