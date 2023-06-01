@@ -58,6 +58,28 @@ function SelectAProject() {
       });
   };
 
+  const finishWork = () => {
+    // to be added back once the API is fixed
+    // finishWorkApi()
+    //   .then(() => {
+    //     setUser(undefined);
+    //     setActiveTasks([]);
+    //     // setScreen("LoginScreen");
+    //     localStorage.clear();
+    //     navigate("/login", {
+    //       replace: true,
+    //     })
+    //   })
+    //   .catch((error) => {
+    //     console.log("error", error)
+    //     console.error(error?.response?.data?.message || "Something went wrong");
+    //   });
+    localStorage.clear();
+    navigate("/login", {
+      replace: true,
+    })
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between text-black p-5 font-inter">
       <div className="items-center text-sm flex flex-row w-full border-b border-slate-200 py-4">
@@ -67,6 +89,17 @@ function SelectAProject() {
       </div>
       <div className="flex flex-col flex-1 bg-white w-full h-full text-black mt-5">
         <div className="w-full border-b py-2">
+          {fetching && (
+            <ColorRing
+              visible={fetching}
+              height="80"
+              width="80"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper"
+              colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+            />
+          )}
           {tasks.map((data: any, index: number) => (
             <button
               className={`py-1.5 px-2 w-full rounded-md flex flex-row align-center justify-between ${selectedProject === index && "bg-slate-100"}`}
@@ -82,33 +115,21 @@ function SelectAProject() {
             </button>
           ))}
         </div>
-        {fetching ? (
-          <ColorRing
-            visible={fetching}
-            height="80"
-            width="80"
-            ariaLabel="blocks-loading"
-            wrapperStyle={{}}
-            wrapperClass="blocks-wrapper"
-            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
-          />
-        ) : (
-          <div className="w-full my-4 items-end flex flex-row justify-end gap-4">
-            <Button
-              variant="ghost"
-              className="border border-slate-200"
-              onClick={() => navigate(-1)}
-            >
-              Cancel
-            </Button>
-            <Button
-              className="bg-cyan-500"
-              onClick={startTask}
-            >
-              Okay
-            </Button>
-          </div>
-        )}
+        <div className="w-full my-4 items-end flex flex-row justify-end gap-4">
+          <Button
+            variant="ghost"
+            className="border border-slate-200"
+            onClick={finishWork}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="bg-cyan-500"
+            onClick={startTask}
+          >
+            Okay
+          </Button>
+        </div>
       </div>
     </main>
   )

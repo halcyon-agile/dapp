@@ -87,6 +87,28 @@ function MultipleProjects() {
     };
   }, [currentTime]);
 
+  const finishWork = () => {
+    // to be added back once the API is fixed
+    // finishWorkApi()
+    //   .then(() => {
+    //     setUser(undefined);
+    //     setActiveTasks([]);
+    //     // setScreen("LoginScreen");
+    //     localStorage.clear();
+    //     navigate("/login", {
+    //       replace: true,
+    //     })
+    //   })
+    //   .catch((error) => {
+    //     console.log("error", error)
+    //     console.error(error?.response?.data?.message || "Something went wrong");
+    //   });
+    localStorage.clear();
+    navigate("/login", {
+      replace: true,
+    })
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
       <div className="items-center justify-center text-sm flex flex-row w-full">
@@ -211,6 +233,14 @@ function MultipleProjects() {
         >
           <p className="text-slate-900 text-xs text-center">
             Take a Break
+          </p>
+        </button>
+        <button
+          className="rounded-md border border-slate-200 py-2 px-4"
+          onClick={finishWork}
+        >
+          <p className="text-slate-900 text-xs text-center">
+            Finish Work
           </p>
         </button>
       </div>
