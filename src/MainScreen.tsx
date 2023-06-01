@@ -253,7 +253,9 @@ function MainScreen() {
             <div className="flex flex-col items-end">
               <p className="text-xs text-gray-500">Time In</p>
               <p className="font-bold text-base text-gray-900">
-                {new Date(user.attendance.started_at).toLocaleTimeString()}
+                {user?.attendance?.started_at &&
+                  new Date(user.attendance.started_at).toLocaleTimeString()}
+                {!user?.attendance?.started_at && "No Time In Yet"}
               </p>
             </div>
           </div>
