@@ -5,6 +5,8 @@ import loginUser from "./api/loginUser";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 
+import { ColorRing } from  'react-loader-spinner'
+
 import { Input } from "./components/ui/input";
 import { Label } from "./components/ui/label";
 
@@ -18,6 +20,7 @@ function LoginScreen() {
     email: "system.administrator@lively-geyser-q53l27l9w5bc.vapor-farm-e1.com",
     password: "secret",
   });
+  const [attempting, attemptingLogin] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -25,6 +28,7 @@ function LoginScreen() {
   }, [form]);
 
   const attemptLogin = async (e: any) => {
+    attemptingLogin(true)
     e.preventDefault();
     try {
       const user = await loginUser(form.email, form.password);
@@ -32,8 +36,10 @@ function LoginScreen() {
       navigate("/", {
         replace: true,
       })
+      attemptingLogin(false)
     } catch (error: AxiosError | any) {
       console.log('error', error)
+      attemptingLogin(false)
       setErrorMessage(
         error?.response?.data?.message || "Something went wrong."
       );
@@ -82,12 +88,24 @@ function LoginScreen() {
             value={form.password}
           />
         </div>
+        {attempting ? (
+          <ColorRing
+            visible={attempting}
+            height="80"
+            width="80"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{}}
+            wrapperClass="blocks-wrapper"
+            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+          />
+        ) : (
         <button
           className="bg-sky-400 py-2 px-10 rounded-md font-medium"
           type="submit"
         >
           Login
         </button>
+        )}
       </form>
     </main>
   );

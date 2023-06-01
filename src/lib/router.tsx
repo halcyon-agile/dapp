@@ -16,7 +16,7 @@ import {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainScreen />,
+    element: <SelectAProject />,
   },
   {
     path: "login",
@@ -25,10 +25,6 @@ const router = createBrowserRouter([
   {
     path: "take-a-break",
     element: <TakeABreak />
-  },
-  {
-    path: "select-a-project",
-    element: <SelectAProject />
   },
   {
     path: "multiple-projects",
