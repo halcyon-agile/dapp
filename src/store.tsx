@@ -13,7 +13,7 @@ type State = {
 type Action = {
   setUser: (user: State["user"]) => void;
   setScreen: (firstName: State["screen"]) => void;
-  setActiveTasks: (firstName: State["activeTasks"]) => void;
+  setActiveTasks: (firstName: any) => void;
   setNotificationPermissionGranted: (
     notificationPermissionGranted: State["notificationPermissionGranted"]
   ) => void;
@@ -27,7 +27,7 @@ const useStore = create(
       screen: "",
       setScreen: (screen) => set(() => ({ screen })),
       activeTasks: [],
-      setActiveTasks: (activeTasks: Task[]) => set(() => ({ activeTasks })),
+      setActiveTasks: (activeTasks: any) => set(() => ({ activeTasks })),
       notificationPermissionGranted: false,
       setNotificationPermissionGranted: (permissionGranted: boolean) =>
         set({ notificationPermissionGranted: permissionGranted }),

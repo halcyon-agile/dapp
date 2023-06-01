@@ -27,9 +27,9 @@ const loginUser = async (
     customAxios.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${loginResponse.data.token}`;
-    const userResponse = await customAxios.get("/api/me");
-    console.log('user response', userResponse)
-    return userResponse.data as UserData;
+    return loginResponse;
+    // const userResponse = await customAxios.get("/api/me");
+    // return userResponse.data as UserData;
   } catch (error: AxiosError | any) {
     throw error;
   }

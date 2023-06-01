@@ -6,7 +6,8 @@ import finishWorkApi from "../api/finishWork";
 import getAttendance from "../api/getAttendance";
 import { sendNotification } from "@tauri-apps/api/notification";
 import { DateTime } from "luxon";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { isPermissionGranted, requestPermission } from '@tauri-apps/api/notification';
 
 function formatHourDifference(startedAt: string) {
   const currentDate = DateTime.now();
@@ -189,12 +190,16 @@ function MainScreen() {
         </button>
         <button
           className="rounded-md border border-slate-200 py-2 px-4"
-          onClick={() => {
-            // if (notificationPermissionGranted) {
-            //   sendNotification("Tauri is awesome!");
-            //   sendNotification({ title: "TAURI", body: "Tauri is awesome!" });
-            // }
-            // setScreen("TakeABreak")
+          onClick={async () => {
+            let permissionGranted = await isPermissionGranted();
+            if (!permissionGranted) {
+              const permission = await requestPermission();
+              permissionGranted = permission === 'granted';
+            }
+            if (notificationPermissionGranted) {
+              sendNotification("Tauri is awesome!");
+              sendNotification({ title: "TAURI", body: "Tauri is awesome!" });
+            }
             navigate("/take-a-break")
           }}
         >

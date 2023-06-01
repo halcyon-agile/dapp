@@ -28,7 +28,7 @@ function LoginScreen() {
     e.preventDefault();
     try {
       const user = await loginUser(form.email, form.password);
-      setUser(user);
+      // setUser(user);
       navigate("/", {
         replace: true,
       })
