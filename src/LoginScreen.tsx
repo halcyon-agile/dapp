@@ -12,12 +12,9 @@ import { Label } from "./components/ui/label";
 
 function LoginScreen() {
   const navigate = useNavigate();
-  const [setUser] = useStore((state) => [
-    state.setUser,
-    state.setScreen,
-  ]);
-  const [form, setForm] = useState<{email: string, password: string}>({
-    email: "system.administrator@lively-geyser-q53l27l9w5bc.vapor-farm-e1.com",
+  const [setUser] = useStore((state) => [state.setUser, state.setScreen]);
+  const [form, setForm] = useState<{ email: string; password: string }>({
+    email: "system.administrator@halcyon-pms-web.test",
     password: "secret",
   });
   const [attempting, attemptingLogin] = useState<boolean>(false);
@@ -32,7 +29,7 @@ function LoginScreen() {
     e.preventDefault();
     try {
       const user = await loginUser(form.email, form.password);
-      // setUser(user);
+      setUser(user);
       navigate("/", {
         replace: true,
       })
@@ -67,7 +64,12 @@ function LoginScreen() {
         onSubmit={attemptLogin}
       >
         <div className="grid w-full items-center gap-1.5">
-          <Label htmlFor="email" className="text-black font-medium text-sm self-start">Email</Label>
+          <Label
+            htmlFor="email"
+            className="text-black font-medium text-sm self-start"
+          >
+            Email
+          </Label>
           <Input
             type="email"
             id="email"
@@ -78,7 +80,12 @@ function LoginScreen() {
           />
         </div>
         <div className="grid w-full items-center gap-1.5">
-          <Label htmlFor="password" className="text-black font-medium text-sm self-start">Password</Label>
+          <Label
+            htmlFor="password"
+            className="text-black font-medium text-sm self-start"
+          >
+            Password
+          </Label>
           <Input
             type="password"
             id="password"
