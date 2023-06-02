@@ -3,15 +3,36 @@ import React from "react"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 
+import stopTaskApi from "../api/stopTask";
+
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
+import useStore from "../store";
 
 function AttributeHour() {
   const navigate = useNavigate()
+  const [
+    selectedTask,
+  ] = useStore((state) => [
+    state.selectedTask,
+  ]);
+
   const [form, setForm] = useState<{hour: number | null, minute: number | null}>({
     hour: null,
     minute: null,
   });
+
+  const stopTask = (id: number) => {
+    stopTaskApi(id)
+      .then(() => {
+        navigate("/multiple-projects")
+      })
+      .catch((error) => {
+        console.error(error?.response?.data?.message || "Something went wrong");
+      });
+  };
+  console.log('selected', selectedTask)
+
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
       <div className="text-sm w-full">
@@ -21,7 +42,7 @@ function AttributeHour() {
       </div>
       <div className="w-full p-4 mt-3.5 border rounded-sm border-slate-200">
         <p className="font-medium text-base text-gray-700">
-          Project 2 - Task 2.1
+          {selectedTask?.task?.project?.name} - {selectedTask?.task?.name}
         </p>
         <div className="mt-4 pt-4 border-t border-slate-200 flex flex-row justify-between gap-4">
           <div className="flex-col flex-1 gap-1.5">
@@ -64,7 +85,7 @@ function AttributeHour() {
         </Button>
         <Button
           className="bg-cyan-500"
-          onClick={() => navigate(-1)}
+          onClick={() => stopTask(selectedTask?.task?.id)}
         >
           Okay
         </Button>

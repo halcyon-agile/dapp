@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Task } from "./api/getTasks";
 import { TaskTime } from "./api/getActiveTasks";
 
 type State = {
@@ -8,6 +7,7 @@ type State = {
   user?: any;
   activeTasks: TaskTime[];
   notificationPermissionGranted: boolean;
+  selectedTask: any;
 };
 
 type Action = {
@@ -17,6 +17,7 @@ type Action = {
   setNotificationPermissionGranted: (
     notificationPermissionGranted: State["notificationPermissionGranted"]
   ) => void;
+  setSelectedTask: (task: any) => void;
 };
 
 const useStore = create(
@@ -31,6 +32,8 @@ const useStore = create(
       notificationPermissionGranted: false,
       setNotificationPermissionGranted: (permissionGranted: boolean) =>
         set({ notificationPermissionGranted: permissionGranted }),
+      selectedTask: null,
+      setSelectedTask: (task: any) => set(() => ({ selectedTask: task }))
     }),
     {
       name: "store",

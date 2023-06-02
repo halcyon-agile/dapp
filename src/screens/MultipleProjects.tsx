@@ -38,13 +38,13 @@ function MultipleProjects() {
     activeTasks,
     setActiveTasks,
     setUser,
+    setSelectedTask,
   ] = useStore((state) => [
     state.user,
     state.activeTasks,
     state.setActiveTasks,
-    state.setScreen,
     state.setUser,
-    state.notificationPermissionGranted,
+    state.setSelectedTask,
   ]);
 
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
@@ -52,7 +52,7 @@ function MultipleProjects() {
   // Refactor later to only fetch once logged in
   useEffect(() => {
     const userData = localStorage.getItem("token")
-    console.log("userData", userData)
+    // console.log("userData", userData)
     if (!userData) {
       navigate("/login", {
         replace: true,
@@ -158,71 +158,16 @@ function MultipleProjects() {
                 <Button
                   variant="outline"
                   className="font-medium text-xs"
-                  onClick={() => navigate("/attribute-hour")}
+                  onClick={() => {
+                    setSelectedTask(data)
+                    navigate("/attribute-hour")
+                  }}
                 >
                   Close
                 </Button>
               </div>
             </div>
           ))}
-          <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4">
-            <div className="flex flex-row justify-start">
-              <p className="font-medium text-xs text-slate-500">
-                Maintenance
-              </p>
-            </div>
-            <div className="flex flex-row align-center justify-between">
-              <p className="font-medium text-base text-gray-700">
-                Project 2 - Task 2.1
-              </p>
-              <p className="font-medium text-base text-gray-700">
-                00:30
-              </p>
-            </div>
-            <div className="flex flex-row align-center justify-between py-4 border-b border-slate-200">
-              <div className="rounded-full px-4 py-1 bg-red-600 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
-                <p className="font-medium text-xs text-white">
-                  Stopped
-                </p>
-              </div>
-              <Button
-                variant="outline"
-                className="font-medium text-xs"
-                onClick={() => navigate("/attribute-hour")}
-              >
-                Close
-              </Button>
-            </div>
-          </div>
-          <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4">
-            <div className="flex flex-row justify-start">
-              <p className="font-medium text-xs text-slate-500">
-                Outsourced
-              </p>
-            </div>
-            <div className="flex flex-row align-center justify-between">
-              <p className="font-medium text-base text-gray-700">
-                Project 3 - Task 2.1
-              </p>
-              <p className="font-medium text-base text-gray-700">
-                00:30
-              </p>
-            </div>
-            <div className="flex flex-row align-center justify-between py-4">
-              <div className="rounded-full px-4 py-1 bg-green-500 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
-                <p className="font-medium text-xs text-white">
-                  Running
-                </p>
-              </div>
-              <Button
-                variant="outline"
-                className="font-medium text-xs"
-                onClick={() => navigate("/attribute-hour")}
-              >
-                Close
-              </Button>
-            </div>
-          </div>
         </div>
       </div>
       <div className="w-full flex-row items-center py-5 flex border-b-2 gap-3">
