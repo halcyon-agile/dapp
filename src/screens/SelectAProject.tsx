@@ -110,6 +110,7 @@ function SelectAProject() {
           <Button
             className="bg-cyan-500"
             onClick={startTask}
+            disabled={startedTask}
           >
             {startedTask ? (
               <ColorRing

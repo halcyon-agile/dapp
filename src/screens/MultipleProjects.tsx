@@ -197,6 +197,7 @@ function MultipleProjects() {
         <button
           className="rounded-md border border-slate-200 py-2 px-4"
           onClick={logoff}
+          disabled={loggedOff}
         >
           {loggedOff ? (
             <ColorRing
