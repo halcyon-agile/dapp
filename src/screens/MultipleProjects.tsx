@@ -8,6 +8,8 @@ import getActiveTasks from "../api/getActiveTasks";
 import getAttendance from "../api/getAttendance";
 import { Button } from "../components/ui/button";
 import Timer from "../components/ui/timer";
+import finishWork from "../api/finishWork";
+import { ColorRing } from "react-loader-spinner";
 
 function formatHourDifference(startedAt: string) {
   const currentDate = DateTime.now();
@@ -48,6 +50,7 @@ function MultipleProjects() {
   ]);
 
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [loggedOff, loggingOff] = useState<boolean>(false)
 
   // Refactor later to only fetch once logged in
   useEffect(() => {
@@ -90,26 +93,23 @@ function MultipleProjects() {
     };
   }, [currentTime]);
 
-  const finishWork = () => {
-    // to be added back once the API is fixed
-    // finishWorkApi()
-    //   .then(() => {
-    //     setUser(undefined);
-    //     setActiveTasks([]);
-    //     // setScreen("LoginScreen");
-    //     localStorage.clear();
-    //     navigate("/login", {
-    //       replace: true,
-    //     })
-    //   })
-    //   .catch((error) => {
-    //     console.log("error", error)
-    //     console.error(error?.response?.data?.message || "Something went wrong");
-    //   });
-    localStorage.clear();
-    navigate("/login", {
-      replace: true,
-    })
+  const logoff = () => {
+    loggingOff(true)
+    finishWork()
+      .then(() => {
+        loggingOff(false)
+        setUser(undefined);
+        setActiveTasks([]);
+        localStorage.clear();
+        navigate("/login", {
+          replace: true,
+        })
+      })
+      .catch((error) => {
+        loggingOff(false)
+        console.log("error", error)
+        console.error(error?.response?.data?.message || "Something went wrong");
+      });
   };
 
   return (
@@ -196,11 +196,23 @@ function MultipleProjects() {
         </button>
         <button
           className="rounded-md border border-slate-200 py-2 px-4"
-          onClick={finishWork}
+          onClick={logoff}
         >
-          <p className="text-slate-900 text-xs text-center">
-            Finish Work
-          </p>
+          {loggedOff ? (
+            <ColorRing
+              visible={loggedOff}
+              height="24"
+              width="24"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper"
+              colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+            />
+          ) : (
+            <p className="text-slate-900 text-xs text-center">
+              Finish Work
+            </p>
+          )}
         </button>
       </div>
       <div className="w-full py-5 flex flex-row">

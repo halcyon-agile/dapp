@@ -1,6 +1,10 @@
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
 import {
   useNavigate,
+  useLocation,
 } from "react-router-dom"
 import { AxiosError } from "axios";
 import { ColorRing } from "react-loader-spinner";
@@ -15,11 +19,14 @@ function SelectAProject() {
     state.activeTasks,
     state.setActiveTasks,
   ]);
+
   const navigate = useNavigate();
+  const location = useLocation()
 
   const [selectedProject, setCurrentProject] = useState<null | number>(null);
   const [fetching, fetch] = useState<boolean>(true)
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [startedTask, startingTask] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -42,37 +49,17 @@ function SelectAProject() {
 
   const startTask = () => {
     if (!selectedTask) return;
-
+    startingTask(true)
     startTaskApi(selectedTask.id)
       .then((taskTime) => {
+        startingTask(false)
         setActiveTasks([...activeTasks, taskTime]);
-        navigate("/multiple-projects")
+        navigate("/multiple-projects", { replace: true })
       })
       .catch((error: { response: { data: { message: any } } }) => {
+        startingTask(false)
         console.error(error?.response?.data?.message || "Something went wrong");
       });
-  };
-
-  const finishWork = () => {
-    // to be added back once the API is fixed
-    // finishWorkApi()
-    //   .then(() => {
-    //     setUser(undefined);
-    //     setActiveTasks([]);
-    //     // setScreen("LoginScreen");
-    //     localStorage.clear();
-    //     navigate("/login", {
-    //       replace: true,
-    //     })
-    //   })
-    //   .catch((error) => {
-    //     console.log("error", error)
-    //     console.error(error?.response?.data?.message || "Something went wrong");
-    //   });
-    localStorage.clear();
-    navigate("/login", {
-      replace: true,
-    })
   };
 
   return (
@@ -111,18 +98,30 @@ function SelectAProject() {
           ))}
         </div>
         <div className="w-full my-4 items-end flex flex-row justify-end gap-4">
+          {location?.state?.screen !== "login" && (
           <Button
             variant="ghost"
             className="border border-slate-200"
-            onClick={finishWork}
+            onClick={() => navigate(-1)}
           >
             Cancel
           </Button>
+          )}
           <Button
             className="bg-cyan-500"
             onClick={startTask}
           >
-            Okay
+            {startedTask ? (
+              <ColorRing
+                visible={startedTask}
+                height="24"
+                width="24"
+                ariaLabel="blocks-loading"
+                wrapperStyle={{}}
+                wrapperClass="blocks-wrapper"
+                colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+              />
+            ) : "Okay"}
           </Button>
         </div>
       </div>
