@@ -36,7 +36,6 @@ function SelectAProject() {
         const fetchTasks = async () => {
           try {
             const fetchedTasks: Task[] = await getTasks();
-            console.log(fetchedTasks)
             setTasks(fetchedTasks);
             fetch(false)
           } catch (error: AxiosError | any) {

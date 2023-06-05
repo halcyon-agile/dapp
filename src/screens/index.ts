@@ -7,6 +7,7 @@ import MultipleProjects from "./MultipleProjects";
 import AttributeHour from "./AttributeHour";
 import BreakReason from "./BreakReason";
 import BreakTimer from "./BreakTimer";
+import Consultations from "./Consultations";
 
 export {
   LoginScreen,
@@ -17,4 +18,5 @@ export {
   AttributeHour,
   BreakReason,
   BreakTimer,
+  Consultations,
 };

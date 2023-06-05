@@ -29,8 +29,8 @@ function formatHourDifference(startedAt: string) {
   if (isNaN(Number(formattedMinutes)) || Number(formattedMinutes) < 0) {
     return "00:00";
   }
-  // return `${formattedHours}:${formattedMinutes}`;
-  return moment(startedAt).toNow(true)
+  return `${formattedHours}:${formattedMinutes}`;
+  // return moment(startedAt).toNow(true)
 }
 
 function MultipleProjects() {
@@ -144,13 +144,13 @@ function MultipleProjects() {
               <div className="flex flex-row align-center justify-between py-4 border-b border-slate-200">
                   {data?.ended_at === null ? (
                     <div className="rounded-full px-4 py-1 bg-green-500 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
-                      <p className="font-medium text-xs text-white">
+                      <p className="font-medium text-xs text-white text-center">
                         Running
                       </p>
                     </div>
                   ) : (
                     <div className="rounded-full px-4 py-1 bg-red-600 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
-                      <p className="font-medium text-xs text-white">
+                      <p className="font-medium text-xs text-white text-center">
                         Stopped
                       </p>
                     </div>
@@ -248,7 +248,10 @@ function MultipleProjects() {
               Portal
             </p>
           </div>
-          <div className="flex flex-col items-center">
+          <button
+            className="flex flex-col items-center"
+            onClick={() => navigate("/consultations")}
+          >
             <div className="rounded-full border border-slate-200 p-3 mb-2">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#334155" className="w-4 h-4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -257,7 +260,7 @@ function MultipleProjects() {
             <p className="text-xs text-gray-500">
               Consultation
             </p>
-          </div>
+          </button>
         </div>
         <div className="flex items-end justify-end">
           <div className="flex flex-col items-end">
