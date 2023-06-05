@@ -1,4 +1,4 @@
-import customAxios from "../lib/customAxios";
+import request from "../lib/request";
 import { AxiosError } from "axios";
 import { TaskTime } from "./getActiveTasks";
 
@@ -6,7 +6,7 @@ const startTask = async (
   taskId: number
 ): Promise<TaskTime | AxiosError | any> => {
   try {
-    const taskTimeResponse = await customAxios.post(
+    const taskTimeResponse = await request.post(
       `api/tasks/${taskId}/start`
     );
 

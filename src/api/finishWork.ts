@@ -1,4 +1,4 @@
-import customAxios from "../lib/customAxios";
+import request from "../lib/request";
 import { AxiosError } from "axios";
 
 export interface Attendance {
@@ -9,11 +9,11 @@ export interface Attendance {
 
 const finishWork = async (): Promise<Attendance | AxiosError | any> => {
   try {
-    const attendance = await customAxios.post(`api/finish-work`, {
+    const attendance = await request.post(`api/finish-work`, {
       password: "secret",
     });
 
-    delete customAxios.defaults.headers.common["Authorization"];
+    delete request.defaults.headers.common["Authorization"];
     
     return attendance.data;
   } catch (error) {

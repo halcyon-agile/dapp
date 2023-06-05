@@ -1,4 +1,4 @@
-import customAxios from "../lib/customAxios";
+import request from "../lib/request";
 import { AxiosError } from "axios";
 export interface TaskTime {
   id: number;
@@ -19,7 +19,7 @@ export interface TaskTime {
 
 const getActiveTasks = async (): Promise<TaskTime[] | AxiosError | any> => {
   try {
-    const tasks = await customAxios.get("/api/active-tasks");
+    const tasks = await request.get("/api/active-tasks");
     return tasks.data;
   } catch (error) {
     console.error(error);

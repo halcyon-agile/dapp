@@ -1,4 +1,4 @@
-import customAxios from "../lib/customAxios";
+import request from "../lib/request";
 import { AxiosError } from "axios";
 
 export interface UserData {
@@ -18,16 +18,16 @@ const loginUser = async (
   password: string
 ): Promise<UserData | AxiosError | any> => {
   try {
-    const loginResponse = await customAxios.post("/api/login", {
+    const loginResponse = await request.post("/api/login", {
       email,
       password,
       device_name: "desktop-app",
     });
     localStorage.setItem("token", loginResponse.data.token);
-    customAxios.defaults.headers.common[
+    request.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${loginResponse.data.token}`;
-    const userResponse = await customAxios.get("/api/me");
+    const userResponse = await request.get("/api/me");
     return userResponse.data as UserData;
   } catch (error: AxiosError | any) {
     throw error;

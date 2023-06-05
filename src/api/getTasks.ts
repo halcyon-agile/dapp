@@ -1,4 +1,4 @@
-import customAxios from "../lib/customAxios";
+import request from "../lib/request";
 import { AxiosError } from "axios";
 
 export interface Task {
@@ -14,7 +14,7 @@ export interface Task {
 
 const getTasks = async (): Promise<Task[] | AxiosError | any> => {
   try {
-    const tasks = await customAxios.get("/api/tasks");
+    const tasks = await request.get("/api/tasks");
     return tasks.data;
   } catch (error) {
     console.error(error);
