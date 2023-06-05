@@ -173,7 +173,7 @@ function MultipleProjects() {
       <div className="w-full flex-row items-center py-5 flex border-b-2 gap-3">
         <button
           className="rounded-md border border-slate-200 py-2 px-4"
-          onClick={() => navigate("/select-a-project")}
+          onClick={() => navigate("/")}
         >
           <p className="text-slate-900 text-xs text-center">
             Add Project

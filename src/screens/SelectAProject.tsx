@@ -13,6 +13,7 @@ import { Button } from "../components/ui/button";
 import getTasks, { Task } from "../api/getTasks";
 import useStore from "../store";
 import startTaskApi from "../api/startTask";
+import getActiveTasks from "../api/getActiveTasks";
 
 function SelectAProject() {
   const [activeTasks, setActiveTasks] = useStore((state) => [
@@ -29,19 +30,25 @@ function SelectAProject() {
   const [startedTask, startingTask] = useState<boolean>(false)
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const fetchedTasks: Task[] = await getTasks();
-        console.log(fetchedTasks)
-        setTasks(fetchedTasks);
-        fetch(false)
-      } catch (error: AxiosError | any) {
-        console.error(error?.response?.data?.message || "Something went wrong");
-        fetch(false)
+    getActiveTasks().then((tasks) => {
+      setActiveTasks(tasks);
+      if (activeTasks.length <= 0) {
+        const fetchTasks = async () => {
+          try {
+            const fetchedTasks: Task[] = await getTasks();
+            console.log(fetchedTasks)
+            setTasks(fetchedTasks);
+            fetch(false)
+          } catch (error: AxiosError | any) {
+            console.error(error?.response?.data?.message || "Something went wrong");
+            fetch(false)
+          }
+        };
+        fetchTasks();
+      } else {
+        navigate("/multiple-projects", { replace: true })
       }
-    };
-
-    fetchTasks();
+    });
   }, []);
 
   const selectedTask =
