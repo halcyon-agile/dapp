@@ -32,6 +32,9 @@ function LoginScreen() {
       setUser(user);
       navigate("/", {
         replace: true,
+        state: {
+          screen: 'login',
+        }
       })
       attemptingLogin(false)
     } catch (error: AxiosError | any) {

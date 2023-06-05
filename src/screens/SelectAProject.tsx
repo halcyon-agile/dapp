@@ -99,13 +99,13 @@ function SelectAProject() {
         </div>
         <div className="w-full my-4 items-end flex flex-row justify-end gap-4">
           {location?.state?.screen !== "login" && (
-          <Button
-            variant="ghost"
-            className="border border-slate-200"
-            onClick={() => navigate(-1)}
-          >
-            Cancel
-          </Button>
+            <Button
+              variant="ghost"
+              className="border border-slate-200"
+              onClick={() => navigate(-1)}
+            >
+              Cancel
+            </Button>
           )}
           <Button
             className="bg-cyan-500"
