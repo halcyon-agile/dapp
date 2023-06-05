@@ -1,5 +1,9 @@
-import { useState, useEffect } from "react";
+import {
+  useState,
+  useEffect,
+} from "react";
 import { useNavigate } from "react-router-dom";
+import { ColorRing } from "react-loader-spinner";
 import { DateTime } from "luxon";
 import moment from "moment";
 
@@ -9,7 +13,6 @@ import getAttendance from "../api/getAttendance";
 import { Button } from "../components/ui/button";
 import Timer from "../components/ui/timer";
 import finishWork from "../api/finishWork";
-import { ColorRing } from "react-loader-spinner";
 
 function formatHourDifference(startedAt: string) {
   const currentDate = DateTime.now();
@@ -111,7 +114,6 @@ function MultipleProjects() {
         console.error(error?.response?.data?.message || "Something went wrong");
       });
   };
-  console.log('user', user)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">

@@ -13,7 +13,6 @@ import { Button } from "../components/ui/button";
 import getTasks, { Task } from "../api/getTasks";
 import useStore from "../store";
 import startTaskApi from "../api/startTask";
-import getActiveTasks from "../api/getActiveTasks";
 
 function SelectAProject() {
   const [activeTasks, setActiveTasks] = useStore((state) => [
@@ -30,24 +29,22 @@ function SelectAProject() {
   const [startedTask, startingTask] = useState<boolean>(false)
 
   useEffect(() => {
-    getActiveTasks().then((tasks) => {
-      setActiveTasks(tasks);
-      if (activeTasks.length <= 0) {
-        const fetchTasks = async () => {
-          try {
-            const fetchedTasks: Task[] = await getTasks();
-            setTasks(fetchedTasks);
-            fetch(false)
-          } catch (error: AxiosError | any) {
-            console.error(error?.response?.data?.message || "Something went wrong");
-            fetch(false)
-          }
-        };
-        fetchTasks();
-      } else {
-        navigate("/multiple-projects", { replace: true })
+    const fetchTasks = async () => {
+      try {
+        const fetchedTasks: Task[] = await getTasks();
+        setTasks(
+          fetchedTasks.filter(
+            (task) =>
+              !activeTasks.find((activeTask) => activeTask.task.id === task.id)
+          )
+        );
+        fetch(false)
+      } catch (error: AxiosError | any) {
+        console.error(error?.response?.data?.message || "Something went wrong");
+        fetch(false)
       }
-    });
+    };
+    fetchTasks();
   }, []);
 
   const selectedTask =
@@ -76,7 +73,7 @@ function SelectAProject() {
         </p>
       </div>
       <div className="flex flex-col flex-1 bg-white w-full h-full text-black mt-5">
-        <div className="w-full border-b py-2">
+        <div className="w-full py-2">
           {fetching && (
             <ColorRing
               visible={fetching}
@@ -89,18 +86,19 @@ function SelectAProject() {
             />
           )}
           {tasks.map((data: any, index: number) => (
-            <button
-              className={`py-1.5 px-2 w-full rounded-md flex flex-row align-center justify-between ${selectedProject === index && "bg-slate-100"}`}
-              key={1}
-              onClick={() => setCurrentProject(index)}
-            >
-              <p className={`left-0 top-0 w-full text-1xl flex-1 text-left font-normal text-base text-slate-700`}>
-                {data.project.name} - {data.name}
-              </p>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#334155" className="w-4 h-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
-            </button>
+            <div className="flex w-full py-4 border-b" key={index}>
+              <button
+                className={`py-1.5 px-2 w-full rounded-md flex flex-row items-center justify-between ${selectedProject === index && "bg-slate-100"}`}
+                onClick={() => setCurrentProject(index)}
+              >
+                <p className={`left-0 top-0 w-full text-1xl flex-1 text-left font-normal text-base text-slate-700`}>
+                  {data.project.name} - {data.name}
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#334155" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+              </button>
+            </div>
           ))}
         </div>
         <div className="w-full my-4 items-end flex flex-row justify-end gap-4">
