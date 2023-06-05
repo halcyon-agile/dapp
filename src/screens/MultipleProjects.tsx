@@ -111,6 +111,7 @@ function MultipleProjects() {
         console.error(error?.response?.data?.message || "Something went wrong");
       });
   };
+  console.log('user', user)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -268,7 +269,7 @@ function MultipleProjects() {
               Time In
             </p>
             <p className="font-semibold text-2xl text-slate-900">
-              7:00 AM
+              {moment(user?.attendance?.started_at).format('hh:mm A')}
             </p>
           </div>
         </div>
