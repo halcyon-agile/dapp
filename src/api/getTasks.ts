@@ -17,7 +17,7 @@ const getTasks = async (): Promise<Task[] | AxiosError | any> => {
     const tasks = await request.get("/api/tasks");
     return tasks.data;
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error;
   }
 };

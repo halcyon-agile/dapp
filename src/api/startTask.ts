@@ -12,7 +12,7 @@ const startTask = async (
 
     return taskTimeResponse.data;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     throw error;
   }
 };

@@ -14,7 +14,7 @@ function LoginScreen() {
   const navigate = useNavigate();
   const [setUser] = useStore((state) => [state.setUser, state.setScreen]);
   const [form, setForm] = useState<{ email: string; password: string }>({
-    email: import.meta.env.VITE_MODE === "DEV" ? "system.administrator@halcyon-pms-web.test" : "system.administrator@lively-geyser-q53l27l9w5bc.vapor-farm-e1.com",
+    email: import.meta.env.VITE_MODE === "DEV" ? "system.administrator@halcyon-pms-web.test" : "halcyon.developer@lively-geyser-q53l27l9w5bc.vapor-farm-e1.com",
     password: "secret",
   });
   const [attempting, attemptingLogin] = useState<boolean>(false);

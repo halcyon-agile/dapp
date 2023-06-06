@@ -7,7 +7,7 @@ const getAttendance = async (): Promise<Attendance | AxiosError | any> => {
     const attendanceResponse = await request.get("/api/attendance");
     return attendanceResponse.data;
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error;
   }
 };

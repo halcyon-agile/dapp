@@ -7,7 +7,7 @@ const stopTask = async (taskId: number): Promise<Task | AxiosError | any> => {
     const tasks = await request.post(`api/tasks/${taskId}/stop`);
     return tasks.data;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     throw error;
   }
 };

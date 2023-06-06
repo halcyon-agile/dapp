@@ -110,8 +110,7 @@ function MultipleProjects() {
       })
       .catch((error) => {
         loggingOff(false)
-        console.log("error", error)
-        console.error(error?.response?.data?.message || "Something went wrong");
+        // console.error(error?.response?.data?.message || "Something went wrong");
       });
   };
 

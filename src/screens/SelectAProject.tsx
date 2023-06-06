@@ -8,11 +8,13 @@ import {
 } from "react-router-dom"
 import { AxiosError } from "axios";
 import { ColorRing } from "react-loader-spinner";
+import { Terminal } from "lucide-react";
 
 import { Button } from "../components/ui/button";
 import getTasks, { Task } from "../api/getTasks";
 import useStore from "../store";
 import startTaskApi from "../api/startTask";
+import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
 
 function SelectAProject() {
   const [activeTasks, setActiveTasks] = useStore((state) => [
@@ -29,6 +31,13 @@ function SelectAProject() {
   const [startedTask, startingTask] = useState<boolean>(false)
 
   useEffect(() => {
+    const userData = localStorage.getItem("token")
+    // console.log("userData", userData)
+    if (!userData) {
+      navigate("/login", {
+        replace: true,
+      })
+    }
     const fetchTasks = async () => {
       try {
         const fetchedTasks: Task[] = await getTasks();
@@ -40,7 +49,7 @@ function SelectAProject() {
         );
         fetch(false)
       } catch (error: AxiosError | any) {
-        console.error(error?.response?.data?.message || "Something went wrong");
+        // console.error(error?.response?.data?.message || "Something went wrong");
         fetch(false)
       }
     };
@@ -85,7 +94,7 @@ function SelectAProject() {
               colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
             />
           )}
-          {tasks.map((data: any, index: number) => (
+          {tasks.length > 0 ? tasks.map((data: any, index: number) => (
             <div className="flex w-full py-4 border-b" key={index}>
               <button
                 className={`py-1.5 px-2 w-full rounded-md flex flex-row items-center justify-between ${selectedProject === index && "bg-slate-100"}`}
@@ -99,7 +108,15 @@ function SelectAProject() {
                 </svg>
               </button>
             </div>
-          ))}
+          )) : !fetching ? (
+            <Alert>
+              <Terminal className="h-4 w-4" />
+              <AlertTitle>Heads up!</AlertTitle>
+              <AlertDescription>
+                There are no tasks available right now.
+              </AlertDescription>
+            </Alert>
+          ) : null}
         </div>
         <div className="w-full my-4 items-end flex flex-row justify-end gap-4">
           {location?.state?.screen !== "login" && (
