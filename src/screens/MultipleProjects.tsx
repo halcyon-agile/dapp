@@ -133,7 +133,7 @@ function MultipleProjects() {
         </div>
         {activeTasks.map((data: any) => (
           <div className="w-full border rounded-sm">
-            <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4" key={data.id}>
+            <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4" key={data?.id}>
               <div className="flex flex-row justify-between">
                 <p className="font-medium text-xs text-slate-500">
                   {data?.task?.project?.project_type?.name}
