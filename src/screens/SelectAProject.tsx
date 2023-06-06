@@ -10,11 +10,15 @@ import { AxiosError } from "axios";
 import { ColorRing } from "react-loader-spinner";
 import { Terminal } from "lucide-react";
 
-import { Button } from "../components/ui/button";
 import getTasks, { Task } from "../api/getTasks";
 import useStore from "../store";
 import startTaskApi from "../api/startTask";
-import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button
+} from "../components/ui";
 
 function SelectAProject() {
   const [activeTasks, setActiveTasks] = useStore((state) => [
