@@ -117,8 +117,6 @@ function MultipleProjects() {
       });
   };
 
-  console.log('active', activeTasks)
-
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
       <div className="items-center justify-center text-sm flex flex-col w-full gap-2">
@@ -153,7 +151,8 @@ function MultipleProjects() {
                   {formatHourDifference(data.started_at)}
                 </p> */}
               </div>
-              <div className="flex flex-row align-center justify-between py-4 border-b border-slate-200">
+              <div className="flex flex-row items-center justify-between py-4 border-b border-slate-200">
+                <div className="flex flex-1">
                   {data?.ended_at === null ? (
                     <div className="rounded-full px-4 py-1 bg-green-500 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
                       <p className="font-medium text-xs text-white text-center">
@@ -167,18 +166,41 @@ function MultipleProjects() {
                       </p>
                     </div>
                   )}
-                <Button
-                  variant="outline"
-                  className="font-medium text-xs"
-                  onClick={() => {
-                    setSelectedTask(data)
-                    navigate("/attribute-hour")
-                  }}
-                >
-                  Close
-                </Button>
+                </div>
+                <div className="flex-9 flex-row items-center justify-end">
+                  <Button
+                    variant="outline"
+                    className="font-medium text-xs ml-4"
+                    onClick={() => {
+                      setSelectedTask(data)
+                      navigate("/attribute-hour")
+                    }}
+                  >
+                    Return
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="font-medium text-xs ml-4"
+                    onClick={() => {
+                      setSelectedTask(data)
+                      navigate("/attribute-hour")
+                    }}
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="font-medium text-xs ml-4"
+                    // onClick={() => {
+                    //   setSelectedTask(data)
+                    //   navigate("/attribute-hour")
+                    // }}
+                  >
+                    Consult
+                  </Button>
+                </div>
               </div>
-              <Graph />
+              <Graph showRemainingHours />
             </div>
           </div>
         ))}

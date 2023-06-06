@@ -5,7 +5,11 @@ import {
   CollapsibleTrigger,
 } from "../ui/collapsible";
 
-function Graph() {
+interface Props {
+  showRemainingHours?: boolean
+}
+
+function Graph(props: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   return (
     <Collapsible
@@ -15,6 +19,11 @@ function Graph() {
     >
       <CollapsibleContent>
         <div className="w-full pt-2">
+          {props?.showRemainingHours && (
+            <p className="text-sm font-normal text-gray-700">
+              Remaining Hours: 40
+            </p>
+          )}
           <div className="flex flex-row w-full items-center py-1">
             <p className="flex-1 pr-2 text-xs text-gray-500">
               96 Hrs (12)
