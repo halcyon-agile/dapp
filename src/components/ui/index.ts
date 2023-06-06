@@ -4,6 +4,7 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./collapsib
 import { Input } from "./input";
 import { Label } from "./label";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "./tooltip"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "./tabs"
 
 export {
   Alert,
@@ -20,4 +21,8 @@ export {
   TooltipTrigger,
   TooltipContent,
   TooltipProvider,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
 }
