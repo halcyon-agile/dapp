@@ -119,9 +119,9 @@ function MultipleProjects() {
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
-      <div className="items-center justify-center text-sm flex flex-row w-full">
+      <div className="items-center justify-center text-sm flex flex-col w-full gap-2">
         <div className="w-full border rounded-sm">
-          <div className="left-0 top-0 w-full items-center justify-between text-4xl flex-1 flex flex-row align-center py-2 px-4 border-b">
+          <div className="left-0 top-0 w-full items-center justify-between text-4xl flex-1 flex flex-row align-center py-2 px-4">
             <p className="font-semibold text-xl">
               All
             </p>
@@ -130,12 +130,17 @@ function MultipleProjects() {
               {formatHourDifference(user?.attendance?.started_at)}
             </p>
           </div>
-          {activeTasks.map((data: any) => (  
+        </div>
+        {activeTasks.map((data: any) => (
+          <div className="w-full border rounded-sm">
             <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4" key={data.id}>
-              <div className="flex flex-row justify-start">
+              <div className="flex flex-row justify-between">
                 <p className="font-medium text-xs text-slate-500">
                   {data?.type}
                 </p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#334155" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                </svg>
               </div>
               <div className="flex flex-row align-center justify-between">
                 <p className="font-medium text-base text-gray-700">
@@ -173,8 +178,8 @@ function MultipleProjects() {
               </div>
               <Graph />
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
       <div className="w-full flex-row justify-between py-5 flex border-b-2">
         <div className="flex flex-1 flex-row items-center gap-3">
