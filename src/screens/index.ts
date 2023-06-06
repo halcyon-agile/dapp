@@ -8,6 +8,7 @@ import AttributeHour from "./AttributeHour";
 import BreakReason from "./BreakReason";
 import BreakTimer from "./BreakTimer";
 import Consultations from "./Consultations";
+import Scrum from "./Scrum";
 
 export {
   LoginScreen,
@@ -19,4 +20,5 @@ export {
   BreakReason,
   BreakTimer,
   Consultations,
+  Scrum,
 };

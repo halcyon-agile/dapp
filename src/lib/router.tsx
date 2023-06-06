@@ -11,6 +11,7 @@ import {
   BreakReason,
   BreakTimer,
   Consultations,
+  Scrum,
 } from "../screens"
 
 const router = createBrowserRouter([
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: "consultations",
     element: <Consultations />
+  },
+  {
+    path: "scrum",
+    element: <Scrum />
   }
 ]);
 
