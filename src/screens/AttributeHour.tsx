@@ -28,10 +28,9 @@ function AttributeHour() {
         navigate("/multiple-projects")
       })
       .catch((error) => {
-        console.error(error?.response?.data?.message || "Something went wrong");
+        // console.error(error?.response?.data?.message || "Something went wrong");
       });
   };
-  console.log('selected', selectedTask)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">

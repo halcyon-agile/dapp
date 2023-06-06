@@ -11,8 +11,9 @@ import useStore from "../store";
 import getActiveTasks from "../api/getActiveTasks";
 import getAttendance from "../api/getAttendance";
 import { Button } from "../components/ui/button";
-import Timer from "../components/ui/timer";
+import Timer from "../components/custom/timer";
 import finishWork from "../api/finishWork";
+import Graph from "../components/custom/graph";
 
 function formatHourDifference(startedAt: string) {
   const currentDate = DateTime.now();
@@ -114,6 +115,8 @@ function MultipleProjects() {
       });
   };
 
+  console.log('active', activeTasks)
+
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
       <div className="items-center justify-center text-sm flex flex-row w-full">
@@ -128,7 +131,7 @@ function MultipleProjects() {
             </p>
           </div>
           {activeTasks.map((data: any) => (  
-            <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4">
+            <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4" key={data.id}>
               <div className="flex flex-row justify-start">
                 <p className="font-medium text-xs text-slate-500">
                   {data?.type}
@@ -168,58 +171,63 @@ function MultipleProjects() {
                   Close
                 </Button>
               </div>
+              <Graph />
             </div>
           ))}
         </div>
       </div>
-      <div className="w-full flex-row items-center py-5 flex border-b-2 gap-3">
-        <button
-          className="rounded-md border border-slate-200 py-2 px-4"
-          onClick={() => navigate("/")}
-        >
-          <p className="text-slate-900 text-xs text-center">
-            Add Project
-          </p>
-        </button>
-        <button
-          className="rounded-md border border-slate-200 py-2 px-4"
-          onClick={() => {
-            // if (notificationPermissionGranted) {
-            //   sendNotification("Tauri is awesome!");
-            //   sendNotification({ title: "TAURI", body: "Tauri is awesome!" });
-            // }
-            // setScreen("TakeABreak")
-            navigate("/take-a-break")
-          }}
-        >
-          <p className="text-slate-900 text-xs text-center">
-            Take a Break
-          </p>
-        </button>
-        <button
-          className="rounded-md border border-slate-200 py-2 px-4"
-          onClick={logoff}
-          disabled={loggedOff}
-        >
-          {loggedOff ? (
-            <ColorRing
-              visible={loggedOff}
-              height="24"
-              width="24"
-              ariaLabel="blocks-loading"
-              wrapperStyle={{}}
-              wrapperClass="blocks-wrapper"
-              colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
-            />
-          ) : (
+      <div className="w-full flex-row justify-between py-5 flex border-b-2">
+        <div className="flex flex-1 flex-row items-center gap-3">
+          <button
+            className="rounded-md border border-slate-200 py-2 px-4"
+            onClick={() => navigate("/")}
+          >
             <p className="text-slate-900 text-xs text-center">
-              Finish Work
+              Add Task
             </p>
-          )}
-        </button>
+          </button>
+          <button
+            className="rounded-md border border-slate-200 py-2 px-4"
+            onClick={() => {
+              // if (notificationPermissionGranted) {
+              //   sendNotification("Tauri is awesome!");
+              //   sendNotification({ title: "TAURI", body: "Tauri is awesome!" });
+              // }
+              // setScreen("TakeABreak")
+              navigate("/take-a-break")
+            }}
+          >
+            <p className="text-slate-900 text-xs text-center">
+              Take a Break
+            </p>
+          </button>
+        </div>
+        <div className="flex">
+          <button
+            className="rounded-md border border-slate-200 py-2 px-4"
+            onClick={logoff}
+            disabled={loggedOff}
+          >
+            {loggedOff ? (
+              <ColorRing
+                visible={loggedOff}
+                height="24"
+                width="24"
+                ariaLabel="blocks-loading"
+                wrapperStyle={{}}
+                wrapperClass="blocks-wrapper"
+                colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+              />
+            ) : (
+              <p className="text-slate-900 text-xs text-center">
+                Finish Work
+              </p>
+            )}
+          </button>
+        </div>
       </div>
-      <div className="w-full py-5 flex flex-row">
-        <div className="flex flex-1 flex-row items-center gap-8">
+      <div className="w-full py-5 flex flex-row items-start">
+        <div className="flex flex-1 flex-row items-center gap-8 flex-wrap">
           <div className="flex flex-col items-center">
             <div className="rounded-full border border-slate-200 p-3 mb-2">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#334155" className="w-4 h-4">
@@ -263,8 +271,20 @@ function MultipleProjects() {
               Consultation
             </p>
           </button>
+          <button
+            className="flex flex-col items-center"
+          >
+            <div className="rounded-full border border-slate-200 p-3 mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#334155" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+              </svg>
+            </div>
+            <p className="text-xs text-gray-500">
+              Scrum
+            </p>
+          </button>
         </div>
-        <div className="flex items-end justify-end">
+        <div className="flex items-end justify-end ml-2">
           <div className="flex flex-col items-end">
             <p className="text-xs text-gray-500">
               Time In
