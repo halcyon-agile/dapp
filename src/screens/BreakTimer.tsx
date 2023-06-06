@@ -1,9 +1,19 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
-import { Button } from "../components/ui/button"
+import { Button } from "../components/ui/button";
+import endBreakApi from "../api/endBreak";
 
 function BreakTimer() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const endBreak = () => {
+    endBreakApi()
+      .then(() => navigate("/multiple-projects"))
+      .catch((error) => {
+        console.error(error?.response?.data?.message || "Something went wrong");
+      });
+  };
+
   return (
     <main className="flex min-h-screen flex-col text-black py-16">
       <div className="w-full flex flex-col items-center gap-4">
@@ -15,15 +25,12 @@ function BreakTimer() {
             ALERT! Break exceeds inputted time.
           </p>
         </div>
-        <Button
-          className="bg-cyan-500 px-4"
-          onClick={() => navigate("/multiple-projects")}
-        >
+        <Button className="bg-cyan-500 px-4" onClick={() => endBreak()}>
           End Break
         </Button>
       </div>
     </main>
-  )
+  );
 }
 
-export default BreakTimer
+export default BreakTimer;
