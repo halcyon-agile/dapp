@@ -9,7 +9,7 @@ const request = axios.create({
 })
 
 request.interceptors.response.use(undefined, data => {
-  console.log('data', data)
+  // console.log('data', data)
   if (data.response.config) {
     if (data.response.data) {
       if (data.response.status === 401 || data.response.status === 403) {
