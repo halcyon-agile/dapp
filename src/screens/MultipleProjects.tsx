@@ -18,6 +18,7 @@ import {
 } from "../components/custom";
 import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
 import leaveConsultation from "../api/consultations/leave-consultation";
+import startTask from "../api/startTask";
 
 function formatHourDifference(startedAt: string) {
   const currentDate = DateTime.now();
@@ -49,12 +50,16 @@ function MultipleProjects() {
     setActiveTasks,
     setUser,
     setSelectedTask,
+    stoppedTasks,
+    setStoppedTasks,
   ] = useStore((state) => [
     state.user,
     state.activeTasks,
     state.setActiveTasks,
     state.setUser,
     state.setSelectedTask,
+    state.stoppedTasks,
+    state.setStoppedTasks,
   ]);
 
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
@@ -109,6 +114,7 @@ function MultipleProjects() {
         loggingOff(false)
         setUser(undefined);
         setActiveTasks([]);
+        setStoppedTasks([])
         localStorage.clear();
         navigate("/login", {
           replace: true,
@@ -120,7 +126,7 @@ function MultipleProjects() {
       });
   };
 
-  console.log('active', activeTasks)
+  // console.log('active', activeTasks)
 
   // console.log('user', user)
 
@@ -244,6 +250,85 @@ function MultipleProjects() {
             </AlertDescription>
           </Alert>
         )}
+        {stoppedTasks.map((data: any) => (
+          <div className="w-full border rounded-sm" key={data?.id}>
+            <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4">
+              <div className="flex flex-row justify-between">
+                <p className="font-medium text-xs text-slate-500">
+                  {data?.consultation_id === null ? data?.task?.project?.project_type?.name : "Consultation"}
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#334155" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                </svg>
+              </div>
+              <div className="flex flex-row align-center justify-between">
+                <p className="font-medium text-base text-gray-700">
+                  {data?.task?.project?.name} - {data?.task?.name}
+                </p>
+                <Timer started_at={data?.started_at} />
+              </div>
+              <div className="flex flex-row items-center justify-between py-4 border-b border-slate-200">
+                <div className="flex flex-1">
+                  <div className="rounded-full px-4 py-1 bg-red-600 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
+                    <p className="font-medium text-xs text-white text-center">
+                      Stopped
+                    </p>
+                  </div>
+                </div>
+                <div className="flex-9 flex-row items-center justify-end">
+                  <Button
+                    variant="outline"
+                    className="font-medium text-xs ml-4"
+                    onClick={() => {
+                      startTask(data?.id)
+                        .then((taskTime) => {
+                          if (activeTasks.length <= 0) {
+                            setActiveTasks([taskTime]);
+                            navigate("/multiple-projects", { replace: true })
+                          } else {
+                            setActiveTasks([taskTime]);
+                            navigate("/multiple-projects", { replace: true })
+                          }
+                        })
+                        .catch((error: { response: { data: { message: any } } }) => {
+                          console.error(error?.response?.data?.message || "Something went wrong");
+                        });
+                    }}
+                  >
+                    Return
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="font-medium text-xs ml-4"
+                    // onClick={() => {
+                    //   setSelectedTask(data)
+                    //   navigate("/attribute-hour")
+                    // }}
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="font-medium text-xs ml-4"
+                    // onClick={() => {
+                    //   setSelectedTask(data)
+                    //   navigate("/attribute-hour")
+                    // }}
+                  >
+                    Consult
+                  </Button>
+                </div>
+              </div>
+              {data?.consultation_id === null && (
+                <Graph
+                  showRemainingHours
+                  assigned={data?.task?.assignees?.find((x: any) => x.admin_id === user.id)}
+                  started_at={data?.started_at}
+                />
+              )}
+            </div>
+          </div>
+        ))}
       </div>
       <div className="w-full flex-row justify-between py-5 flex border-b-2">
         <div className="flex flex-1 flex-row items-center gap-3">

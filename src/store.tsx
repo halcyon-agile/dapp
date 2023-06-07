@@ -10,6 +10,7 @@ type State = {
   notificationPermissionGranted: boolean;
   selectedTask: any;
   consultations: Consultations[];
+  stoppedTasks: TaskTime[];
 };
 
 type Action = {
@@ -21,6 +22,7 @@ type Action = {
   ) => void;
   setSelectedTask: (task: any) => void;
   setConsultations: (list: any) => void;
+  setStoppedTasks: (task: any) => void;
 };
 
 const useStore = create(
@@ -38,7 +40,9 @@ const useStore = create(
       selectedTask: null,
       setSelectedTask: (task: any) => set(() => ({ selectedTask: task })),
       consultations: [],
-      setConsultations: (consultations: any) => set(() => ({ consultations }))
+      setConsultations: (consultations: any) => set(() => ({ consultations })),
+      stoppedTasks: [],
+      setStoppedTasks: (task: any) => set(() => ({ stoppedTasks: task })),
     }),
     {
       name: "store",

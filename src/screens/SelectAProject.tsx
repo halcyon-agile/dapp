@@ -21,9 +21,14 @@ import {
 } from "../components/ui";
 
 function SelectAProject() {
-  const [activeTasks, setActiveTasks] = useStore((state) => [
+  const [
+    activeTasks,
+    setActiveTasks,
+    setStoppedTasks,
+  ] = useStore((state) => [
     state.activeTasks,
     state.setActiveTasks,
+    state.setStoppedTasks,
   ]);
 
   const navigate = useNavigate();
@@ -71,8 +76,14 @@ function SelectAProject() {
       startTaskApi(selectedTask.id)
         .then((taskTime) => {
           startingTask(false)
-          setActiveTasks([...activeTasks, taskTime]);
-          navigate("/multiple-projects", { replace: true })
+          if (activeTasks.length <= 0) {
+            setActiveTasks([taskTime]);
+            navigate("/multiple-projects", { replace: true })
+          } else {
+            setStoppedTasks([...activeTasks])
+            setActiveTasks([taskTime]);
+            navigate("/multiple-projects", { replace: true })
+          }
         })
         .catch((error: { response: { data: { message: any } } }) => {
           startingTask(false)

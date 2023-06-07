@@ -13,8 +13,12 @@ function AttributeHour() {
   const navigate = useNavigate()
   const [
     selectedTask,
+    stoppedTasks,
+    setStoppedTasks,
   ] = useStore((state) => [
     state.selectedTask,
+    state.stoppedTasks,
+    state.setStoppedTasks,
   ]);
 
   const [form, setForm] = useState<{hour: number | null, minute: number | null}>({
@@ -25,12 +29,15 @@ function AttributeHour() {
   const stopTask = (id: number) => {
     stopTaskApi(id)
       .then(() => {
+        setStoppedTasks([...stoppedTasks, selectedTask])
         navigate("/multiple-projects")
       })
       .catch((error) => {
         // console.error(error?.response?.data?.message || "Something went wrong");
       });
   };
+
+  // console.log('selected', selectedTask)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">

@@ -23,7 +23,7 @@ function ConsultationItem(props: Props) {
     state.activeTasks,
   ]);
 
-  console.log(activeTasks.find((item) => item.consultation_id === props?.data?.id))
+  // console.log(activeTasks.find((item) => item.consultation_id === props?.data?.id))
 
   return (
     <div className="w-full flex flex-1 flex-col gap-4">
