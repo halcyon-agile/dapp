@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import moment from "moment";
+
 import {
   Collapsible,
   CollapsibleContent,
@@ -7,10 +9,24 @@ import {
 
 interface Props {
   showRemainingHours?: boolean
+  assigned: any
+  started_at: string
 }
 
 function Graph(props: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [time, setTime] = useState("")
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const timeDiff = moment.duration(moment().diff(moment(props?.started_at)))
+      const hour = timeDiff.hours()
+      const formatHour = Math.floor(hour)
+      setTime(`${formatHour}`)
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [time])
+
   return (
     <Collapsible
       open={isOpen}
@@ -26,7 +42,7 @@ function Graph(props: Props) {
           )}
           <div className="flex flex-row w-full items-center py-1">
             <p className="flex-1 pr-2 text-xs text-gray-500">
-              96 Hrs (12)
+              {props?.assigned?.estimate} Hrs
             </p>
             <div className="flex-[5]">
               <div className="h-2.5 rounded-full bg-teal-500 grow" />

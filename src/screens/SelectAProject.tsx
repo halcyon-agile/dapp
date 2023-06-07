@@ -78,6 +78,8 @@ function SelectAProject() {
       });
   };
 
+  // console.log('tasks', tasks)
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between text-black p-5 font-inter">
       <div className="items-center text-sm flex flex-row w-full border-b border-slate-200 py-4">
