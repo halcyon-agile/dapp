@@ -4,35 +4,42 @@ import { useNavigate } from "react-router-dom";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
+import startBreakApi from "../api/startBreak";
 
 function BreakReason() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [reason, setReason] = useState<string>("");
+
+  const startBreak = () => {
+    startBreakApi(reason)
+      .then(() => navigate("/break-timer"))
+      .catch((error) => {
+        console.error(error?.response?.data?.message || "Something went wrong");
+      });
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center text-black px-4">
       <div className="w-full">
         <div className="w-full py-4 border-b border-slate-200">
-          <p className="font-semibold text-xl text-gray-900">
-            Break Reason
-          </p>
+          <p className="font-semibold text-xl text-gray-900">Break Reason</p>
         </div>
         <div className="w-full py-4 border-b border-slate-200">
-          <p className="font-normal text-base text-slate-700">
-            Reason 1
-          </p>
+          <p className="font-normal text-base text-slate-700">Reason 1</p>
         </div>
         <div className="w-full py-4 border-b border-slate-200">
-          <p className="font-normal text-base text-slate-700">
-            Reason 2
-          </p>
+          <p className="font-normal text-base text-slate-700">Reason 2</p>
         </div>
         <div className="w-full py-4 border-b border-slate-200">
-          <p className="font-normal text-base text-slate-700">
-            Reason 3
-          </p>
+          <p className="font-normal text-base text-slate-700">Reason 3</p>
         </div>
         <div className="w-full py-4">
-          <Label htmlFor="reason" className="font-medium text-sm text-slate-900">Other Reason</Label>
+          <Label
+            htmlFor="reason"
+            className="font-medium text-sm text-slate-900"
+          >
+            Other Reason
+          </Label>
           <Input
             type="reason"
             id="reason"
@@ -51,15 +58,12 @@ function BreakReason() {
         >
           Cancel
         </Button>
-        <Button
-          className="bg-cyan-500"
-          onClick={() => navigate("/break-timer")}
-        >
+        <Button className="bg-cyan-500" onClick={() => startBreak()}>
           Okay
         </Button>
       </div>
     </main>
-  )
+  );
 }
 
 export default BreakReason;
