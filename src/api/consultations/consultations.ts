@@ -2,6 +2,9 @@ import request from "../../lib/request";
 import { AxiosError } from "axios";
 
 export interface Consultations {
+  started_at: string;
+  type: string;
+  task: any;
   id: number;
 }
 
