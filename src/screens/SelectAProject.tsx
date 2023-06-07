@@ -64,18 +64,21 @@ function SelectAProject() {
     selectedProject !== null ? tasks[selectedProject] : null;
 
   const startTask = () => {
-    if (!selectedTask) return;
-    startingTask(true)
-    startTaskApi(selectedTask.id)
-      .then((taskTime) => {
-        startingTask(false)
-        setActiveTasks([...activeTasks, taskTime]);
-        navigate("/multiple-projects", { replace: true })
-      })
-      .catch((error: { response: { data: { message: any } } }) => {
-        startingTask(false)
-        console.error(error?.response?.data?.message || "Something went wrong");
-      });
+    if (selectedTask === null) {
+      navigate("/multiple-projects", { replace: true })
+    } else {
+      startingTask(true)
+      startTaskApi(selectedTask.id)
+        .then((taskTime) => {
+          startingTask(false)
+          setActiveTasks([...activeTasks, taskTime]);
+          navigate("/multiple-projects", { replace: true })
+        })
+        .catch((error: { response: { data: { message: any } } }) => {
+          startingTask(false)
+          console.error(error?.response?.data?.message || "Something went wrong");
+        });
+    }
   };
 
   // console.log('tasks', tasks)

@@ -15,7 +15,8 @@ import {
   Graph,
   Timer,
 } from "../components/custom";
-import { Button } from "../components/ui";
+import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
+import { Terminal } from "lucide-react";
 
 function formatHourDifference(startedAt: string) {
   const currentDate = DateTime.now();
@@ -135,7 +136,7 @@ function MultipleProjects() {
             </p>
           </div>
         </div>
-        {activeTasks.map((data: any) => (
+        {activeTasks.length > 0 ? activeTasks.map((data: any) => (
           <div className="w-full border rounded-sm" key={data?.id}>
             <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4">
               <div className="flex flex-row justify-between">
@@ -211,7 +212,16 @@ function MultipleProjects() {
               />
             </div>
           </div>
-        ))}
+        )) : (
+          <Alert>
+            <Terminal className="h-4 w-4" />
+            <AlertTitle>Heads up!</AlertTitle>
+            <AlertDescription>
+              You have no active tasks running right now.
+              <br></br>Please add one.
+            </AlertDescription>
+          </Alert>
+        )}
       </div>
       <div className="w-full flex-row justify-between py-5 flex border-b-2">
         <div className="flex flex-1 flex-row items-center gap-3">
