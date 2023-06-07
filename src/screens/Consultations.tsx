@@ -25,10 +25,12 @@ function Consultations() {
     user,
     consultations,
     setConsultations,
+    activeTasks,
   ] = useStore((state) => [
     state.user,
     state.consultations,
     state.setConsultations,
+    state.activeTasks,
   ]);
   useEffect(() => {
     isFetching(true)
@@ -38,8 +40,22 @@ function Consultations() {
     });
   }, []);
 
-  console.log('consultations', consultations)
-  console.log('user', user)
+  // console.log('consultations', consultations)
+  // console.log('user', user)
+
+  // console.log('active', activeTasks)
+
+  const tasks = activeTasks.filter((task) => {
+    return task.consultation_id !== null
+  })
+
+  const filteredConsultations = consultations.filter((consult) => {
+    return tasks.every((task) => {
+      return task.consultation_id !== consult.id
+    });
+  });
+
+  // console.log('filtered', filteredConsultations)
 
   return (
     <main className="flex min-h-screen flex-col p-5">
@@ -83,7 +99,7 @@ function Consultations() {
               wrapperClass="blocks-wrapper"
               colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
             />
-          ) : consultations.length > 0 ? consultations.map((data) => (
+          ) : filteredConsultations.length > 0 ? filteredConsultations.map((data) => (
             <ConsultationItem
               data={data}
               name={user?.first_name}
