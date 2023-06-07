@@ -99,7 +99,7 @@ function Consultations() {
               wrapperClass="blocks-wrapper"
               colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
             />
-          ) : filteredConsultations.length > 0 ? filteredConsultations.map((data) => (
+          ) : consultations.length > 0 ? consultations.map((data) => (
             <ConsultationItem
               data={data}
               name={user?.first_name}
@@ -141,19 +141,27 @@ function Consultations() {
                     Expired
                   </p>
                 </div> */}
-                <div className="w-full flex flex-row items-center mt-2 gap-4">
-                  <Button
-                    className="bg-cyan-500"
-                  >
-                    Join
-                  </Button>
-                  <Button
-                    className="border border-slate-200"
-                    variant="ghost"
-                  >
-                    Decline
-                  </Button>
-                </div>
+                {activeTasks.find((task) => task.consultation_id === data?.id) ? (
+                  <div className="w-full flex flex-row items-center mt-2 gap-4">
+                    <Button
+                      className="bg-cyan-500"
+                    >
+                      Join
+                    </Button>
+                    <Button
+                      className="border border-slate-200"
+                      variant="ghost"
+                    >
+                      Decline
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="rounded-full px-4 py-1 bg-slate-100 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
+                    <p className="font-medium text-xs text-center text-slate-900">
+                      Joined
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           )) : (
