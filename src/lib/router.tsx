@@ -12,7 +12,9 @@ import {
   BreakTimer,
   Consultations,
   Scrum,
+  CreateConsultation,
 } from "../screens"
+import { m } from "@tauri-apps/api/dialog-20ff401c";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +52,10 @@ const router = createBrowserRouter([
   {
     path: "scrum",
     element: <Scrum />
+  },
+  {
+    path: "create-consultation",
+    element: <CreateConsultation />
   }
 ]);
 

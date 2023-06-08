@@ -6,6 +6,36 @@ import { Label } from "./label";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "./tooltip"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./tabs"
 
+import { RadioGroup, RadioGroupItem } from "./radio-group"
+
+import {
+  Command,
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandShortcut,
+  CommandSeparator,
+} from "./command"
+
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from "./dialog"
+
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "./popover"
+
 export {
   Alert,
   AlertDescription,
@@ -25,4 +55,25 @@ export {
   TabsList,
   TabsTrigger,
   TabsContent,
+  RadioGroup,
+  RadioGroupItem,
+  Command,
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandShortcut,
+  CommandSeparator,
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
 }

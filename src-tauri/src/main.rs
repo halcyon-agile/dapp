@@ -7,7 +7,7 @@ use tauri::{
 
 fn main() {
     // here `"quit".to_string()` defines the menu item id, and the second parameter is the menu item label.
-    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
+    // let quit = CustomMenuItem::new("quit".to_string(), "Quit");
     let hide = CustomMenuItem::new("hide".to_string(), "Hide");
     let open = CustomMenuItem::new("open".to_string(), "Open");
     let tray_menu = SystemTrayMenu::new()
@@ -40,9 +40,9 @@ fn main() {
                     let window = app.get_window("main").unwrap();
                     window.show().unwrap();
                 }
-                "quit" => {
-                    std::process::exit(0);
-                }
+                // "quit" => {
+                //     std::process::exit(0);
+                // }
                 "hide" => {
                     let window = app.get_window("main").unwrap();
                     window.hide().unwrap();

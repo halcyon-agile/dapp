@@ -9,6 +9,7 @@ import BreakReason from "./BreakReason";
 import BreakTimer from "./BreakTimer";
 import Consultations from "./Consultations";
 import Scrum from "./Scrum";
+import CreateConsultation from "./CreateConsultation";
 
 export {
   LoginScreen,
@@ -21,4 +22,5 @@ export {
   BreakTimer,
   Consultations,
   Scrum,
+  CreateConsultation,
 };

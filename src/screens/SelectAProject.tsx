@@ -144,6 +144,12 @@ function SelectAProject() {
               variant="ghost"
               className="border border-slate-200"
               onClick={() => navigate(-1)}
+              // onClick={() => {
+              //   localStorage.clear();
+              //   navigate("/login", {
+              //     replace: true,
+              //   })
+              // }}
             >
               Cancel
             </Button>

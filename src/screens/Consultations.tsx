@@ -127,43 +127,11 @@ function Consultations() {
               colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
             />
           ) : consultations.length > 0 ? consultations.map((data) => (
-            <div className="w-full flex flex-1 flex-col gap-4">
-              <div className="w-full flex flex-col border rounded border-slate-200 p-4 gap-1">
-                <p className="font-medium text-base text-gray-700">
-                  {data?.task?.name} - Consult
-                </p>
-                <p className="font-medium text-xs text-gray-500">
-                  from {user?.first_name}
-                </p>
-                {/* display if consultation is expired */}
-                {/* <div className="rounded-full px-4 py-1 bg-slate-100 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
-                  <p className="font-medium text-xs text-center text-slate-900">
-                    Expired
-                  </p>
-                </div> */}
-                {activeTasks.find((task) => task.consultation_id === data?.id) ? (
-                  <div className="w-full flex flex-row items-center mt-2 gap-4">
-                    <Button
-                      className="bg-cyan-500"
-                    >
-                      Join
-                    </Button>
-                    <Button
-                      className="border border-slate-200"
-                      variant="ghost"
-                    >
-                      Decline
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="rounded-full px-4 py-1 bg-slate-100 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
-                    <p className="font-medium text-xs text-center text-slate-900">
-                      Joined
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
+            <ConsultationItem
+              data={data}
+              name={user?.first_name}
+              tab="invites"
+            />
           )) : (
             <Alert>
               <Terminal className="h-4 w-4" />
@@ -185,6 +153,7 @@ function Consultations() {
         </Button>
         <Button
           className="bg-cyan-500"
+          onClick={() => navigate("/create-consultation")}
         >
           Add Consult
         </Button>
