@@ -30,6 +30,15 @@ function CreateConsultation() {
   }, []);
 
   // console.log('value', value)
+  console.log('members', members)
+
+  const filteredUsers = users.filter((user: any) => {
+    return members.every((member: any) => {
+      return member.id !== user.id
+    });
+  });
+
+  console.log('filtered users', filteredUsers)
 
   return (
     <main className="flex min-h-screen flex-col p-5">
@@ -93,7 +102,7 @@ function CreateConsultation() {
           />
         </div>
         <div className="flex flex-1 flex-col items-center justify-between gap-1.5 pt-6">
-          <div className="flex flex-row items-center gap-2">
+          <div className="flex w-full flex-row items-center gap-1">
             <button
               className="flex flex-1 flex-row items-center"
               onClick={() => setSelected(0)}
@@ -159,7 +168,7 @@ function CreateConsultation() {
             <PopoverContent className="w-full p-0">
               <Command className="w-full">
                 <CommandGroup className="w-full">
-                  {users.map((user: any) => (
+                  {filteredUsers.map((user: any) => (
                     <button
                       className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
                       onClick={() => {
@@ -178,7 +187,9 @@ function CreateConsultation() {
             className="bg-cyan-500"
             onClick={() => {
               if (value) {
-                setMembers([...members, users.find((user: any) => user.id === value)])
+                const list = members
+                list.push(users.find((user: any) => user.id === value))
+                setMembers(list)
                 setValue(null)
               }
             }}
@@ -188,12 +199,18 @@ function CreateConsultation() {
         </div>
       </div>
       <div className="w-full flex flex-col gap-1.5">
-        {members.map((item: any) => (
-          <div className="w-full py-3.5 border-b flex flex-row items-center justify-between">
+        {members.map((item: any, index: number) => (
+          <div className="w-full py-3.5 border-b flex flex-row items-center justify-between" key={item.id}>
             <p className="font-medium text-sm text-slate-700">
               {item.first_name} {item.last_name}
             </p>
-            <button>
+            <button
+              onClick={() => {
+                const memberList = members
+                const list = memberList.splice(index + 1, 1)
+                setMembers(list)
+              }}
+            >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#334155" className="w-5 h-5">
                 <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
               </svg>
