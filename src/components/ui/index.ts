@@ -36,6 +36,8 @@ import {
   PopoverContent,
 } from "./popover"
 
+import { Calendar } from "./calendar"
+
 export {
   Alert,
   AlertDescription,
@@ -76,4 +78,5 @@ export {
   Popover,
   PopoverTrigger,
   PopoverContent,
+  Calendar,
 }

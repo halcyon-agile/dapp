@@ -202,10 +202,13 @@ function MultipleProjects() {
                     <Button
                       variant="outline"
                       className="font-medium text-xs ml-4"
-                      // onClick={() => {
-                      //   setSelectedTask(data)
-                      //   navigate("/attribute-hour")
-                      // }}
+                      onClick={() => {
+                        navigate("/create-consultation", {
+                          state: {
+                            id: data?.id,
+                          }
+                        })
+                      }}
                     >
                       Consult
                     </Button>
@@ -310,10 +313,13 @@ function MultipleProjects() {
                   <Button
                     variant="outline"
                     className="font-medium text-xs ml-4"
-                    // onClick={() => {
-                    //   setSelectedTask(data)
-                    //   navigate("/attribute-hour")
-                    // }}
+                    onClick={() => {
+                      navigate("/create-consultation", {
+                        state: {
+                          id: data?.id,
+                        }
+                      })
+                    }}
                   >
                     Consult
                   </Button>

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { ChevronsUpDown } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { CalendarIcon, ChevronsUpDown } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import moment from "moment";
 
 import {
   Button,
+  Calendar,
   Command,
   CommandGroup,
   Input,
@@ -13,14 +15,27 @@ import {
   PopoverTrigger
 } from "../components/ui";
 import getUsers from "../api/users";
+import { cn } from "../lib/utils";
+import requestConsultation from "../api/consultations/requestConsultation";
 
 function CreateConsultation() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [selected, setSelected] = useState<number>(0)
   const [users, setUsers] = useState<any>([])
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState<any>(null)
   const [members, setMembers] = useState<any>([])
+  const [form, setForm] = useState<{
+    started_at: any
+    duration: string
+    members: []
+  }>({
+    started_at: '',
+    duration: '',
+    members: [],
+  })
+  const [creating, create] = useState<boolean>(false)
 
   useEffect(() => {
     getUsers().then((data) => {
@@ -30,7 +45,7 @@ function CreateConsultation() {
   }, []);
 
   // console.log('value', value)
-  console.log('members', members)
+  // console.log('members', members)
 
   const filteredUsers = users.filter((user: any) => {
     return members.every((member: any) => {
@@ -38,7 +53,7 @@ function CreateConsultation() {
     });
   });
 
-  console.log('filtered users', filteredUsers)
+  // console.log('filtered users', filteredUsers)
 
   return (
     <main className="flex min-h-screen flex-col p-5">
@@ -49,21 +64,33 @@ function CreateConsultation() {
       </div>
       <div className="flex flex-row w-full items-center justify-between gap-4">
         <div className="flex-1 flex-col gap-1.5">
-          <Label
-            htmlFor="date"
-            className="font-medium text-sm text-slate-900 self-start"
+          <h1
+            className="font-medium text-sm text-slate-900 self-start mb-2.5"
           >
             Date
-          </Label>
-          <Input
-            type="date"
-            id="date"
-            placeholder="< Date Picker >"
-            className="text-black p-1 rounded-md border px-3 font-normal text-base text-sm w-full mt-1.5"
-            autoCapitalize="none"
-            // onChange={(e) => setForm({ ...form, password: e.target.value })}
-            // value={form.password}
-          />
+          </h1>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={"outline"}
+                className={cn(
+                  "w-[280px] justify-start text-left font-normal",
+                  !form.started_at && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {form.started_at ? form.started_at : <span>Pick a date</span>}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                mode="single"
+                selected={form.started_at}
+                onSelect={(value) => setForm({...form, started_at: moment(value).format('MM/DD/YYYY')})}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
         </div>
         <div className="flex-1 flex-col gap-1.5">
           <Label
@@ -97,8 +124,8 @@ function CreateConsultation() {
             placeholder="< Duration >"
             className="text-black p-1 rounded-md border px-3 font-normal text-base text-sm w-full mt-1.5"
             autoCapitalize="none"
-            // onChange={(e) => setForm({ ...form, password: e.target.value })}
-            // value={form.password}
+            onChange={(e) => setForm({ ...form, duration: e.target.value })}
+            value={form.duration}
           />
         </div>
         <div className="flex flex-1 flex-col items-center justify-between gap-1.5 pt-6">
@@ -168,7 +195,7 @@ function CreateConsultation() {
             <PopoverContent className="w-full p-0">
               <Command className="w-full">
                 <CommandGroup className="w-full">
-                  {filteredUsers.map((user: any) => (
+                  {filteredUsers.length > 0 ? filteredUsers.map((user: any) => (
                     <button
                       className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
                       onClick={() => {
@@ -178,7 +205,11 @@ function CreateConsultation() {
                     >
                       <p>{user.first_name} {user.last_name}</p>
                     </button>
-                  ))}
+                  )) : (
+                    <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+                      <p>No users.</p>
+                    </div>
+                  )}
                 </CommandGroup>
               </Command>
             </PopoverContent>
@@ -228,7 +259,13 @@ function CreateConsultation() {
         </Button>
         <Button
           className="bg-cyan-500"
-          onClick={() => navigate("/create-consultation")}
+          onClick={() => {
+            create(true)
+            requestConsultation(location?.state?.id, form.started_at, form.duration, selected === 0 ? "fixed" : "flexible", form.members).then(() => {
+              create(false)
+              navigate("/multiple-projects", { replace: true })
+            })
+          }}
         >
           Request
         </Button>

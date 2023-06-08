@@ -6,6 +6,7 @@ import { Button } from "../ui";
 import { ColorRing } from "react-loader-spinner";
 import joinConsultation from "../../api/consultations/join-consultation";
 import useStore from "../../store";
+import { useToast } from "../ui/use-toast";
 
 interface Props {
   data: any
@@ -15,6 +16,7 @@ interface Props {
 
 function ConsultationItem(props: Props) {
   const navigate = useNavigate()
+  const { toast } = useToast()
   const [joining, join] = useState<boolean>(false)
 
   const [
@@ -74,9 +76,17 @@ function ConsultationItem(props: Props) {
               disabled={joining}
               onClick={() => {
                 join(true)
-                joinConsultation(props?.data?.id).then((response) => {
-                  navigate("/multiple-projects", { replace: true })
-                });
+                joinConsultation(props?.data?.id)
+                .then((response) => {
+                  console.log('response', response)
+                  // navigate("/multiple-projects", { replace: true })
+                })
+                .catch((error) => {
+                  toast({
+                    title: "Error",
+                    description: error,
+                  })
+                })
               }}
             >
               {joining ? (
