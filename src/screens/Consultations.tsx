@@ -40,7 +40,7 @@ function Consultations() {
     });
   }, []);
 
-  // console.log('consultations', consultations)
+  console.log('consultations', consultations)
   // console.log('user', user)
 
   // console.log('active', activeTasks)

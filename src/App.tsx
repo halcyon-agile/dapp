@@ -9,6 +9,7 @@ import {
 
 import useStore from "./store";
 import router from "./lib/router";
+import { Toaster } from "./components/ui/toaster";
 
 function App() {
   const [screen, setNotificationPermissionGranted] = useStore((state) => [
@@ -31,7 +32,10 @@ function App() {
   }, [setNotificationPermissionGranted]);
 
   return (
-    <RouterProvider router={router} />
+    <>
+      <RouterProvider router={router} />
+      <Toaster />
+    </>
   )
 }
 

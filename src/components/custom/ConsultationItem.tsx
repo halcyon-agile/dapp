@@ -104,6 +104,12 @@ function ConsultationItem(props: Props) {
             <Button
               className="border border-slate-200"
               variant="ghost"
+              onClick={() => {
+                toast({
+                  title: "Error",
+                  description: "something",
+                })
+              }}
             >
               Decline
             </Button>

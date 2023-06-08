@@ -38,6 +38,18 @@ import {
 
 import { Calendar } from "./calendar"
 
+import {
+  type ToastProps,
+  type ToastActionElement,
+  ToastProvider,
+  ToastViewport,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  ToastClose,
+  ToastAction,
+} from "./toast"
+
 export {
   Alert,
   AlertDescription,
@@ -79,4 +91,13 @@ export {
   PopoverTrigger,
   PopoverContent,
   Calendar,
+  type ToastProps,
+  type ToastActionElement,
+  ToastProvider,
+  ToastViewport,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  ToastClose,
+  ToastAction,
 }
