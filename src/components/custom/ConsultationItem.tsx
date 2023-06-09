@@ -78,8 +78,7 @@ function ConsultationItem(props: Props) {
                 join(true)
                 joinConsultation(props?.data?.id)
                 .then((response) => {
-                  console.log('response', response)
-                  // navigate("/multiple-projects", { replace: true })
+                  navigate("/multiple-projects", { replace: true })
                 })
                 .catch((error) => {
                   toast({

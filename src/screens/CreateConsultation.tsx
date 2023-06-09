@@ -29,11 +29,9 @@ function CreateConsultation() {
   const [form, setForm] = useState<{
     started_at: any
     duration: string
-    members: []
   }>({
     started_at: '',
     duration: '',
-    members: [],
   })
   const [creating, create] = useState<boolean>(false)
 
@@ -45,7 +43,7 @@ function CreateConsultation() {
   }, []);
 
   // console.log('value', value)
-  // console.log('members', members)
+  console.log('members', members)
 
   const filteredUsers = users.filter((user: any) => {
     return members.every((member: any) => {
@@ -54,6 +52,7 @@ function CreateConsultation() {
   });
 
   // console.log('filtered users', filteredUsers)
+  // console.log('form', form)
 
   return (
     <main className="flex min-h-screen flex-col p-5">
@@ -261,7 +260,7 @@ function CreateConsultation() {
           className="bg-cyan-500"
           onClick={() => {
             create(true)
-            requestConsultation(location?.state?.id, form.started_at, form.duration, selected === 0 ? "fixed" : "flexible", form.members).then(() => {
+            requestConsultation(location?.state?.id, form.started_at, form.duration, selected === 0 ? "fixed" : "flexible", members).then(() => {
               create(false)
               navigate("/multiple-projects", { replace: true })
             })

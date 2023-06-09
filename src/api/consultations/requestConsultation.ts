@@ -16,7 +16,7 @@ const requestConsultation = async (id: number, started_at: string, duration: str
     formData.append('duration', duration)
     formData.append('type', type)
     members.map((item:any, index: number) => {
-      formData.append(`member[${index}]`, item.id)
+      formData.append(`members[${index}]`, item.id)
     })
 
     const consultations = await request.post(`/api/tasks/${id}/request-consultation`, formData);
