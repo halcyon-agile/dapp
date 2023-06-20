@@ -143,7 +143,7 @@ function Consultations() {
           )}
         </TabsContent>
       </Tabs>
-      {/* <div className="w-full items-end flex flex-row justify-end gap-4 mt-4">
+      <div className="w-full items-end flex flex-row justify-end gap-4 mt-4">
         <Button
           variant="ghost"
           className="border border-slate-200"
@@ -151,13 +151,13 @@ function Consultations() {
         >
           Cancel
         </Button>
-        <Button
+        {/* <Button
           className="bg-cyan-500"
           onClick={() => navigate("/create-consultation")}
         >
           Add Consult
-        </Button>
-      </div> */}
+        </Button> */}
+      </div>
     </main>
   )
 }

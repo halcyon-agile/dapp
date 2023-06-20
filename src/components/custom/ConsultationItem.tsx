@@ -72,7 +72,7 @@ function ConsultationItem(props: Props) {
         ) : (
           <div className="w-full flex flex-row items-center mt-2 gap-4">
             <Button
-              className="bg-cyan-500"
+              className={`bg-cyan-500 ${props?.tab === 'requests' ? 'hidden' : ''}`}
               disabled={joining}
               onClick={() => {
                 join(true)
@@ -100,7 +100,7 @@ function ConsultationItem(props: Props) {
                 />
               ) : "Join"}
             </Button>
-            <Button
+            {/* <Button
               className="border border-slate-200"
               variant="ghost"
               onClick={() => {
@@ -111,7 +111,7 @@ function ConsultationItem(props: Props) {
               }}
             >
               Decline
-            </Button>
+            </Button> */}
           </div>
         )}
       </div>

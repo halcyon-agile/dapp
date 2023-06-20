@@ -179,7 +179,7 @@ function MultipleProjects() {
                 </div>
                 {data?.consultation_id === null ? (
                   <div className="flex-9 flex-row items-center justify-end">
-                    <Button
+                    {/* <Button
                       variant="outline"
                       className="font-medium text-xs ml-4"
                       onClick={() => {
@@ -188,16 +188,16 @@ function MultipleProjects() {
                       }}
                     >
                       Return
-                    </Button>
+                    </Button> */}
                     <Button
                       variant="outline"
-                      className="font-medium text-xs ml-4"
+                      className={`font-medium text-xs ml-4 ${data.task.timer_on ? 'hidden' : ''}`}
                       onClick={() => {
                         setSelectedTask(data)
                         navigate("/attribute-hour")
                       }}
                     >
-                      Close
+                      Close 
                     </Button>
                     <Button
                       variant="outline"
@@ -205,7 +205,7 @@ function MultipleProjects() {
                       onClick={() => {
                         navigate("/create-consultation", {
                           state: {
-                            id: data?.id,
+                            id: data?.task_id,
                           }
                         })
                       }}
@@ -253,7 +253,7 @@ function MultipleProjects() {
             </AlertDescription>
           </Alert>
         )}
-        {stoppedTasks.map((data: any) => (
+        {/* {stoppedTasks.map((data: any) => (
           <div className="w-full border rounded-sm" key={data?.id}>
             <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4">
               <div className="flex flex-row justify-between">
@@ -334,7 +334,7 @@ function MultipleProjects() {
               )}
             </div>
           </div>
-        ))}
+        ))} */}
       </div>
       <div className="w-full flex-row justify-between py-5 flex border-b-2">
         <div className="flex flex-1 flex-row items-center gap-3">

@@ -29,7 +29,7 @@ function AttributeHour() {
   const stopTask = (id: number) => {
     stopTaskApi(id)
       .then(() => {
-        setStoppedTasks([...stoppedTasks, selectedTask])
+        // setStoppedTasks([...stoppedTasks, selectedTask])
         navigate("/multiple-projects")
       })
       .catch((error) => {
