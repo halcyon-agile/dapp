@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useStore from "./store";
-import getTasks, { Task } from "./api/getTasks";
+import { Task } from "@/types";
+import getTasks from "./api/getTasks";
 import startTaskApi from "./api/startTask";
 import { AxiosError } from "axios";
 

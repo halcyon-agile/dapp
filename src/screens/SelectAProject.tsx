@@ -1,51 +1,36 @@
-import {
-  useEffect,
-  useState,
-} from "react";
-import {
-  useNavigate,
-  useLocation,
-} from "react-router-dom"
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AxiosError } from "axios";
 import { ColorRing } from "react-loader-spinner";
 import { Terminal } from "lucide-react";
-
-import getTasks, { Task } from "../api/getTasks";
+import { Task } from "@/types";
+import getTasks from "../api/getTasks";
 import useStore from "../store";
 import startTaskApi from "../api/startTask";
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-  Button
-} from "../components/ui";
+import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
 
 function SelectAProject() {
-  const [
-    activeTasks,
-    setActiveTasks,
-    setStoppedTasks,
-  ] = useStore((state) => [
+  const [activeTasks, setActiveTasks, setStoppedTasks] = useStore((state) => [
     state.activeTasks,
     state.setActiveTasks,
     state.setStoppedTasks,
   ]);
 
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
 
   const [selectedProject, setCurrentProject] = useState<null | number>(null);
-  const [fetching, fetch] = useState<boolean>(true)
+  const [fetching, fetch] = useState<boolean>(true);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [startedTask, startingTask] = useState<boolean>(false)
+  const [startedTask, startingTask] = useState<boolean>(false);
 
   useEffect(() => {
-    const userData = localStorage.getItem("token")
+    const userData = localStorage.getItem("token");
     // console.log("userData", userData)
     if (!userData) {
       navigate("/login", {
         replace: true,
-      })
+      });
     }
     const fetchTasks = async () => {
       try {
@@ -56,38 +41,39 @@ function SelectAProject() {
               !activeTasks.find((activeTask) => activeTask.task.id === task.id)
           )
         );
-        fetch(false)
+        fetch(false);
       } catch (error: AxiosError | any) {
         // console.error(error?.response?.data?.message || "Something went wrong");
-        fetch(false)
+        fetch(false);
       }
     };
     fetchTasks();
   }, []);
 
-  const selectedTask =
-    selectedProject !== null ? tasks[selectedProject] : null;
+  const selectedTask = selectedProject !== null ? tasks[selectedProject] : null;
 
   const startTask = () => {
     if (selectedTask === null) {
-      navigate("/multiple-projects", { replace: true })
+      navigate("/multiple-projects", { replace: true });
     } else {
-      startingTask(true)
+      startingTask(true);
       startTaskApi(selectedTask.id)
         .then((taskTime) => {
-          startingTask(false)
+          startingTask(false);
           if (activeTasks.length <= 0) {
             setActiveTasks([taskTime]);
-            navigate("/multiple-projects", { replace: true })
+            navigate("/multiple-projects", { replace: true });
           } else {
-            setStoppedTasks([...activeTasks])
+            setStoppedTasks([...activeTasks]);
             setActiveTasks([taskTime]);
-            navigate("/multiple-projects", { replace: true })
+            navigate("/multiple-projects", { replace: true });
           }
         })
         .catch((error: { response: { data: { message: any } } }) => {
-          startingTask(false)
-          console.error(error?.response?.data?.message || "Something went wrong");
+          startingTask(false);
+          console.error(
+            error?.response?.data?.message || "Something went wrong"
+          );
         });
     }
   };
@@ -111,27 +97,41 @@ function SelectAProject() {
               ariaLabel="blocks-loading"
               wrapperStyle={{}}
               wrapperClass="blocks-wrapper"
-              colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+              colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
             />
           )}
-          {tasks.length > 0 ? 
-          tasks.map((data: any, index: number) => (
-            <div className="flex w-full py-4 border-b" key={index}>
-              <button
-                className={`py-1.5 px-2 w-full rounded-md flex flex-row items-center justify-between ${selectedProject === index && "bg-slate-100"}`}
-                onClick={() => setCurrentProject(index)}
-              >
-                <p className={`left-0 top-0 w-full text-1xl flex-1 text-left font-normal text-base text-slate-700`}>
-                  {data.project.name} - {data.name}
-                </p>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#334155" className="w-4 h-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                </svg>
-              </button>
-            </div>
-          )) 
-          
-          : !fetching ? (
+          {tasks.length > 0 ? (
+            tasks.map((data: any, index: number) => (
+              <div className="flex w-full py-4 border-b" key={index}>
+                <button
+                  className={`py-1.5 px-2 w-full rounded-md flex flex-row items-center justify-between ${
+                    selectedProject === index && "bg-slate-100"
+                  }`}
+                  onClick={() => setCurrentProject(index)}
+                >
+                  <p
+                    className={`left-0 top-0 w-full text-1xl flex-1 text-left font-normal text-base text-slate-700`}
+                  >
+                    {data.project.name} - {data.name}
+                  </p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="#334155"
+                    className="w-4 h-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                    />
+                  </svg>
+                </button>
+              </div>
+            ))
+          ) : !fetching ? (
             <Alert>
               <Terminal className="h-4 w-4" />
               <AlertTitle>Heads up!</AlertTitle>
@@ -170,14 +170,16 @@ function SelectAProject() {
                 ariaLabel="blocks-loading"
                 wrapperStyle={{}}
                 wrapperClass="blocks-wrapper"
-                colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
               />
-            ) : "Okay"}
+            ) : (
+              "Okay"
+            )}
           </Button>
         </div>
       </div>
     </main>
-  )
+  );
 }
 
 export default SelectAProject;
