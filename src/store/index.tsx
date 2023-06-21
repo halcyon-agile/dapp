@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { TaskTime, BreakForm, Consultations } from "@/types";
+import { TaskTime, BreakForm, Consultations, Scrum } from "@/types";
 
 type State = {
   screen: string;
@@ -9,6 +9,7 @@ type State = {
   notificationPermissionGranted: boolean;
   selectedTask: any;
   consultations: Consultations[];
+  scrums: Scrum[];
   stoppedTasks: TaskTime[];
   breakForm: BreakForm;
 };
@@ -22,6 +23,7 @@ type Action = {
   ) => void;
   setSelectedTask: (task: any) => void;
   setConsultations: (list: any) => void;
+  setScrums: (list: any) => void;
   setStoppedTasks: (task: any) => void;
   setBreakForm: (breakForm: any) => void;
 };
@@ -42,6 +44,8 @@ const useStore = create(
       setSelectedTask: (task: any) => set(() => ({ selectedTask: task })),
       consultations: [],
       setConsultations: (consultations: any) => set(() => ({ consultations })),
+      scrums: [],
+      setScrums: (scrums: any) => set(() => ({ scrums })),
       stoppedTasks: [],
       setStoppedTasks: (task: any) => set(() => ({ stoppedTasks: task })),
       breakForm: {

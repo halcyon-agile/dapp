@@ -9,6 +9,7 @@ import {
 
 interface Props {
   showRemainingHours?: boolean
+  showGanttEstimate?: boolean
   assigned: any
   started_at: string
 }
@@ -40,6 +41,8 @@ function Graph(props: Props) {
               Remaining Hours: 40
             </p>
           )}
+
+          {props?.showGanttEstimate && (
           <div className="flex flex-row w-full items-center py-1">
             <p className="flex-1 pr-2 text-xs text-gray-500">
               {props?.assigned?.estimate} Hrs
@@ -48,6 +51,7 @@ function Graph(props: Props) {
               <div className="h-2.5 rounded-full bg-teal-500 grow" />
             </div>
           </div>
+          )}
           <div className="flex flex-row w-full items-center py-1">
             <p className="flex-1 pr-2 text-xs text-gray-500">
               64 Hrs (12)

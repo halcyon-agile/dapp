@@ -11,6 +11,7 @@ import { Terminal } from "lucide-react";
 import useStore from "../store";
 import getActiveTasks from "../api/getActiveTasks";
 import getAttendance from "../api/getAttendance";
+import getRedDots from "../api/getRedDots";
 import finishWork from "../api/finishWork";
 import {
   Graph,
@@ -65,6 +66,7 @@ function MultipleProjects() {
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [loggedOff, loggingOff] = useState<boolean>(false)
   const [leavingConsultation, leaveConsult] = useState<boolean>(false)
+  const [reddot, setRedDots] = useState<any>({ scrums: false, consultations: false})
 
   // Refactor later to only fetch once logged in
   useEffect(() => {
@@ -82,6 +84,11 @@ function MultipleProjects() {
 
     getAttendance().then((data) => {
       setUser({ ...user, attendance: data });
+    });
+
+    getRedDots().then((result) => {
+      setRedDots(result);
+      console.log(result)
     });
   }, []);
 
@@ -201,7 +208,7 @@ function MultipleProjects() {
                     </Button>
                     <Button
                       variant="outline"
-                      className="font-medium text-xs ml-4"
+                      className={`font-medium text-xs ml-4 ${data?.task?.project?.consultation_members.find((member: any) => member.id === user.id) ? '' : 'hidden'}`}
                       onClick={() => {
                         navigate("/create-consultation", {
                           state: {
@@ -236,7 +243,8 @@ function MultipleProjects() {
               </div>
               {data?.consultation_id === null && (
                 <Graph
-                  showRemainingHours
+                  showRemainingHours={data?.task?.project?.project_type?.show_remaining_hours ? true : false}
+                  showGanttEstimate={data?.task?.project?.project_type?.gantt_project_duration ? true : false}
                   assigned={data?.task?.assignees?.find((x: any) => x.admin_id === user.id)}
                   started_at={data?.started_at}
                 />
@@ -419,9 +427,12 @@ function MultipleProjects() {
             </p>
           </div>
           <button
-            className="flex flex-col items-center"
+            className="flex flex-col items-center relative"
             onClick={() => navigate("/consultations")}
           >
+            <div className={`absolute rounded-full bg-red-500 top-0 right-1 w-2 h-2 ${reddot.consultations ? '' : 'hidden'}`}>
+            </div>
+
             <div className="rounded-full border border-slate-200 p-2 mb-2">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#334155" className="w-4 h-4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -432,9 +443,12 @@ function MultipleProjects() {
             </p>
           </button>
           <button
-            className="flex flex-col items-center"
+            className="flex flex-col items-center relative"
             onClick={() => navigate("/scrum")}
           >
+            <div className={`absolute rounded-full bg-red-500 top-0 right-1 w-2 h-2 ${reddot.scrums ? '' : 'hidden'}`}>
+            </div>
+
             <div className="rounded-full border border-slate-200 p-2 mb-2">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#334155" className="w-4 h-4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />

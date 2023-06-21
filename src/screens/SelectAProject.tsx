@@ -114,7 +114,8 @@ function SelectAProject() {
               colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
             />
           )}
-          {tasks.length > 0 ? tasks.map((data: any, index: number) => (
+          {tasks.length > 0 ? 
+          tasks.map((data: any, index: number) => (
             <div className="flex w-full py-4 border-b" key={index}>
               <button
                 className={`py-1.5 px-2 w-full rounded-md flex flex-row items-center justify-between ${selectedProject === index && "bg-slate-100"}`}
@@ -128,7 +129,9 @@ function SelectAProject() {
                 </svg>
               </button>
             </div>
-          )) : !fetching ? (
+          )) 
+          
+          : !fetching ? (
             <Alert>
               <Terminal className="h-4 w-4" />
               <AlertTitle>Heads up!</AlertTitle>

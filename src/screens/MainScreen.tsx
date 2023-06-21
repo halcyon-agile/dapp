@@ -60,6 +60,7 @@ function MainScreen() {
         replace: true,
       })
     }
+    
     getActiveTasks().then((tasks) => {
       setActiveTasks(tasks);
       console.log({ activeTasks });

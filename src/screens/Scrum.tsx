@@ -19,7 +19,6 @@ function Scrum() {
   const navigate = useNavigate()
   const [fetching, isFetching] = useState<boolean>(false)
 
-  const [scrums, setScrums] = useState([]);
   useEffect(() => {
     isFetching(true)
     getScrums().then((list) => {
@@ -29,13 +28,17 @@ function Scrum() {
   }, []);
 
   const [
+    scrums,
     setActiveTasks,
     activeTasks,
     setScreen,
+    setScrums
   ] = useStore((state) => [
+    state.scrums,
     state.setActiveTasks,
     state.activeTasks,
     state.setScreen,
+    state.setScrums,
   ]);
   
   return (
