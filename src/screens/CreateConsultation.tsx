@@ -12,42 +12,42 @@ import {
   Label,
   Popover,
   PopoverContent,
-  PopoverTrigger
+  PopoverTrigger,
 } from "../components/ui";
 import getUsers from "../api/users";
 import { cn } from "../lib/utils";
 import requestConsultation from "../api/consultations/requestConsultation";
 
 function CreateConsultation() {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const [selected, setSelected] = useState<number>(0)
-  const [users, setUsers] = useState<any>([])
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState<any>(null)
-  const [members, setMembers] = useState<any>([])
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [selected, setSelected] = useState<number>(0);
+  const [users, setUsers] = useState<any>([]);
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState<any>(null);
+  const [members, setMembers] = useState<any>([]);
   const [form, setForm] = useState<{
-    started_at: any
-    duration: string
+    started_at: any;
+    duration: string;
   }>({
-    started_at: '',
-    duration: '',
-  })
-  const [creating, create] = useState<boolean>(false)
+    started_at: "",
+    duration: "",
+  });
+  const [creating, create] = useState<boolean>(false);
 
   useEffect(() => {
     getUsers().then((data) => {
       // console.log('data', data)
-      setUsers(data)
+      setUsers(data);
     });
   }, []);
 
   // console.log('value', value)
-  console.log('members', members)
+  console.log("members", members);
 
   const filteredUsers = users.filter((user: any) => {
     return members.every((member: any) => {
-      return member.id !== user.id
+      return member.id !== user.id;
     });
   });
 
@@ -57,15 +57,11 @@ function CreateConsultation() {
   return (
     <main className="flex min-h-screen flex-col p-5">
       <div className="left-0 top-0 w-full text-4xl py-2">
-        <p className="font-semibold text-xl">
-          Create Consultation
-        </p>
+        <p className="font-semibold text-xl">Create Consultation</p>
       </div>
       <div className="flex flex-row w-full items-center justify-between gap-4">
         <div className="flex-1 flex-col gap-1.5">
-          <h1
-            className="font-medium text-sm text-slate-900 self-start mb-2.5"
-          >
+          <h1 className="font-medium text-sm text-slate-900 self-start mb-2.5">
             Date
           </h1>
           <Popover>
@@ -85,7 +81,12 @@ function CreateConsultation() {
               <Calendar
                 mode="single"
                 selected={form.started_at}
-                onSelect={(value) => setForm({...form, started_at: moment(value).format('MM/DD/YYYY')})}
+                onSelect={(value) =>
+                  setForm({
+                    ...form,
+                    started_at: moment(value).format("MM/DD/YYYY"),
+                  })
+                }
                 initialFocus
               />
             </PopoverContent>
@@ -102,7 +103,7 @@ function CreateConsultation() {
             type="time"
             id="time"
             placeholder="< Time >"
-            className="text-black p-1 rounded-md border px-3 font-normal text-base text-sm w-full mt-1.5"
+            className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
             autoCapitalize="none"
             // onChange={(e) => setForm({ ...form, password: e.target.value })}
             // value={form.password}
@@ -121,7 +122,7 @@ function CreateConsultation() {
             type="duration"
             id="duration"
             placeholder="< Duration >"
-            className="text-black p-1 rounded-md border px-3 font-normal text-base text-sm w-full mt-1.5"
+            className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
             autoCapitalize="none"
             onChange={(e) => setForm({ ...form, duration: e.target.value })}
             value={form.duration}
@@ -174,7 +175,7 @@ function CreateConsultation() {
             type="members"
             id="members"
             placeholder="Members"
-            className="text-black p-1 rounded-md border px-3 font-normal text-base text-sm w-full"
+            className="text-black p-1 rounded-md border px-3 font-normal text-base w-full"
             autoCapitalize="none"
           /> */}
           <Popover open={open} onOpenChange={setOpen}>
@@ -186,7 +187,11 @@ function CreateConsultation() {
                 className="w-full justify-between"
               >
                 {value
-                  ? `${users.find((user: any) => user.id === value)?.first_name} ${users.find((user: any) => user.id === value)?.last_name}`
+                  ? `${
+                      users.find((user: any) => user.id === value)?.first_name
+                    } ${
+                      users.find((user: any) => user.id === value)?.last_name
+                    }`
                   : "Select member..."}
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
@@ -194,17 +199,21 @@ function CreateConsultation() {
             <PopoverContent className="w-full p-0">
               <Command className="w-full">
                 <CommandGroup className="w-full">
-                  {filteredUsers.length > 0 ? filteredUsers.map((user: any) => (
-                    <button
-                      className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
-                      onClick={() => {
-                        setValue(user.id)
-                        setOpen(false)
-                      }}
-                    >
-                      <p>{user.first_name} {user.last_name}</p>
-                    </button>
-                  )) : (
+                  {filteredUsers.length > 0 ? (
+                    filteredUsers.map((user: any) => (
+                      <button
+                        className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+                        onClick={() => {
+                          setValue(user.id);
+                          setOpen(false);
+                        }}
+                      >
+                        <p>
+                          {user.first_name} {user.last_name}
+                        </p>
+                      </button>
+                    ))
+                  ) : (
                     <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
                       <p>No users.</p>
                     </div>
@@ -217,10 +226,10 @@ function CreateConsultation() {
             className="bg-cyan-500"
             onClick={() => {
               if (value) {
-                const list = members
-                list.push(users.find((user: any) => user.id === value))
-                setMembers(list)
-                setValue(null)
+                const list = members;
+                list.push(users.find((user: any) => user.id === value));
+                setMembers(list);
+                setValue(null);
               }
             }}
           >
@@ -230,18 +239,26 @@ function CreateConsultation() {
       </div>
       <div className="w-full flex flex-col gap-1.5">
         {members.map((item: any, index: number) => (
-          <div className="w-full py-3.5 border-b flex flex-row items-center justify-between" key={item.id}>
+          <div
+            className="w-full py-3.5 border-b flex flex-row items-center justify-between"
+            key={item.id}
+          >
             <p className="font-medium text-sm text-slate-700">
               {item.first_name} {item.last_name}
             </p>
             <button
               onClick={() => {
-                const memberList = members
-                const list = memberList.splice(index + 1, 1)
-                setMembers(list)
+                const memberList = members;
+                const list = memberList.splice(index + 1, 1);
+                setMembers(list);
               }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#334155" className="w-5 h-5">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="#334155"
+                className="w-5 h-5"
+              >
                 <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
               </svg>
             </button>
@@ -259,18 +276,24 @@ function CreateConsultation() {
         <Button
           className="bg-cyan-500"
           onClick={() => {
-            create(true)
-            requestConsultation(location?.state?.id, form.started_at, form.duration, selected === 0 ? "fixed" : "flexible", members).then(() => {
-              create(false)
-              navigate("/multiple-projects", { replace: true })
-            })
+            create(true);
+            requestConsultation(
+              location?.state?.id,
+              form.started_at,
+              form.duration,
+              selected === 0 ? "fixed" : "flexible",
+              members
+            ).then(() => {
+              create(false);
+              navigate("/multiple-projects", { replace: true });
+            });
           }}
         >
           Request
         </Button>
       </div>
     </main>
-  )
+  );
 }
 
 export default CreateConsultation;

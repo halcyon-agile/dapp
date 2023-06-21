@@ -5,7 +5,7 @@ import loginUser from "./api/loginUser";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 
-import { ColorRing } from  'react-loader-spinner'
+import { ColorRing } from "react-loader-spinner";
 
 import { Input } from "./components/ui/input";
 import { Label } from "./components/ui/label";
@@ -14,7 +14,10 @@ function LoginScreen() {
   const navigate = useNavigate();
   const [setUser] = useStore((state) => [state.setUser, state.setScreen]);
   const [form, setForm] = useState<{ email: string; password: string }>({
-    email: import.meta.env.VITE_MODE === "DEV" ? "system.administrator@halcyon-pms-web.test" : "halcyon.developer@lively-geyser-q53l27l9w5bc.vapor-farm-e1.com",
+    email:
+      import.meta.env.VITE_MODE === "DEV"
+        ? "system.administrator@halcyon-pms-web.test"
+        : "halcyon.developer@lively-geyser-q53l27l9w5bc.vapor-farm-e1.com",
     password: "secret",
   });
   const [attempting, attemptingLogin] = useState<boolean>(false);
@@ -25,7 +28,7 @@ function LoginScreen() {
   }, [form]);
 
   const attemptLogin = async (e: any) => {
-    attemptingLogin(true)
+    attemptingLogin(true);
     e.preventDefault();
     try {
       const user = await loginUser(form.email, form.password);
@@ -33,13 +36,13 @@ function LoginScreen() {
       navigate("/", {
         replace: true,
         state: {
-          screen: 'login',
-        }
-      })
-      attemptingLogin(false)
+          screen: "login",
+        },
+      });
+      attemptingLogin(false);
     } catch (error: AxiosError | any) {
-      console.log('error', error)
-      attemptingLogin(false)
+      console.log("error", error);
+      attemptingLogin(false);
       setErrorMessage(
         error?.response?.data?.message || "Something went wrong."
       );
@@ -76,7 +79,7 @@ function LoginScreen() {
           <Input
             type="email"
             id="email"
-            className="text-black p-1 rounded-md border px-3 font-normal text-base text-sm w-full mt-1.5"
+            className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
             autoCapitalize="none"
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             value={form.email}
@@ -92,7 +95,7 @@ function LoginScreen() {
           <Input
             type="password"
             id="password"
-            className="text-black p-1 rounded-md border px-3 font-normal text-base text-sm w-full mt-1.5"
+            className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
             autoCapitalize="none"
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             value={form.password}
@@ -106,15 +109,15 @@ function LoginScreen() {
             ariaLabel="blocks-loading"
             wrapperStyle={{}}
             wrapperClass="blocks-wrapper"
-            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+            colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
           />
         ) : (
-        <button
-          className="bg-sky-400 py-2 px-10 rounded-md font-medium"
-          type="submit"
-        >
-          Login
-        </button>
+          <button
+            className="bg-sky-400 py-2 px-10 rounded-md font-medium"
+            type="submit"
+          >
+            Login
+          </button>
         )}
       </form>
     </main>

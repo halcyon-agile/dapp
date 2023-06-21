@@ -1,17 +1,15 @@
 import request from "../lib/request";
 import { AxiosError } from "axios";
-
-export interface Breaks {
-  id: number;
-  started_at: string;
-  reason: string;
-}
+import { Breaks, BreakForm } from "@/types";
 
 const startBreak = async (
-  reason: string
+  breakForm: BreakForm
 ): Promise<Breaks | AxiosError | any> => {
   try {
-    const response = await request.post(`api/break/start`, { reason });
+    const response = await request.post(`api/break/start`, {
+      reason: breakForm.reason,
+      minutes: Number(breakForm.hours) / 60 + Number(breakForm.minutes),
+    });
 
     return response.data;
   } catch (error) {

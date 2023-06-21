@@ -2,9 +2,9 @@ import request from "../lib/request";
 import { AxiosError } from "axios";
 import { Breaks } from "../types";
 
-const endBreak = async (): Promise<Breaks | AxiosError | any> => {
+const getBreak = async (): Promise<Breaks | AxiosError | any> => {
   try {
-    const response = await request.post(`api/break/end`);
+    const response = await request.get(`api/break`);
 
     return response.data;
   } catch (error) {
@@ -13,4 +13,4 @@ const endBreak = async (): Promise<Breaks | AxiosError | any> => {
   }
 };
 
-export default endBreak;
+export default getBreak;

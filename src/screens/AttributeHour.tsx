@@ -1,7 +1,7 @@
-import React from "react"
+import React from "react";
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 import stopTaskApi from "../api/stopTask";
 
@@ -10,18 +10,17 @@ import { Button } from "../components/ui/button";
 import useStore from "../store";
 
 function AttributeHour() {
-  const navigate = useNavigate()
-  const [
-    selectedTask,
-    stoppedTasks,
-    setStoppedTasks,
-  ] = useStore((state) => [
+  const navigate = useNavigate();
+  const [selectedTask, stoppedTasks, setStoppedTasks] = useStore((state) => [
     state.selectedTask,
     state.stoppedTasks,
     state.setStoppedTasks,
   ]);
 
-  const [form, setForm] = useState<{hour: number | null, minute: number | null}>({
+  const [form, setForm] = useState<{
+    hour: number | null;
+    minute: number | null;
+  }>({
     hour: null,
     minute: null,
   });
@@ -30,7 +29,7 @@ function AttributeHour() {
     stopTaskApi(id)
       .then(() => {
         // setStoppedTasks([...stoppedTasks, selectedTask])
-        navigate("/multiple-projects")
+        navigate("/multiple-projects");
       })
       .catch((error) => {
         // console.error(error?.response?.data?.message || "Something went wrong");
@@ -52,30 +51,30 @@ function AttributeHour() {
         </p>
         <div className="mt-4 pt-4 border-t border-slate-200 flex flex-row justify-between gap-4">
           <div className="flex-col flex-1 gap-1.5">
-            <p className="font-medium text-sm text-slate-900">
-              Hour
-            </p>
+            <p className="font-medium text-sm text-slate-900">Hour</p>
             <Input
               type="hour"
               id="hour"
               placeholder="Hour"
-              className="text-black p-1 rounded-md border px-3 font-normal text-base text-sm w-full mt-1.5"
+              className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
               autoCapitalize="none"
-              onChange={(e) => setForm({ ...form, hour: parseInt(e.target.value, 10) })}
+              onChange={(e) =>
+                setForm({ ...form, hour: parseInt(e.target.value, 10) })
+              }
               value={form.hour !== null ? form.hour : ""}
             />
           </div>
           <div className="flex-col flex-1 gap-1.5">
-            <p className="font-medium text-sm text-slate-900">
-              Minute
-            </p>
+            <p className="font-medium text-sm text-slate-900">Minute</p>
             <Input
               type="minute"
               id="minute"
               placeholder="Minute"
-              className="text-black p-1 rounded-md border px-3 font-normal text-base text-sm w-full mt-1.5"
+              className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
               autoCapitalize="none"
-              onChange={(e) => setForm({ ...form, minute: parseInt(e.target.value, 10) })}
+              onChange={(e) =>
+                setForm({ ...form, minute: parseInt(e.target.value, 10) })
+              }
               value={form.minute !== null ? form.minute : ""}
             />
           </div>
@@ -97,7 +96,7 @@ function AttributeHour() {
         </Button>
       </div>
     </main>
-  )
+  );
 }
 
 export default AttributeHour;

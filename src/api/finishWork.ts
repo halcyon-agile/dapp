@@ -1,11 +1,6 @@
 import request from "../lib/request";
 import { AxiosError } from "axios";
-
-export interface Attendance {
-  id: number;
-  started_at: string;
-  ended_at: string;
-}
+import { Attendance } from "../types";
 
 const finishWork = async (): Promise<Attendance | AxiosError | any> => {
   try {
@@ -14,7 +9,7 @@ const finishWork = async (): Promise<Attendance | AxiosError | any> => {
     });
 
     delete request.defaults.headers.common["Authorization"];
-    
+
     return attendance.data;
   } catch (error) {
     throw error;

@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { TaskTime } from "./api/getActiveTasks";
-import { Consultations } from "./api/consultations/consultations";
+import { TaskTime, BreakForm, Consultations } from "@/types";
 
 type State = {
   screen: string;
@@ -11,6 +10,7 @@ type State = {
   selectedTask: any;
   consultations: Consultations[];
   stoppedTasks: TaskTime[];
+  breakForm: BreakForm;
 };
 
 type Action = {
@@ -23,6 +23,7 @@ type Action = {
   setSelectedTask: (task: any) => void;
   setConsultations: (list: any) => void;
   setStoppedTasks: (task: any) => void;
+  setBreakForm: (breakForm: any) => void;
 };
 
 const useStore = create(
@@ -43,6 +44,13 @@ const useStore = create(
       setConsultations: (consultations: any) => set(() => ({ consultations })),
       stoppedTasks: [],
       setStoppedTasks: (task: any) => set(() => ({ stoppedTasks: task })),
+      breakForm: {
+        reason: "",
+        hours: 0,
+        minutes: 15,
+      },
+      setBreakForm: (breakForm: BreakForm) =>
+        set(() => ({ breakForm: breakForm })),
     }),
     {
       name: "store",

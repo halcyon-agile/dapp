@@ -1,17 +1,25 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
 import startBreakApi from "../api/startBreak";
+import useStore from "../store";
 
 function BreakReason() {
+  const [breakForm, setBreakForm] = useStore((state) => [
+    state.breakForm,
+    state.setBreakForm,
+  ]);
   const navigate = useNavigate();
-  const [reason, setReason] = useState<string>("");
+
+  useEffect(() => {
+    console.log(breakForm);
+  }, [breakForm]);
 
   const startBreak = () => {
-    startBreakApi(reason)
+    console.log({ breakForm });
+    startBreakApi(breakForm)
       .then(() => navigate("/break-timer"))
       .catch((error) => {
         console.error(error?.response?.data?.message || "Something went wrong");
@@ -43,10 +51,15 @@ function BreakReason() {
           <Input
             type="reason"
             id="reason"
-            className="text-black p-1 rounded-md border px-3 font-normal text-base text-sm w-full mt-1.5"
+            className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
             autoCapitalize="none"
-            onChange={(e) => setReason(e.target.value)}
-            value={reason}
+            onChange={(e) =>
+              setBreakForm({
+                ...breakForm,
+                reason: e.target.value,
+              })
+            }
+            value={breakForm.reason}
           />
         </div>
       </div>

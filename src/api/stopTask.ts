@@ -1,6 +1,6 @@
 import request from "../lib/request";
 import { AxiosError } from "axios";
-import { Task } from "./getTasks";
+import { Task } from "@/types";
 
 const stopTask = async (taskId: number): Promise<Task | AxiosError | any> => {
   try {

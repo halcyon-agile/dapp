@@ -1,6 +1,6 @@
 import request from "../lib/request";
 import { AxiosError } from "axios";
-import { Attendance } from "./finishWork";
+import { Attendance } from "../types";
 
 const getAttendance = async (): Promise<Attendance | AxiosError | any> => {
   try {

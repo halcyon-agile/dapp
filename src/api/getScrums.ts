@@ -1,22 +1,14 @@
 import request from "../lib/request";
 import { AxiosError } from "axios";
 import moment from "moment";
-
-export interface Scrum {
-  id: number;
-  name: string;
-  started_at: string;
-  ended_at: string;
-  project: {
-    id: number;
-    name: string;
-  };
-}
+import { Scrum } from "../types";
 
 const getScrums = async (): Promise<Scrum[] | AxiosError | any> => {
   try {
-    let dayOfTheWeek = moment().format('dddd')
-    const scrums = await request.get(`/api/scrums?day=${dayOfTheWeek.toLowerCase()}`);
+    let dayOfTheWeek = moment().format("dddd");
+    const scrums = await request.get(
+      `/api/scrums?day=${dayOfTheWeek.toLowerCase()}`
+    );
     return scrums.data;
   } catch (error) {
     // console.error(error);

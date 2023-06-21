@@ -3,17 +3,14 @@ import {
   isPermissionGranted,
   requestPermission,
 } from "@tauri-apps/api/notification";
-import {
-  RouterProvider, redirect,
-} from "react-router-dom"
+import { RouterProvider } from "react-router-dom";
 
 import useStore from "./store";
 import router from "./lib/router";
 import { Toaster } from "./components/ui/toaster";
 
 function App() {
-  const [screen, setNotificationPermissionGranted] = useStore((state) => [
-    state.screen,
+  const [setNotificationPermissionGranted] = useStore((state) => [
     state.setNotificationPermissionGranted,
   ]);
 
@@ -31,12 +28,19 @@ function App() {
     askPermissions();
   }, [setNotificationPermissionGranted]);
 
+  useEffect(() => {
+    if (!window.localStorage.getItem("token")) {
+      router.navigate("/login");
+      console.log(router);
+    }
+  }, []);
+
   return (
     <>
       <RouterProvider router={router} />
       <Toaster />
     </>
-  )
+  );
 }
 
 export default App;

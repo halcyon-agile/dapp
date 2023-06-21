@@ -1,14 +1,10 @@
 import request from "../../lib/request";
 import { AxiosError } from "axios";
+import { Consultations } from "@/types";
 
-export interface Consultations {
-  started_at: string;
-  type: string;
-  task: any;
-  id: number;
-}
-
-const getConsultations = async (): Promise<Consultations[] | AxiosError | any> => {
+const getConsultations = async (): Promise<
+  Consultations[] | AxiosError | any
+> => {
   try {
     const consultations = await request.get("/api/consultations");
     return consultations.data;

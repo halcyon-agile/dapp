@@ -1,15 +1,20 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom"
-
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
+import useStore from "../store";
 
 function TakeABreak() {
-  const navigate = useNavigate()
-  const [form, setForm] = useState<{hour: number | null, minute: number | null}>({
-    hour: null,
-    minute: null,
-  });
+  const navigate = useNavigate();
+  const [breakForm, setBreakForm] = useStore((state) => [
+    state.breakForm,
+    state.setBreakForm,
+  ]);
+
+  useEffect(() => {
+    console.log(breakForm);
+  }, [breakForm]);
+
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
       <div className="text-sm w-full">
@@ -20,31 +25,37 @@ function TakeABreak() {
       <div className="w-full p-4 mt-3.5 border rounded-sm border-slate-200">
         <div className="flex flex-row justify-between gap-4">
           <div className="flex-col flex-1 gap-1.5">
-            <p className="font-medium text-sm text-slate-900">
-              Hour
-            </p>
+            <p className="font-medium text-sm text-slate-900">Hour</p>
             <Input
-              type="hour"
-              id="hour"
+              type="hours"
+              id="hours"
               placeholder="Hour"
-              className="text-black p-1 rounded-md border px-3 font-normal text-base text-sm w-full mt-1.5"
+              className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
               autoCapitalize="none"
-              onChange={(e) => setForm({ ...form, hour: parseInt(e.target.value, 10) })}
-              value={form.hour !== null ? form.hour : ""}
+              onChange={(e) =>
+                setBreakForm({
+                  ...breakForm,
+                  hours: parseInt(e.target.value, 10),
+                })
+              }
+              value={breakForm.hours !== null ? breakForm.hours : ""}
             />
           </div>
           <div className="flex-col flex-1 gap-1.5">
-            <p className="font-medium text-sm text-slate-900">
-              Minute
-            </p>
+            <p className="font-medium text-sm text-slate-900">Minute</p>
             <Input
-              type="minute"
-              id="minute"
+              type="minutes"
+              id="minutes"
               placeholder="Minute"
-              className="text-black p-1 rounded-md border px-3 font-normal text-base text-sm w-full mt-1.5"
+              className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
               autoCapitalize="none"
-              onChange={(e) => setForm({ ...form, minute: parseInt(e.target.value, 10) })}
-              value={form.minute !== null ? form.minute : ""}
+              onChange={(e) =>
+                setBreakForm({
+                  ...breakForm,
+                  minutes: parseInt(e.target.value, 10),
+                })
+              }
+              value={breakForm.minutes !== null ? breakForm.minutes : ""}
             />
           </div>
         </div>
@@ -59,13 +70,13 @@ function TakeABreak() {
         </Button>
         <Button
           className="bg-cyan-500"
-          onClick={() => navigate("/break-reason")}
+          onClick={() => navigate("/break-reason", { state: breakForm })}
         >
           Okay
         </Button>
       </div>
     </main>
-  )
+  );
 }
 
 export default TakeABreak;
