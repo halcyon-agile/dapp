@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { TaskTime } from "./api/getActiveTasks";
 import { Consultations } from "./api/consultations/consultations";
+import { Scrum } from "./api/getScrums";
 
 type State = {
   screen: string;
@@ -10,6 +11,7 @@ type State = {
   notificationPermissionGranted: boolean;
   selectedTask: any;
   consultations: Consultations[];
+  scrums: Scrum[];
   stoppedTasks: TaskTime[];
 };
 
@@ -22,6 +24,7 @@ type Action = {
   ) => void;
   setSelectedTask: (task: any) => void;
   setConsultations: (list: any) => void;
+  setScrums: (list: any) => void;
   setStoppedTasks: (task: any) => void;
 };
 
@@ -41,6 +44,8 @@ const useStore = create(
       setSelectedTask: (task: any) => set(() => ({ selectedTask: task })),
       consultations: [],
       setConsultations: (consultations: any) => set(() => ({ consultations })),
+      scrums: [],
+      setScrums: (scrums: any) => set(() => ({ scrums })),
       stoppedTasks: [],
       setStoppedTasks: (task: any) => set(() => ({ stoppedTasks: task })),
     }),
