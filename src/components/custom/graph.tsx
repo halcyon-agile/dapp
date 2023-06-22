@@ -41,33 +41,35 @@ function Graph(props: Props) {
               Remaining Hours: 40
             </p>
           )}
-
           {props?.showGanttEstimate && (
-          <div className="flex flex-row w-full items-center py-1">
-            <p className="flex-1 pr-2 text-xs text-gray-500">
-              {props?.assigned?.estimate} Hrs
-            </p>
-            <div className="flex-[5]">
-              <div className="h-2.5 rounded-full bg-teal-500 grow" />
+          <div>
+            <div className="flex flex-row w-full items-center py-1">
+              <p className="flex-1 pr-2 text-xs text-gray-500">
+                {props?.assigned?.initial_estimate} Hrs
+              </p>
+              <div className="flex-[5]">
+                <div className="h-2.5 rounded-full bg-teal-500 grow" />
+              </div>
+            </div>
+            <div className="flex flex-row w-full items-center py-1">
+              <p className="flex-1 pr-2 text-xs text-gray-500">
+                64 Hrs (12)
+              </p>
+              <div className="flex-[5]">
+                <div className="h-2.5 w-[80%] rounded-full bg-green-500" />
+              </div>
+            </div>
+            <div className="flex flex-row w-full items-center py-1">
+              <p className="flex-1 pr-2 text-xs text-gray-500">
+                {props?.assigned?.estimate} Hrs
+              </p>
+              <div className="flex-[5]">
+                <div className="h-2.5 w-[40%] rounded-full bg-cyan-500" />
+              </div>
             </div>
           </div>
           )}
-          <div className="flex flex-row w-full items-center py-1">
-            <p className="flex-1 pr-2 text-xs text-gray-500">
-              64 Hrs (12)
-            </p>
-            <div className="flex-[5]">
-              <div className="h-2.5 w-[80%] rounded-full bg-green-500" />
-            </div>
-          </div>
-          <div className="flex flex-row w-full items-center py-1">
-            <p className="flex-1 pr-2 text-xs text-gray-500">
-              32 Hrs (12)
-            </p>
-            <div className="flex-[5]">
-              <div className="h-2.5 w-[40%] rounded-full bg-cyan-500" />
-            </div>
-          </div>
+
         </div>
       </CollapsibleContent>
       <CollapsibleTrigger asChild>
