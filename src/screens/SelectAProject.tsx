@@ -60,7 +60,7 @@ function SelectAProject() {
       startTaskApi(selectedTask.id)
         .then((taskTime) => {
           startingTask(false);
-          if (activeTasks.length <= 0) {
+          if (activeTasks?.length <= 0) {
             setActiveTasks([taskTime]);
             navigate("/multiple-projects", { replace: true });
           } else {

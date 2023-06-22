@@ -85,7 +85,7 @@ function MainScreen() {
   const stopTask = (id: number) => {
     stopTaskApi(id)
       .then(() => {
-        setActiveTasks(activeTasks.filter((task) => task.id !== id));
+        setActiveTasks(activeTasks?.filter((task) => task.id !== id));
       })
       .catch((error) => {
         console.error(error?.response?.data?.message || "Something went wrong");
