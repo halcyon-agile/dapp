@@ -13,7 +13,6 @@ import finishWork from "../api/finishWork";
 import { Graph, Timer } from "../components/custom";
 import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
 import leaveConsultation from "../api/consultations/leave-consultation";
-import startTask from "../api/startTask";
 
 function formatHourDifference(startedAt: string) {
   const currentDate = DateTime.now();
@@ -37,25 +36,26 @@ function formatHourDifference(startedAt: string) {
   // return moment(startedAt).toNow(true)
 }
 
+function getHoursFromEndDate(endedAt: string) {
+  const currentDate = DateTime.now();
+  const endedDate = DateTime.fromISO(endedAt);
+  const timeDifference = endedDate.diff(currentDate);
+
+  const hours = Math.floor(timeDifference.as("hours"));
+
+  return hours;
+}
+
 function MultipleProjects() {
   const navigate = useNavigate();
-  const [
-    user,
-    activeTasks,
-    setActiveTasks,
-    setUser,
-    setSelectedTask,
-    stoppedTasks,
-    setStoppedTasks,
-  ] = useStore((state) => [
-    state.user,
-    state.activeTasks,
-    state.setActiveTasks,
-    state.setUser,
-    state.setSelectedTask,
-    state.stoppedTasks,
-    state.setStoppedTasks,
-  ]);
+  const [user, activeTasks, setActiveTasks, setUser, setSelectedTask] =
+    useStore((state) => [
+      state.user,
+      state.activeTasks,
+      state.setActiveTasks,
+      state.setUser,
+      state.setSelectedTask,
+    ]);
 
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [loggedOff, loggingOff] = useState<boolean>(false);
@@ -68,7 +68,6 @@ function MultipleProjects() {
   // Refactor later to only fetch once logged in
   useEffect(() => {
     const userData = localStorage.getItem("token");
-    // console.log("userData", userData)
     if (!userData) {
       navigate("/login", {
         replace: true,
@@ -76,7 +75,6 @@ function MultipleProjects() {
     }
     getActiveTasks().then((tasks) => {
       setActiveTasks(tasks);
-      // console.log({ activeTasks });
     });
 
     getAttendance().then((data) => {
@@ -118,7 +116,6 @@ function MultipleProjects() {
         loggingOff(false);
         setUser(undefined);
         setActiveTasks([]);
-        setStoppedTasks([]);
         localStorage.clear();
         navigate("/login", {
           replace: true,
@@ -129,10 +126,6 @@ function MultipleProjects() {
         // console.error(error?.response?.data?.message || "Something went wrong");
       });
   };
-
-  // console.log('active', activeTasks)
-
-  // console.log('user', user)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -177,7 +170,7 @@ function MultipleProjects() {
                   </p>
                   <Timer started_at={data?.started_at} />
                 </div>
-                <div className="flex flex-row items-center justify-between py-4 border-b border-slate-200">
+                <div className="flex flex-row items-center justify-between py-4 border-slate-200">
                   <div className="flex flex-1">
                     {data?.ended_at === null ? (
                       <div className="rounded-full px-4 py-1 bg-green-500 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
@@ -260,24 +253,17 @@ function MultipleProjects() {
                     </div>
                   )}
                 </div>
-                {data?.consultation_id === null && (
+                {/* {data?.consultation_id === null && (
                   <Graph
-                    showRemainingHours={
-                      data?.task?.project?.project_type?.show_remaining_hours
-                        ? true
-                        : false
-                    }
-                    showGanttEstimate={
-                      data?.task?.project?.project_type?.gantt_project_duration
-                        ? true
-                        : false
-                    }
-                    assigned={data?.task?.assignees?.find(
-                      (x: any) => x.admin_id === user.id
+                    remainingHours={100}
+                    initialEstimateHours={getHoursFromEndDate(
+                      data?.task?.ended_at
                     )}
+                    currentEstimateHours={100}
+                    totalRenderedHours={data?.total_minutes_spent * 60}
                     started_at={data?.started_at}
                   />
-                )}
+                )} */}
               </div>
             </div>
           ))
@@ -483,7 +469,7 @@ function MultipleProjects() {
           >
             <div
               className={`absolute rounded-full bg-red-500 top-0 right-1 w-2 h-2 ${
-                reddot.consultations ? "" : "hidden"
+                reddot?.consultations ? "" : "hidden"
               }`}
             ></div>
 
@@ -511,7 +497,7 @@ function MultipleProjects() {
           >
             <div
               className={`absolute rounded-full bg-red-500 top-0 right-1 w-2 h-2 ${
-                reddot.scrums ? "" : "hidden"
+                reddot?.scrums ? "" : "hidden"
               }`}
             ></div>
 

@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import logo from "./assets/logo.png";
-import useStore from "./store";
-import loginUser from "./api/loginUser";
+import logo from "../assets/logo.png";
+import useStore from "../store";
+import loginUser from "../api/loginUser";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 
 import { ColorRing } from "react-loader-spinner";
 
-import { Input } from "./components/ui/input";
-import { Label } from "./components/ui/label";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
 
 function LoginScreen() {
   const navigate = useNavigate();
