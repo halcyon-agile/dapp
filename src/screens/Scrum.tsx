@@ -1,10 +1,4 @@
-
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-  Button,
-} from "../components/ui";
+import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
 
 import getScrums from "../api/getScrums";
 import { useNavigate } from "react-router-dom";
@@ -14,62 +8,51 @@ import { useEffect, useState } from "react";
 import { ScrumItem } from "../components/custom";
 import useStore from "../store";
 
-
 function Scrum() {
-  const navigate = useNavigate()
-  const [fetching, isFetching] = useState<boolean>(false)
+  const navigate = useNavigate();
+  const [fetching, isFetching] = useState<boolean>(false);
 
   useEffect(() => {
-    isFetching(true)
+    isFetching(true);
     getScrums().then((list) => {
       setScrums(list);
-      isFetching(false)
+      isFetching(false);
     });
   }, []);
 
-  const [
-    scrums,
-    setActiveTasks,
-    activeTasks,
-    setScreen,
-    setScrums
-  ] = useStore((state) => [
-    state.scrums,
-    state.setActiveTasks,
-    state.activeTasks,
-    state.setScreen,
-    state.setScrums,
-  ]);
-  
+  const [scrums, setActiveTasks, activeTasks, setScreen, setScrums] = useStore(
+    (state) => [
+      state.scrums,
+      state.setActiveTasks,
+      state.activeTasks,
+      state.setScreen,
+      state.setScrums,
+    ]
+  );
+
   return (
     <main className="flex min-h-screen flex-col p-5">
       <div className="left-0 top-0 w-full text-4xl py-2">
-        <p className="font-semibold text-xl">
-          Scrum for today
-        </p>
+        <p className="font-semibold text-xl">Scrum for today</p>
       </div>
       <div className="w-full flex flex-1 flex-col gap-4">
-        { fetching ?
-          (<ColorRing
+        {fetching ? (
+          <ColorRing
             visible={fetching}
             height="100"
             width="100"
             ariaLabel="blocks-loading"
             wrapperStyle={{}}
             wrapperClass="blocks-wrapper"
-            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
-          />) : scrums.length > 0 ? scrums.map((data) => (
-            <ScrumItem
-              data={data}
-            />
-          
-          )): (
+            colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+          />
+        ) : scrums?.length > 0 ? (
+          scrums.map((data) => <ScrumItem data={data} />)
+        ) : (
           <Alert>
             <Terminal className="h-4 w-4" />
             <AlertTitle>Heads up!</AlertTitle>
-            <AlertDescription>
-              You have no scrums right now.
-            </AlertDescription>
+            <AlertDescription>You have no scrums right now.</AlertDescription>
           </Alert>
         )}
 
@@ -101,7 +84,7 @@ function Scrum() {
         </div>
       </div>
     </main>
-  )
+  );
 }
 
 export default Scrum;

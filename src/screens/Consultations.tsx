@@ -11,7 +11,7 @@ import {
   Tabs,
   TabsContent,
   TabsList,
-  TabsTrigger
+  TabsTrigger,
 } from "../components/ui";
 import getConsultations from "../api/consultations/consultations";
 import useStore from "../store";
@@ -19,39 +19,36 @@ import getConsultationInvites from "../api/consultations/consultationInvites";
 import { ConsultationItem } from "../components/custom";
 
 function Consultations() {
-  const navigate = useNavigate()
-  const [fetching, isFetching] = useState<boolean>(false)
-  const [
-    user,
-    consultations,
-    setConsultations,
-    activeTasks,
-  ] = useStore((state) => [
-    state.user,
-    state.consultations,
-    state.setConsultations,
-    state.activeTasks,
-  ]);
+  const navigate = useNavigate();
+  const [fetching, isFetching] = useState<boolean>(false);
+  const [user, consultations, setConsultations, activeTasks] = useStore(
+    (state) => [
+      state.user,
+      state.consultations,
+      state.setConsultations,
+      state.activeTasks,
+    ]
+  );
   useEffect(() => {
-    isFetching(true)
+    isFetching(true);
     getConsultations().then((list) => {
       setConsultations(list);
-      isFetching(false)
+      isFetching(false);
     });
   }, []);
 
-  console.log('consultations', consultations)
+  console.log("consultations", consultations);
   // console.log('user', user)
 
   // console.log('active', activeTasks)
 
-  const tasks = activeTasks.filter((task) => {
-    return task.consultation_id !== null
-  })
+  const tasks = activeTasks?.filter((task) => {
+    return task.consultation_id !== null;
+  });
 
-  const filteredConsultations = consultations.filter((consult) => {
+  const filteredConsultations = consultations?.filter((consult) => {
     return tasks.every((task) => {
-      return task.consultation_id !== consult.id
+      return task.consultation_id !== consult.id;
     });
   });
 
@@ -60,33 +57,36 @@ function Consultations() {
   return (
     <main className="flex min-h-screen flex-col p-5">
       <div className="left-0 top-0 w-full text-4xl py-2">
-        <p className="font-semibold text-xl">
-          Consult
-        </p>
+        <p className="font-semibold text-xl">Consult</p>
       </div>
       <Tabs defaultValue="requests" className="w-full">
         <TabsList className="grid grid-cols-2 w-[50%]">
           <TabsTrigger
             value="requests"
             onClick={() => {
-              isFetching(true)
-              setConsultations([])
+              isFetching(true);
+              setConsultations([]);
               getConsultations().then((list) => {
                 setConsultations(list);
-                isFetching(false)
+                isFetching(false);
               });
-            }}>From you</TabsTrigger>
+            }}
+          >
+            From you
+          </TabsTrigger>
           <TabsTrigger
             value="invites"
             onClick={() => {
-              isFetching(true)
-              setConsultations([])
+              isFetching(true);
+              setConsultations([]);
               getConsultationInvites().then((list) => {
                 setConsultations(list);
-                isFetching(false)
+                isFetching(false);
               });
             }}
-          >From others</TabsTrigger>
+          >
+            From others
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="requests">
           {fetching ? (
@@ -97,15 +97,17 @@ function Consultations() {
               ariaLabel="blocks-loading"
               wrapperStyle={{}}
               wrapperClass="blocks-wrapper"
-              colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+              colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
             />
-          ) : consultations.length > 0 ? consultations.map((data) => (
-            <ConsultationItem
-              data={data}
-              name={user?.first_name}
-              tab="requests"
-            />
-          )) : (
+          ) : consultations?.length > 0 ? (
+            consultations.map((data) => (
+              <ConsultationItem
+                data={data}
+                name={user?.first_name}
+                tab="requests"
+              />
+            ))
+          ) : (
             <Alert>
               <Terminal className="h-4 w-4" />
               <AlertTitle>Heads up!</AlertTitle>
@@ -124,15 +126,17 @@ function Consultations() {
               ariaLabel="blocks-loading"
               wrapperStyle={{}}
               wrapperClass="blocks-wrapper"
-              colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+              colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
             />
-          ) : consultations.length > 0 ? consultations.map((data) => (
-            <ConsultationItem
-              data={data}
-              name={user?.first_name}
-              tab="invites"
-            />
-          )) : (
+          ) : consultations?.length > 0 ? (
+            consultations.map((data) => (
+              <ConsultationItem
+                data={data}
+                name={user?.first_name}
+                tab="invites"
+              />
+            ))
+          ) : (
             <Alert>
               <Terminal className="h-4 w-4" />
               <AlertTitle>Heads up!</AlertTitle>
@@ -159,7 +163,7 @@ function Consultations() {
         </Button> */}
       </div>
     </main>
-  )
+  );
 }
 
 export default Consultations;
