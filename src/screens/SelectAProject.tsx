@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AxiosError } from "axios";
 import { ColorRing } from "react-loader-spinner";
 import { Terminal } from "lucide-react";
-import { Task } from "@/types";
+import { Task, Project } from "@/types";
 import getTasks from "../api/getTasks";
+import getProjects from "../api/getProjects";
 import useStore from "../store";
 import startTaskApi from "../api/startTask";
 import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
@@ -23,6 +24,8 @@ function SelectAProject() {
   const [fetching, fetch] = useState<boolean>(true);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [startedTask, startingTask] = useState<boolean>(false);
+  const [projectFilter, setProjectFilter] = useState<any>(null);
+  const [projects, setProjects] = useState<any>([]);
 
   useEffect(() => {
     const userData = localStorage.getItem("token");
@@ -32,9 +35,32 @@ function SelectAProject() {
         replace: true,
       });
     }
-    const fetchTasks = async () => {
+
+    const fetchProjects = async () => {
       try {
-        const fetchedTasks: Task[] = await getTasks();
+        const fetchProjects: Project[] = await getProjects();
+        setProjects([{ id: '', name: 'All Projects'} , ...fetchProjects]);
+        fetch(false);
+      } catch (error: AxiosError | any) {
+        // console.error(error?.response?.data?.message || "Something went wrong");
+        fetch(false);
+      }
+    };
+    fetchProjects();
+  }, []);
+
+  useEffect(() => {
+    const userData = localStorage.getItem("token");
+    // console.log("userData", userData)
+    if (!userData) {
+      navigate("/login", {
+        replace: true,
+      });
+    }
+
+    const fetchTasks = async (filter: number) => {
+      try {
+        const fetchedTasks: Task[] = await getTasks(filter);
         setTasks(
           fetchedTasks.filter(
             (task) =>
@@ -47,8 +73,16 @@ function SelectAProject() {
         fetch(false);
       }
     };
-    fetchTasks();
-  }, []);
+
+    fetchTasks(projectFilter);
+  }, [projectFilter]);
+
+
+  const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = event.target.value;
+    setProjectFilter(selectedValue);
+  };
+
 
   const selectedTask = selectedProject !== null ? tasks[selectedProject] : null;
 
@@ -87,7 +121,21 @@ function SelectAProject() {
           Projects
         </p>
       </div>
+
+
       <div className="flex flex-col flex-1 bg-white w-full h-full text-black mt-5">
+          { projects.length > 0 ?
+              <select className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              onChange={handleSelectChange}>
+              {
+                projects.map((data: any, index: number) => (
+                  <option value={`${data.id}`}>{data.name}</option>
+                ))
+              }
+              </select>
+             : ''
+          }
+
         <div className="w-full py-2">
           {fetching && (
             <ColorRing

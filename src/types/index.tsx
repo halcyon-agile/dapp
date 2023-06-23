@@ -44,6 +44,13 @@ export interface Task {
   };
 }
 
+export interface Project {
+  id: number;
+  name: string;
+  started_at: string;
+  ended_at: string;
+}
+
 export interface UserData {
   id: string;
   name: string;
