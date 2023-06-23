@@ -8,7 +8,7 @@ import {
 } from "../ui/collapsible";
 
 interface Props {
-  remainingHours: number;
+  remainingHours: number | boolean;
   initialEstimateHours: number;
   currentEstimateHours: number;
   totalRenderedHours: number;
@@ -18,6 +18,13 @@ interface Props {
 function Graph(props: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [time, setTime] = useState("");
+
+  const longestHour = Math.max(
+    props.initialEstimateHours,
+    props.currentEstimateHours,
+    props.totalRenderedHours,
+    typeof props.remainingHours === "number" ? props.remainingHours : 0
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -35,9 +42,11 @@ function Graph(props: Props) {
     <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full">
       <CollapsibleContent>
         <div className="w-full pt-2">
-          <p className="text-sm font-normal text-gray-700">
-            Remaining Hours: {props.remainingHours}
-          </p>
+          {typeof props.remainingHours === "number" && (
+            <p className="text-sm font-normal text-gray-700">
+              Remaining Hours: {props.remainingHours}
+            </p>
+          )}
 
           <div className="flex flex-row w-full items-center py-1">
             <p className="flex-1 pr-2 text-xs text-gray-500">
@@ -45,7 +54,14 @@ function Graph(props: Props) {
               {props?.initialEstimateHours / 8})
             </p>
             <div className="flex-[5]">
-              <div className="h-2.5 rounded-full bg-teal-500 grow" />
+              <div
+                style={{
+                  width: `${
+                    (Math.ceil(props.initialEstimateHours) / longestHour) * 100
+                  }%`,
+                }}
+                className="rounded-full bg-teal-500 grow h-2.5"
+              />
             </div>
           </div>
 
@@ -55,7 +71,14 @@ function Graph(props: Props) {
               )
             </p>
             <div className="flex-[5]">
-              <div className="h-2.5 w-[80%] rounded-full bg-green-500" />
+              <div
+                style={{
+                  width: `${
+                    (Math.ceil(props.currentEstimateHours) / longestHour) * 100
+                  }%`,
+                }}
+                className="rounded-full bg-green-500 h-2.5"
+              />
             </div>
           </div>
 
@@ -64,7 +87,14 @@ function Graph(props: Props) {
               {props.totalRenderedHours} Hrs ({props.totalRenderedHours / 8})
             </p>
             <div className="flex-[5]">
-              <div className="h-2.5 w-[40%] rounded-full bg-cyan-500" />
+              <div
+                style={{
+                  width: `${
+                    (Math.ceil(props.totalRenderedHours) / longestHour) * 100
+                  }%`,
+                }}
+                className="rounded-full bg-cyan-500 h-2.5"
+              />
             </div>
           </div>
         </div>

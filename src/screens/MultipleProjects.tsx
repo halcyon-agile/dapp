@@ -170,7 +170,7 @@ function MultipleProjects() {
                   </p>
                   <Timer started_at={data?.started_at} />
                 </div>
-                <div className="flex flex-row items-center justify-between py-4 border-slate-200">
+                <div className="flex flex-row items-center justify-between py-4 border-b border-slate-200">
                   <div className="flex flex-1">
                     {data?.ended_at === null ? (
                       <div className="rounded-full px-4 py-1 bg-green-500 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
@@ -253,17 +253,21 @@ function MultipleProjects() {
                     </div>
                   )}
                 </div>
-                {/* {data?.consultation_id === null && (
+                {data?.consultation_id === null && (
                   <Graph
-                    remainingHours={100}
-                    initialEstimateHours={getHoursFromEndDate(
-                      data?.task?.ended_at
+                    remainingHours={false}
+                    initialEstimateHours={Number(
+                      data?.task?.assignees[0].initial_estimate || 0
                     )}
-                    currentEstimateHours={100}
-                    totalRenderedHours={data?.total_minutes_spent * 60}
+                    currentEstimateHours={
+                      data?.task?.assignees[0].estimate || 0
+                    }
+                    totalRenderedHours={Number(
+                      Number(data?.total_minutes_spent / 60).toFixed(2)
+                    )}
                     started_at={data?.started_at}
                   />
-                )} */}
+                )}
               </div>
             </div>
           ))
