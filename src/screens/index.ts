@@ -1,4 +1,4 @@
-import LoginScreen from "../LoginScreen";
+import LoginScreen from "./LoginScreen";
 
 import MainScreen from "./MainScreen";
 import TakeABreak from "./TakeABreak";
@@ -13,7 +13,6 @@ import CreateConsultation from "./CreateConsultation";
 
 export {
   LoginScreen,
-  MainScreen,
   TakeABreak,
   SelectAProject,
   MultipleProjects,

@@ -1,6 +1,4 @@
-import {
-  createBrowserRouter, redirect,
-} from "react-router-dom";
+import { createBrowserRouter, redirect } from "react-router-dom";
 
 import {
   LoginScreen,
@@ -13,8 +11,7 @@ import {
   Consultations,
   Scrum,
   CreateConsultation,
-} from "../screens"
-import { m } from "@tauri-apps/api/dialog-20ff401c";
+} from "../screens";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +24,7 @@ const router = createBrowserRouter([
   },
   {
     path: "take-a-break",
-    element: <TakeABreak />
+    element: <TakeABreak />,
   },
   {
     path: "multiple-projects",
@@ -39,24 +36,24 @@ const router = createBrowserRouter([
   },
   {
     path: "break-reason",
-    element: <BreakReason />
+    element: <BreakReason />,
   },
   {
     path: "break-timer",
-    element: <BreakTimer />
+    element: <BreakTimer />,
   },
   {
     path: "consultations",
-    element: <Consultations />
+    element: <Consultations />,
   },
   {
     path: "scrum",
-    element: <Scrum />
+    element: <Scrum />,
   },
   {
     path: "create-consultation",
-    element: <CreateConsultation />
-  }
+    element: <CreateConsultation />,
+  },
 ]);
 
 export default router;
