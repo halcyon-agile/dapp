@@ -13,7 +13,6 @@ import CreateConsultation from "./CreateConsultation";
 
 export {
   LoginScreen,
-  MainScreen,
   TakeABreak,
   SelectAProject,
   MultipleProjects,
