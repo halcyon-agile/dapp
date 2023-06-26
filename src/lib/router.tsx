@@ -1,4 +1,4 @@
-import { createBrowserRouter, redirect } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 
 import {
   LoginScreen,
@@ -16,7 +16,7 @@ import {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <SelectAProject />,
+    element: <MultipleProjects />,
   },
   {
     path: "login",
@@ -27,8 +27,8 @@ const router = createBrowserRouter([
     element: <TakeABreak />,
   },
   {
-    path: "multiple-projects",
-    element: <MultipleProjects />,
+    path: "select-project",
+    element: <SelectAProject />,
   },
   {
     path: "attribute-hour",

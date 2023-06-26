@@ -40,9 +40,9 @@ fn main() {
                     let window = app.get_window("main").unwrap();
                     window.show().unwrap();
                 }
-                // "quit" => {
-                //     std::process::exit(0);
-                // }
+                "quit" => {
+                    std::process::exit(0);
+                }
                 "hide" => {
                     let window = app.get_window("main").unwrap();
                     window.hide().unwrap();

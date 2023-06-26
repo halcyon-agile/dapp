@@ -11,11 +11,7 @@ import useStore from "../store";
 
 function AttributeHour() {
   const navigate = useNavigate();
-  const [selectedTask, stoppedTasks, setStoppedTasks] = useStore((state) => [
-    state.selectedTask,
-    state.stoppedTasks,
-    state.setStoppedTasks,
-  ]);
+  const [selectedTask] = useStore((state) => [state.selectedTask]);
 
   const [form, setForm] = useState<{
     hour: number;
@@ -28,7 +24,7 @@ function AttributeHour() {
   const stopTask = (taskId: number) => {
     stopTaskApi({ taskId, hours: form.hour + form.minute / 60 })
       .then(() => {
-        navigate("/multiple-projects");
+        navigate("/");
       })
       .catch((error) => {
         // console.error(error?.response?.data?.message || "Something went wrong");
