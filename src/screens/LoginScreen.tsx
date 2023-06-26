@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { ColorRing } from "react-loader-spinner";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+import { AxiosError } from "axios";
 
 function LoginScreen() {
   const navigate = useNavigate();
