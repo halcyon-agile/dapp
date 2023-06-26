@@ -8,6 +8,7 @@ import getProjects from "../api/getProjects";
 import useStore from "../store";
 import startTaskApi from "../api/startTask";
 import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
+import { AxiosError } from "axios";
 
 function SelectAProject() {
   const [activeTasks, setActiveTasks] = useStore((state) => [

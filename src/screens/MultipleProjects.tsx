@@ -266,8 +266,8 @@ function MultipleProjects() {
                 <Graph
                   visible={isGraphVisible(data)}
                   remainingHours={
-                    data?.task?.project?.project_type?.show_remaining_hours === 1 &&
-                    data?.total_remaining_hours
+                    data?.task?.project?.project_type?.show_remaining_hours ===
+                      1 && data?.total_remaining_hours
                   }
                   initialEstimateHours={Number(
                     data?.task?.assignees[0].initial_estimate || 0
@@ -375,6 +375,7 @@ function MultipleProjects() {
             className="flex flex-col items-center"
             target="_blank"
             href={portalUrl}
+            rel="noreferrer"
           >
             <div className="rounded-full border border-slate-200 p-2 mb-2">
               <svg
