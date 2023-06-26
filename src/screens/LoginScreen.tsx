@@ -2,23 +2,20 @@ import { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
 import useStore from "../store";
 import loginUser from "../api/loginUser";
-import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
-
 import { ColorRing } from "react-loader-spinner";
-
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 
 function LoginScreen() {
   const navigate = useNavigate();
-  const [setUser] = useStore((state) => [state.setUser, state.setScreen]);
+  const [setUser] = useStore((state) => [state.setUser]);
   const [form, setForm] = useState<{ email: string; password: string }>({
     email:
       import.meta.env.VITE_MODE === "DEV"
         ? "system.administrator@halcyon-pms-web.test"
-        : "halcyon.developer@lively-geyser-q53l27l9w5bc.vapor-farm-e1.com",
-    password: "secret",
+        : "",
+    password: "",
   });
   const [attempting, attemptingLogin] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState("");
