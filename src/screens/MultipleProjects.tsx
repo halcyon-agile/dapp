@@ -13,6 +13,7 @@ import finishWork from "../api/finishWork";
 import { Graph, Timer } from "../components/custom";
 import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
 import leaveConsultation from "../api/consultations/leave-consultation";
+import portalUrl from "../lib/portalUrl";
 
 function formatHourDifference(startedAt: string) {
   const currentDate = DateTime.now();
@@ -50,11 +51,6 @@ function isGraphVisible(data: any) {
 
   return false;
 }
-
-const portalUrl =
-  import.meta.env.VITE_MODE === "DEV"
-    ? import.meta.env.VITE_DEV_URL
-    : import.meta.env.VITE_PROD_URL;
 
 function MultipleProjects() {
   const navigate = useNavigate();
@@ -375,7 +371,6 @@ function MultipleProjects() {
             className="flex flex-col items-center"
             target="_blank"
             href={portalUrl}
-            rel="noreferrer"
           >
             <div className="rounded-full border border-slate-200 p-2 mb-2">
               <svg
