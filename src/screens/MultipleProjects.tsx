@@ -155,11 +155,14 @@ function MultipleProjects() {
                       ? data?.task?.project?.project_type?.name
                       : "Consultation"}
                   </p>
-                  <AddRemarksDialog id={data?.task_id} onSuccess={() => {
-                    getActiveTasks().then((tasks) => {
-                      setActiveTasks(tasks);
-                    });
-                  }} />
+                  <AddRemarksDialog
+                    id={data?.task_id}
+                    onSuccess={() => {
+                      getActiveTasks().then((tasks) => {
+                        setActiveTasks(tasks);
+                      });
+                    }}
+                  />
                 </div>
                 <div className="flex flex-row align-center justify-between">
                   <p className="font-medium text-base text-gray-700">
