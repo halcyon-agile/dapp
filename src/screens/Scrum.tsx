@@ -27,6 +27,8 @@ function Scrum() {
     state.setScrums,
   ]);
 
+  console.log(scrums)
+
   return (
     <main className="flex min-h-screen flex-col p-5">
       <div className="left-0 top-0 w-full text-4xl py-2">
