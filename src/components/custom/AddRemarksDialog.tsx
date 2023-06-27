@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Textarea } from "../ui"
 import { Button } from "../ui"
 import {
@@ -15,12 +15,17 @@ import { ColorRing } from "react-loader-spinner"
 interface Props {
   id: number
   onSuccess: () => void
+  remark: string
 }
 
 function AddRemarksDialog(props: Props) {
   const [open, setOpen] = useState<boolean>(false);
   const [remarks, setRemarks] = useState<string>("")
   const [adding, addingRemarks] = useState<boolean>(false)
+
+  useEffect(() => {
+    setRemarks(props?.remark)
+  }, [])
 
   const postRemark = () => {
     addingRemarks(true)
@@ -29,7 +34,6 @@ function AddRemarksDialog(props: Props) {
         if (response.status === 200) {
           addingRemarks(false)
           props?.onSuccess()
-          setRemarks("")
           setOpen(false)
         } else {
           addingRemarks(false)

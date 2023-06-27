@@ -132,7 +132,7 @@ function MultipleProjects() {
       });
   };
 
-  // console.log('active', activeTasks)
+  console.log('active', activeTasks)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -163,6 +163,7 @@ function MultipleProjects() {
                         setActiveTasks(tasks);
                       });
                     }}
+                    remark={data?.remark ? data.remark : ""}
                   />
                 </div>
                 <div className="flex flex-row align-center justify-between">
