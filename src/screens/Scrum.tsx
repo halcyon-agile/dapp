@@ -44,7 +44,7 @@ function Scrum() {
             colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
           />
         ) : scrums?.length > 0 ? (
-          scrums.map((data) => <ScrumItem data={data} />)
+          scrums.map((data) => <ScrumItem data={data} key={data?.id} />)
         ) : (
           <Alert>
             <Terminal className="h-4 w-4" />

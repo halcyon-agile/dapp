@@ -5,7 +5,7 @@ import router from "./lib/router";
 import { Toaster } from "./components/ui/toaster";
 
 import useUser from "./data/use-user";
-
+import portalUrl from "./lib/portalUrl";
 function App() {
   const [setUser] = useStore((state) => [state.setUser]);
   const { status, data, error } = useUser();
@@ -20,7 +20,7 @@ function App() {
       setUser(data);
     }
   }, [error, status, data, setUser]);
-
+  console.log({ portalUrl });
   return (
     <>
       <RouterProvider router={router} />
