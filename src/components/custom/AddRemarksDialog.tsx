@@ -73,6 +73,7 @@ function AddRemarksDialog(props: Props) {
           onChange={(e) =>
             setRemarks(e.target.value)
           }
+          autoFocus
         />
         <DialogFooter>
           <Button
