@@ -24,7 +24,7 @@ function ScrumItem(props: Props) {
   
 
   return (
-    <div className="w-full flex flex-col border rounded border-slate-200 p-4 gap-1" key={props?.data?.id}>
+    <div className="w-full flex flex-col border rounded border-slate-200 p-4 gap-1">
       <p className="font-medium text-base text-gray-700">
         {props?.data?.name} {props?.data?.id}
       </p>

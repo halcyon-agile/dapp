@@ -50,6 +50,11 @@ import {
   ToastAction,
 } from "./toast"
 
+import {
+  type TextareaProps,
+  Textarea,
+} from "./textarea"
+
 export {
   Alert,
   AlertDescription,
@@ -100,4 +105,6 @@ export {
   ToastDescription,
   ToastClose,
   ToastAction,
+  type TextareaProps,
+  Textarea,
 }
