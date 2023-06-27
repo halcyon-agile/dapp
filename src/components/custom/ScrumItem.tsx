@@ -4,6 +4,7 @@ import { Button } from "../ui";
 import { ColorRing } from "react-loader-spinner";
 import startTaskApi from "../../api/startTask";
 import useStore from "../../store";
+import moment from "moment";
 
 interface Props {
   data: any;
@@ -25,7 +26,7 @@ function ScrumItem(props: Props) {
         {props?.data?.name} {props?.data?.id}
       </p>
       <p className="font-medium text-xs text-gray-500">
-        {props?.data?.project?.scrums[0]?.time}
+        {props?.data?.project?.scrums[0]?.time} {parseInt(props?.data?.project?.scrums[0]?.time.slice(0,2), 10) < 12 ? "AM" : "PM"}
       </p>
       <div className="w-full flex flex-row items-center mt-2 gap-4">
         {activeTasks.find((item) => item.task.id === props?.data?.id) ? (
