@@ -1,40 +1,26 @@
 import { useEffect } from "react";
-import {
-  isPermissionGranted,
-  requestPermission,
-} from "@tauri-apps/api/notification";
 import { RouterProvider } from "react-router-dom";
-
 import useStore from "./store";
 import router from "./lib/router";
 import { Toaster } from "./components/ui/toaster";
 
+import useUser from "./data/use-user";
+import portalUrl from "./lib/portalUrl";
 function App() {
-  const [setNotificationPermissionGranted] = useStore((state) => [
-    state.setNotificationPermissionGranted,
-  ]);
+  const [setUser] = useStore((state) => [state.setUser]);
+  const { status, data, error } = useUser();
 
   useEffect(() => {
-    const askPermissions = async () => {
-      let permissionGranted = await isPermissionGranted();
-      if (!permissionGranted) {
-        const permission = await requestPermission();
-        permissionGranted = permission === "granted";
-        setNotificationPermissionGranted(permissionGranted);
-      } else {
-        setNotificationPermissionGranted(permissionGranted);
-      }
-    };
-    askPermissions();
-  }, [setNotificationPermissionGranted]);
-
-  useEffect(() => {
-    if (!window.localStorage.getItem("token")) {
+    if (status === "error") {
+      setUser(null);
       router.navigate("/login");
-      console.log(router);
     }
-  }, []);
 
+    if (status === "success") {
+      setUser(data);
+    }
+  }, [error, status, data, setUser]);
+  console.log({ portalUrl });
   return (
     <>
       <RouterProvider router={router} />

@@ -74,7 +74,7 @@ function BreakTimer() {
     endBreakApi()
       .then(() => {
         setBreakForm({ reason: "", minutes: 15, hours: 0 });
-        navigate("/multiple-projects");
+        navigate("/");
       })
       .catch((error) => {
         console.error(error?.response?.data?.message || "Something went wrong");

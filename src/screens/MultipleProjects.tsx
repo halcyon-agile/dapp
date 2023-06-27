@@ -13,6 +13,7 @@ import finishWork from "../api/finishWork";
 import { AddRemarksDialog, Graph, Timer } from "../components/custom";
 import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
 import leaveConsultation from "../api/consultations/leave-consultation";
+import portalUrl from "../lib/portalUrl";
 
 function formatHourDifference(startedAt: string) {
   const currentDate = DateTime.now();
@@ -257,8 +258,8 @@ function MultipleProjects() {
                 <Graph
                   visible={isGraphVisible(data)}
                   remainingHours={
-                    data?.task?.project?.project_type?.show_remaining_hours === 1 &&
-                    data?.total_remaining_hours
+                    data?.task?.project?.project_type?.show_remaining_hours ===
+                      1 && data?.total_remaining_hours
                   }
                   initialEstimateHours={Number(
                     data?.task?.assignees[0].initial_estimate || 0
@@ -287,7 +288,7 @@ function MultipleProjects() {
         <div className="flex flex-1 flex-row items-center gap-3">
           <button
             className="rounded-md border border-slate-200 py-2 px-4"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/select-project")}
           >
             <p className="text-slate-900 text-xs text-center">Add Task</p>
           </button>
@@ -362,7 +363,11 @@ function MultipleProjects() {
             </div>
             <p className="text-xs text-gray-500">Tickets</p>
           </div>
-          <div className="flex flex-col items-center">
+          <a
+            className="flex flex-col items-center"
+            target="_blank"
+            href={portalUrl}
+          >
             <div className="rounded-full border border-slate-200 p-2 mb-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -380,7 +385,7 @@ function MultipleProjects() {
               </svg>
             </div>
             <p className="text-xs text-gray-500">Portal</p>
-          </div>
+          </a>
           <button
             className="flex flex-col items-center relative"
             onClick={() => navigate("/consultations")}

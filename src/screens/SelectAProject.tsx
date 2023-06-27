@@ -1,6 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { AxiosError } from "axios";
 import { ColorRing } from "react-loader-spinner";
 import { Terminal } from "lucide-react";
 import { Task, Project } from "@/types";
@@ -9,12 +8,12 @@ import getProjects from "../api/getProjects";
 import useStore from "../store";
 import startTaskApi from "../api/startTask";
 import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
+import { AxiosError } from "axios";
 
 function SelectAProject() {
-  const [activeTasks, setActiveTasks, setStoppedTasks] = useStore((state) => [
+  const [activeTasks, setActiveTasks] = useStore((state) => [
     state.activeTasks,
     state.setActiveTasks,
-    state.setStoppedTasks,
   ]);
 
   const navigate = useNavigate();
@@ -26,6 +25,7 @@ function SelectAProject() {
   const [startedTask, startingTask] = useState<boolean>(false);
   const [projectFilter, setProjectFilter] = useState<any>(null);
   const [projects, setProjects] = useState<any>([]);
+  const projectIsSelected = selectedProject !== null;
 
   useEffect(() => {
     const userData = localStorage.getItem("token");
@@ -39,7 +39,7 @@ function SelectAProject() {
     const fetchProjects = async () => {
       try {
         const fetchProjects: Project[] = await getProjects();
-        setProjects([{ id: '', name: 'All Projects'} , ...fetchProjects]);
+        setProjects([{ id: "", name: "All Projects" }, ...fetchProjects]);
         fetch(false);
       } catch (error: AxiosError | any) {
         // console.error(error?.response?.data?.message || "Something went wrong");
@@ -77,39 +77,34 @@ function SelectAProject() {
     fetchTasks(projectFilter);
   }, [projectFilter]);
 
-
   const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
     setProjectFilter(selectedValue);
   };
 
-
   const selectedTask = selectedProject !== null ? tasks[selectedProject] : null;
 
   const startTask = () => {
-    if (selectedTask === null) {
-      navigate("/multiple-projects", { replace: true });
-    } else {
-      startingTask(true);
-      startTaskApi(selectedTask.id)
-        .then((taskTime) => {
-          startingTask(false);
-          if (activeTasks?.length <= 0) {
-            setActiveTasks([taskTime]);
-            navigate("/multiple-projects", { replace: true });
-          } else {
-            setStoppedTasks([...activeTasks]);
-            setActiveTasks([taskTime]);
-            navigate("/multiple-projects", { replace: true });
-          }
-        })
-        .catch((error: { response: { data: { message: any } } }) => {
-          startingTask(false);
-          console.error(
-            error?.response?.data?.message || "Something went wrong"
-          );
-        });
+    if (!selectedTask?.id) {
+      return;
     }
+
+    startingTask(true);
+    startTaskApi(selectedTask.id)
+      .then((taskTime) => {
+        startingTask(false);
+        if (activeTasks?.length <= 0) {
+          setActiveTasks([taskTime]);
+          navigate("/", { replace: true });
+        } else {
+          setActiveTasks([taskTime]);
+          navigate("/", { replace: true });
+        }
+      })
+      .catch((error: { response: { data: { message: any } } }) => {
+        startingTask(false);
+        console.error(error?.response?.data?.message || "Something went wrong");
+      });
   };
 
   // console.log('tasks', tasks)
@@ -122,19 +117,21 @@ function SelectAProject() {
         </p>
       </div>
 
-
       <div className="flex flex-col flex-1 bg-white w-full h-full text-black mt-5">
-          { projects.length > 0 ?
-              <select className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              onChange={handleSelectChange}>
-              {
-                projects.map((data: any, index: number) => (
-                  <option value={`${data.id}`} key={data?.id}>{data.name}</option>
-                ))
-              }
-              </select>
-             : ''
-          }
+        {projects.length > 0 ? (
+          <select
+            className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            onChange={handleSelectChange}
+          >
+            {projects.map((data: any) => (
+              <option key={`${data.id}`} value={`${data.id}`}>
+                {data.name}
+              </option>
+            ))}
+          </select>
+        ) : (
+          ""
+        )}
 
         <div className="w-full py-2">
           {fetching && (
@@ -155,7 +152,13 @@ function SelectAProject() {
                   className={`py-1.5 px-2 w-full rounded-md flex flex-row items-center justify-between ${
                     selectedProject === index && "bg-slate-100"
                   }`}
-                  onClick={() => setCurrentProject(index)}
+                  onClick={() => {
+                    if (projectIsSelected) {
+                      setCurrentProject(null);
+                    } else {
+                      setCurrentProject(index);
+                    }
+                  }}
                 >
                   <p
                     className={`left-0 top-0 w-full text-1xl flex-1 text-left font-normal text-base text-slate-700`}
@@ -195,12 +198,6 @@ function SelectAProject() {
               variant="ghost"
               className="border border-slate-200"
               onClick={() => navigate(-1)}
-              // onClick={() => {
-              //   localStorage.clear();
-              //   navigate("/login", {
-              //     replace: true,
-              //   })
-              // }}
             >
               Cancel
             </Button>
@@ -208,7 +205,7 @@ function SelectAProject() {
           <Button
             className="bg-cyan-500"
             onClick={startTask}
-            disabled={startedTask}
+            disabled={startedTask || !projectIsSelected}
           >
             {startedTask ? (
               <ColorRing

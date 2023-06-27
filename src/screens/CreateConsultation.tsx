@@ -285,7 +285,7 @@ function CreateConsultation() {
               members
             ).then(() => {
               create(false);
-              navigate("/multiple-projects", { replace: true });
+              navigate("/", { replace: true });
             });
           }}
         >

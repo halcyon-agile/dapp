@@ -20,15 +20,12 @@ function Scrum() {
     });
   }, []);
 
-  const [scrums, setActiveTasks, activeTasks, setScreen, setScrums] = useStore(
-    (state) => [
-      state.scrums,
-      state.setActiveTasks,
-      state.activeTasks,
-      state.setScreen,
-      state.setScrums,
-    ]
-  );
+  const [scrums, setActiveTasks, activeTasks, setScrums] = useStore((state) => [
+    state.scrums,
+    state.setActiveTasks,
+    state.activeTasks,
+    state.setScrums,
+  ]);
 
   return (
     <main className="flex min-h-screen flex-col p-5">
