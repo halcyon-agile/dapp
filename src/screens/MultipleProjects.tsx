@@ -428,7 +428,7 @@ function MultipleProjects() {
           <a
             className="flex flex-col items-center"
             target="_blank"
-            href={portalUrl}
+            href={`${portalUrl}/admin`}
             rel="noreferrer"
           >
             <div className="rounded-full border border-slate-200 p-2 mb-2">

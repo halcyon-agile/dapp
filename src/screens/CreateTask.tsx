@@ -1,11 +1,18 @@
 import { useState } from "react";
 import {
   Button,
+  Calendar,
   Input,
   Label,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Textarea,
 } from "../components/ui";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
+import { CalendarIcon } from "lucide-react";
+import { cn } from "../lib/utils";
 
 function CreateTask() {
   const navigate = useNavigate()
@@ -117,32 +124,66 @@ function CreateTask() {
             >
               Start Date
             </Label>
-            <Input
-              type="start"
-              id="start"
-              placeholder="< Start Date >"
-              className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
-              autoCapitalize="none"
-              onChange={(e) => setForm({ ...form, estimate: e.target.value })}
-              value={form.estimate}
-            />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-full justify-start text-left font-normal mt-1.5",
+                    !form.started_at && "text-muted-foreground"
+                  )}
+                >
+                  {form.started_at ? form.started_at : <span>{`< Start Date >`}</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={form.start}
+                  onSelect={(value) =>
+                    setForm({
+                      ...form,
+                      start: moment(value).format("MM/DD/YYYY"),
+                    })
+                  }
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </div>
           <div className="grid flex-1">
-            <Label
+          <Label
               htmlFor="end"
               className="text-black font-medium text-sm self-start"
             >
               End Date
             </Label>
-            <Input
-              type="end"
-              id="end"
-              placeholder="< Start Date >"
-              className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
-              autoCapitalize="none"
-              onChange={(e) => setForm({ ...form, estimate: e.target.value })}
-              value={form.estimate}
-            />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-full justify-start text-left font-normal mt-1.5",
+                    !form.started_at && "text-muted-foreground"
+                  )}
+                >
+                  {form.started_at ? form.started_at : <span>{`< End Date >`}</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={form.end}
+                  onSelect={(value) =>
+                    setForm({
+                      ...form,
+                      end: moment(value).format("MM/DD/YYYY"),
+                    })
+                  }
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </div>
