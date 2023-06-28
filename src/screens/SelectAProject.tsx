@@ -108,6 +108,7 @@ function SelectAProject() {
   };
 
   // console.log('tasks', tasks)
+  console.log('selected project', projectFilter)
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between text-black p-5 font-inter">
@@ -132,7 +133,19 @@ function SelectAProject() {
         ) : (
           ""
         )}
-
+        {(projectFilter === "" || projectFilter === null ) ? null : (
+          <div
+            className="w-full mt-4 pb-2 border-b"
+          >
+            <Button
+              variant="ghost"
+              className="border w-full"
+              onClick={() => navigate("/create-task")}
+            >
+              Create New Task
+            </Button>
+          </div>
+        )}
         <div className="w-full py-2">
           {fetching && (
             <ColorRing
