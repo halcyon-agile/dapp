@@ -214,7 +214,7 @@ function MultipleProjects() {
                       <Button
                         variant="outline"
                         className={`font-medium text-xs ml-4 ${
-                          data.task.timer_on ? "hidden" : ""
+                          data?.task?.timer_on ? "hidden" : ""
                         }`}
                         onClick={() => {
                           setSelectedTask(data);
