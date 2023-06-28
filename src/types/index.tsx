@@ -15,6 +15,7 @@ export interface TaskTime {
     name: string;
     started_at: string;
     ended_at: string;
+    timer_on: number;
     project: {
       id: number;
       name: string;
