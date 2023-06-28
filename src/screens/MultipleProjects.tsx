@@ -49,8 +49,8 @@ function formatHourDifference(startedAt: string) {
 function isGraphVisible(data: any) {
   if (
     data?.task?.project?.project_type?.show_remaining_hours !== 0 ||
-    Number(data?.task?.assignees[0].initial_estimate) !== 0 ||
-    Number(data?.task?.assignees[0].estimate) !== 0 ||
+    Number(data?.task?.assignees[0]?.initial_estimate) !== 0 ||
+    Number(data?.task?.assignees[0]?.estimate) !== 0 ||
     data?.total_minutes_spent !== 0
   ) {
     return true;
@@ -275,9 +275,9 @@ function MultipleProjects() {
                       1 && data?.total_remaining_hours
                   }
                   initialEstimateHours={Number(
-                    data?.task?.assignees[0].initial_estimate || 0
+                    data?.task?.assignees[0]?.initial_estimate || 0
                   )}
-                  currentEstimateHours={data?.task?.assignees[0].estimate || 0}
+                  currentEstimateHours={data?.task?.assignees[0]?.estimate || 0}
                   totalRenderedHours={Number(
                     Number(data?.total_minutes_spent / 60).toFixed(2)
                   )}
