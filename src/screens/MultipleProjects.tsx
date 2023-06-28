@@ -74,7 +74,7 @@ function MultipleProjects() {
 
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [loggedOff, loggingOff] = useState<boolean>(false);
-  const [leavingConsultation, leaveConsult] = useState<boolean>(false);
+  // const [leavingConsultation, leaveConsult] = useState<boolean>(false);
   const [reddot, setRedDots] = useState<any>({
     scrums: false,
     consultations: false,
@@ -141,7 +141,7 @@ function MultipleProjects() {
       });
   };
 
-  // console.log('active', activeTasks)
+  console.log('active', activeTasks)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -223,25 +223,27 @@ function MultipleProjects() {
                       >
                         Stop
                       </Button>
-                      <Button
-                        variant="outline"
-                        className={`font-medium text-xs ml-4 ${
-                          data?.task?.project?.consultation_members?.find(
-                            (member: any) => member.id === user.id
-                          )
-                            ? ""
-                            : "hidden"
-                        }`}
-                        onClick={() => {
-                          navigate("/create-consultation", {
-                            state: {
-                              id: data?.task_id,
-                            },
-                          });
-                        }}
-                      >
-                        Consult
-                      </Button>
+                      {data?.task?.project?.allow_consultation === 1 && (
+                        <Button
+                          variant="outline"
+                          className={`font-medium text-xs ml-4 ${
+                            data?.task?.project?.consultation_members?.find(
+                              (member: any) => member.id === user.id
+                            )
+                              ? ""
+                              : "hidden"
+                          }`}
+                          onClick={() => {
+                            navigate("/create-consultation", {
+                              state: {
+                                id: data?.task_id,
+                              },
+                            });
+                          }}
+                        >
+                          Consult
+                        </Button>
+                      )}
                     </div>
                   ) : (
                     <div className="flex-9 flex-row items-center justify-end">
@@ -249,7 +251,6 @@ function MultipleProjects() {
                         variant="outline"
                         className="font-medium text-xs ml-4"
                         onClick={() => {
-                          leaveConsult(true);
                           leaveConsultation(data?.consultation_id).then(
                             (response) => {
                               console.log("leave", response);
