@@ -1,4 +1,18 @@
-import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../components/ui";
 
 import getScrums from "../api/getScrums";
 import { useNavigate } from "react-router-dom";
@@ -20,12 +34,12 @@ function Scrum() {
     });
   }, []);
 
-  const [scrums, setActiveTasks, activeTasks, setScrums] = useStore((state) => [
+  const [scrums, setScrums] = useStore((state) => [
     state.scrums,
-    state.setActiveTasks,
-    state.activeTasks,
     state.setScrums,
   ]);
+
+  // console.log(scrums)
 
   return (
     <main className="flex min-h-screen flex-col p-5">
@@ -44,7 +58,7 @@ function Scrum() {
             colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
           />
         ) : scrums?.length > 0 ? (
-          scrums.map((data) => <ScrumItem data={data} />)
+          scrums.map((data) => <ScrumItem data={data} key={data?.id} />)
         ) : (
           <Alert>
             <Terminal className="h-4 w-4" />
@@ -71,13 +85,33 @@ function Scrum() {
         </div> */}
 
         <div className="w-full items-end flex flex-row justify-end gap-4 mt-4">
-          <Button
-            variant="ghost"
-            className="border border-slate-200"
-            onClick={() => navigate(-1)}
-          >
-            Cancel
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Button
+                variant="ghost"
+                className="border border-slate-200"
+              >
+                Back
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure you want to cancel?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => navigate(-1)}
+                  className="bg-sky-500"
+                >
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
     </main>

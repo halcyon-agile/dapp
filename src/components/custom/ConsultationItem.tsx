@@ -2,7 +2,18 @@ import { useState } from "react";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 
-import { Button } from "../ui";
+import {
+  Button,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui";
 import { ColorRing } from "react-loader-spinner";
 import joinConsultation from "../../api/consultations/join-consultation";
 import cancelConsultation from "../../api/consultations/cancel-consultation";
@@ -29,7 +40,6 @@ function ConsultationItem(props: Props) {
   return (
     <div
       className="w-full flex flex-1 flex-col gap-4 mt-4"
-      key={props?.data?.id}
     >
       <div className="w-full flex flex-col border rounded border-slate-200 p-4 gap-1">
         <div className="w-full flex flex-row items-center justify-between">
@@ -55,35 +65,54 @@ function ConsultationItem(props: Props) {
                 />
               </svg>
             </button>
-            <button
-              onClick={() =>
-                cancelConsultation(props?.data?.id)
-                  .then((response) => {
-                    navigate("/", { replace: true });
-                  })
-                  .catch((error) => {
-                    toast({
-                      title: "Error",
-                      description: error,
-                    });
-                  })
-              }
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="#EF4444"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </button>
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="#EF4444"
+                    className="w-4 h-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure you want to cancel?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() =>
+                      cancelConsultation(props?.data?.id)
+                        .then((response) => {
+                          navigate("/", { replace: true });
+                        })
+                        .catch((error) => {
+                          toast({
+                            title: "Error",
+                            description: error,
+                          });
+                        })
+                    }
+                    className="bg-sky-500"
+                  >
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
         <p className="font-medium text-xs text-gray-500">

@@ -147,7 +147,7 @@ function SelectAProject() {
           )}
           {tasks.length > 0 ? (
             tasks.map((data: any, index: number) => (
-              <div className="flex w-full py-4 border-b" key={index}>
+              <div className="flex w-full py-4 border-b" key={data?.id}>
                 <button
                   className={`py-1.5 px-2 w-full rounded-md flex flex-row items-center justify-between ${
                     selectedProject === index && "bg-slate-100"
