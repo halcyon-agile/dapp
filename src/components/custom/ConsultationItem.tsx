@@ -66,14 +66,16 @@ function ConsultationItem(props: Props) {
               </svg>
             </button>
             <AlertDialog>
-              <AlertDialogTrigger>
+              <AlertDialogTrigger
+                disabled={props?.data?.status === "cancelled"}
+              >
                 <button>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
-                    stroke="#EF4444"
+                    stroke={props?.data?.status === "cancelled" ? "#fca5a5" : "#EF4444"}
                     className="w-4 h-4"
                   >
                     <path
@@ -122,7 +124,7 @@ function ConsultationItem(props: Props) {
         <p className="font-medium text-xs text-gray-500">from {props?.name}</p>
         {/* display if consultation is expired */}
         <div
-          className={`rounded-full px-4 py-1 bg-slate-100 w-[79px] max-w-[100px] mt-3.5 h-[24px] ${
+          className={`rounded-full px-4 py-1 bg-slate-100 max-w-[100px] mt-3.5 h-[24px] ${
             props?.data?.status !== "cancelled" ? "hidden" : ""
           }`}
         >
