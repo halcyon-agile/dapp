@@ -7,8 +7,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "lint": "eslint --ext .js,.ts .",
-    "prepare": "husky install"
+    "lint": "eslint --ext .js,.ts ."
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.0.4",
