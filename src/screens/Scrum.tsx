@@ -3,15 +3,6 @@ import {
   AlertDescription,
   AlertTitle,
   Button,
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
 } from "../components/ui";
 
 import getScrums from "../api/getScrums";
@@ -85,33 +76,13 @@ function Scrum() {
         </div> */}
 
         <div className="w-full items-end flex flex-row justify-end gap-4 mt-4">
-          <AlertDialog>
-            <AlertDialogTrigger>
-              <Button
-                variant="ghost"
-                className="border border-slate-200"
-              >
-                Back
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure you want to cancel?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => navigate(-1)}
-                  className="bg-sky-500"
-                >
-                  Continue
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <Button
+            variant="ghost"
+            className="border border-slate-200"
+            onClick={() => navigate(-1)}
+          >
+            Back
+          </Button>
         </div>
       </div>
     </main>
