@@ -105,6 +105,7 @@ function Consultations() {
                 data={data}
                 name={user?.first_name}
                 tab="requests"
+                key={data?.id}
               />
             ))
           ) : (
@@ -134,6 +135,7 @@ function Consultations() {
                 data={data}
                 name={user?.first_name}
                 tab="invites"
+                key={data?.id}
               />
             ))
           ) : (
@@ -153,7 +155,7 @@ function Consultations() {
           className="border border-slate-200"
           onClick={() => navigate(-1)}
         >
-          Cancel
+          Back
         </Button>
         {/* <Button
           className="bg-cyan-500"
