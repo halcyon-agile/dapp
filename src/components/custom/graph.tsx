@@ -58,7 +58,7 @@ function Graph(props: Props) {
               {props?.initialEstimateHours} Hrs (
               {props?.initialEstimateHours / 8})
             </p>
-            <div className="flex-[5]">
+            <div className="flex-[5] relative">
               <div
                 style={{
                   width: `${Math.min(
@@ -66,8 +66,10 @@ function Graph(props: Props) {
                     100
                   )}%`,
                 }}
-                className={cn("rounded-full bg-teal-500 grow h-2.5")}
-              />
+                className={cn("rounded-full bg-teal-500 grow h-4")}
+              >
+                <div className="w-[100%] h-4 rounded-full bg-slate-100 absolute  -z-10" />
+              </div>
             </div>
           </div>
 
@@ -76,7 +78,7 @@ function Graph(props: Props) {
               {props.currentEstimateHours} Hrs ({props.currentEstimateHours / 8}
               )
             </p>
-            <div className="flex-[5]">
+            <div className="flex-[5] relative">
               <div
                 style={{
                   width: `${Math.min(
@@ -85,12 +87,14 @@ function Graph(props: Props) {
                   )}%`,
                 }}
                 className={cn(
-                  "rounded-full h-2.5",
+                  "rounded-full h-4",
                   props.currentEstimateHours > props.initialEstimateHours
                     ? "bg-red-500"
                     : "bg-green-500"
                 )}
-              />
+              >
+                <div className="w-[100%] h-4 rounded-full bg-slate-100 absolute  -z-10" />
+              </div>
             </div>
           </div>
 
@@ -98,7 +102,7 @@ function Graph(props: Props) {
             <p className="flex-1 pr-2 text-xs text-gray-500">
               {props.totalRenderedHours} Hrs ({props.totalRenderedHours / 8})
             </p>
-            <div className="flex-[5]">
+            <div className="flex-[5] relative">
               <div
                 style={{
                   width: `${Math.min(
@@ -107,12 +111,14 @@ function Graph(props: Props) {
                   )}%`,
                 }}
                 className={cn(
-                  "rounded-full h-2.5",
+                  "rounded-full h-4",
                   props.totalRenderedHours > props.initialEstimateHours
                     ? "bg-red-500"
                     : "bg-cyan-500"
                 )}
-              />
+              >
+                <div className="w-[100%] h-4 rounded-full bg-slate-100 absolute  -z-10" />
+              </div>
             </div>
           </div>
         </div>

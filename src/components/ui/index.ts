@@ -50,6 +50,23 @@ import {
   ToastAction,
 } from "./toast"
 
+import {
+  type TextareaProps,
+  Textarea,
+} from "./textarea"
+
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "./alert-dialog"
+
 export {
   Alert,
   AlertDescription,
@@ -100,4 +117,15 @@ export {
   ToastDescription,
   ToastClose,
   ToastAction,
+  type TextareaProps,
+  Textarea,
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
 }

@@ -1,10 +1,9 @@
 import axios from "axios";
+import portalUrl from "../lib/portalUrl";
 
+console.log({ portalUrl });
 const request = axios.create({
-  baseURL:
-    import.meta.env.VITE_MODE === "DEV"
-      ? import.meta.env.VITE_DEV_URL
-      : import.meta.env.VITE_PROD_URL,
+  baseURL: portalUrl,
   headers: {
     "Content-Type": "application/json",
   },

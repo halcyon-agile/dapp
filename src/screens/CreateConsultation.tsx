@@ -17,6 +17,7 @@ import {
 import getUsers from "../api/users";
 import { cn } from "../lib/utils";
 import requestConsultation from "../api/consultations/requestConsultation";
+import useStore from "../store";
 
 function CreateConsultation() {
   const navigate = useNavigate();
@@ -34,6 +35,10 @@ function CreateConsultation() {
     duration: "",
   });
   const [creating, create] = useState<boolean>(false);
+  const [user] =
+    useStore((state) => [
+      state.user,
+    ]);
 
   useEffect(() => {
     getUsers().then((data) => {
@@ -42,12 +47,11 @@ function CreateConsultation() {
     });
   }, []);
 
-  // console.log('value', value)
-  console.log("members", members);
+  const removeCurrentUserFromList = users.filter((item: any) => item.id !== user.id)
 
-  const filteredUsers = users.filter((user: any) => {
+  const filteredUsers = removeCurrentUserFromList.filter((userItem: any) => {
     return members.every((member: any) => {
-      return member.id !== user.id;
+      return member.id !== userItem.id
     });
   });
 
@@ -202,6 +206,7 @@ function CreateConsultation() {
                   {filteredUsers.length > 0 ? (
                     filteredUsers.map((user: any) => (
                       <button
+                        key={user?.id}
                         className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
                         onClick={() => {
                           setValue(user.id);

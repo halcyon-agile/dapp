@@ -1,4 +1,9 @@
-import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+} from "../components/ui";
 
 import getScrums from "../api/getScrums";
 import { useNavigate } from "react-router-dom";
@@ -20,12 +25,12 @@ function Scrum() {
     });
   }, []);
 
-  const [scrums, setActiveTasks, activeTasks, setScrums] = useStore((state) => [
+  const [scrums, setScrums] = useStore((state) => [
     state.scrums,
-    state.setActiveTasks,
-    state.activeTasks,
     state.setScrums,
   ]);
+
+  // console.log(scrums)
 
   return (
     <main className="flex min-h-screen flex-col p-5">
@@ -44,7 +49,7 @@ function Scrum() {
             colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
           />
         ) : scrums?.length > 0 ? (
-          scrums.map((data) => <ScrumItem data={data} />)
+          scrums.map((data) => <ScrumItem data={data} key={data?.id} />)
         ) : (
           <Alert>
             <Terminal className="h-4 w-4" />
@@ -76,7 +81,7 @@ function Scrum() {
             className="border border-slate-200"
             onClick={() => navigate(-1)}
           >
-            Cancel
+            Back
           </Button>
         </div>
       </div>

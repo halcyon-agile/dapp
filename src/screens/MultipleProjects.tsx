@@ -10,9 +10,21 @@ import getActiveTasks from "../api/getActiveTasks";
 import getAttendance from "../api/getAttendance";
 import getRedDots from "../api/getRedDots";
 import finishWork from "../api/finishWork";
-import { Graph, Timer } from "../components/custom";
-import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
+import { AddRemarksDialog, Graph, Timer } from "../components/custom";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../components/ui";
 import leaveConsultation from "../api/consultations/leave-consultation";
+import portalUrl from "../lib/portalUrl";
+import { TaskTime } from "@/types";
+import stopTaskApi from "../api/stopTask";
 
 function formatHourDifference(startedAt: string) {
   const currentDate = DateTime.now();
@@ -39,8 +51,8 @@ function formatHourDifference(startedAt: string) {
 function isGraphVisible(data: any) {
   if (
     data?.task?.project?.project_type?.show_remaining_hours !== 0 ||
-    Number(data?.task?.assignees[0].initial_estimate) !== 0 ||
-    Number(data?.task?.assignees[0].estimate) !== 0 ||
+    Number(data?.task?.assignees[0]?.initial_estimate) !== 0 ||
+    Number(data?.task?.assignees[0]?.estimate) !== 0 ||
     data?.total_minutes_spent !== 0
   ) {
     return true;
@@ -50,11 +62,6 @@ function isGraphVisible(data: any) {
 
   return false;
 }
-
-const portalUrl =
-  import.meta.env.VITE_MODE === "DEV"
-    ? import.meta.env.VITE_DEV_URL
-    : import.meta.env.VITE_PROD_URL;
 
 function MultipleProjects() {
   const navigate = useNavigate();
@@ -66,10 +73,13 @@ function MultipleProjects() {
       state.setUser,
       state.setSelectedTask,
     ]);
+  const hasActiveTask = activeTasks.some(
+    (t: TaskTime) => t.task.timer_on === 0
+  );
 
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [loggedOff, loggingOff] = useState<boolean>(false);
-  const [leavingConsultation, leaveConsult] = useState<boolean>(false);
+  // const [leavingConsultation, leaveConsult] = useState<boolean>(false);
   const [reddot, setRedDots] = useState<any>({
     scrums: false,
     consultations: false,
@@ -136,6 +146,18 @@ function MultipleProjects() {
       });
   };
 
+  const stopTask = (taskId: number) => {
+    stopTaskApi({ taskId })
+      .then(() => {
+        getActiveTasks().then((tasks) => {
+          setActiveTasks(tasks);
+        });
+      })
+      .catch((error) => {
+        // console.error(error?.response?.data?.message || "Something went wrong");
+      });
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
       <div className="items-center justify-center text-sm flex flex-col w-full gap-2">
@@ -158,20 +180,17 @@ function MultipleProjects() {
                       ? data?.task?.project?.project_type?.name
                       : "Consultation"}
                   </p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="#334155"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+                  {data?.task?.project?.project_type?.can_add_remarks === 1 && (
+                    <AddRemarksDialog
+                      id={data?.task_id}
+                      onSuccess={() => {
+                        getActiveTasks().then((tasks) => {
+                          setActiveTasks(tasks);
+                        });
+                      }}
+                      remark={data?.remark ? data.remark : ""}
                     />
-                  </svg>
+                  )}
                 </div>
                 <div className="flex flex-row align-center justify-between">
                   <p className="font-medium text-base text-gray-700">
@@ -197,47 +216,36 @@ function MultipleProjects() {
                   </div>
                   {data?.consultation_id === null ? (
                     <div className="flex-9 flex-row items-center justify-end">
-                      {/* <Button
-                      variant="outline"
-                      className="font-medium text-xs ml-4"
-                      onClick={() => {
-                        setSelectedTask(data)
-                        navigate("/attribute-hour")
-                      }}
-                    >
-                      Return
-                    </Button> */}
                       <Button
                         variant="outline"
-                        className={`font-medium text-xs ml-4 ${
-                          data.task.timer_on ? "hidden" : ""
-                        }`}
+                        className={`font-medium text-xs ml-4`}
                         onClick={() => {
-                          setSelectedTask(data);
-                          navigate("/attribute-hour");
+                          stopTask(data?.task?.id);
                         }}
                       >
                         Stop
                       </Button>
-                      <Button
-                        variant="outline"
-                        className={`font-medium text-xs ml-4 ${
-                          data?.task?.project?.consultation_members?.find(
-                            (member: any) => member.id === user.id
-                          )
-                            ? ""
-                            : "hidden"
-                        }`}
-                        onClick={() => {
-                          navigate("/create-consultation", {
-                            state: {
-                              id: data?.task_id,
-                            },
-                          });
-                        }}
-                      >
-                        Consult
-                      </Button>
+                      {data?.task?.project?.allow_consultation === 1 && (
+                        <Button
+                          variant="outline"
+                          className={`font-medium text-xs ml-4 ${
+                            data?.task?.project?.consultation_members?.find(
+                              (member: any) => member.id === user.id
+                            )
+                              ? ""
+                              : "hidden"
+                          }`}
+                          onClick={() => {
+                            navigate("/create-consultation", {
+                              state: {
+                                id: data?.task_id,
+                              },
+                            });
+                          }}
+                        >
+                          Consult
+                        </Button>
+                      )}
                     </div>
                   ) : (
                     <div className="flex-9 flex-row items-center justify-end">
@@ -245,7 +253,6 @@ function MultipleProjects() {
                         variant="outline"
                         className="font-medium text-xs ml-4"
                         onClick={() => {
-                          leaveConsult(true);
                           leaveConsultation(data?.consultation_id).then(
                             (response) => {
                               console.log("leave", response);
@@ -270,9 +277,9 @@ function MultipleProjects() {
                       1 && data?.total_remaining_hours
                   }
                   initialEstimateHours={Number(
-                    data?.task?.assignees[0].initial_estimate || 0
+                    data?.task?.assignees[0]?.initial_estimate || 0
                   )}
-                  currentEstimateHours={data?.task?.assignees[0].estimate || 0}
+                  currentEstimateHours={data?.task?.assignees[0]?.estimate || 0}
                   totalRenderedHours={Number(
                     Number(data?.total_minutes_spent / 60).toFixed(2)
                   )}
@@ -295,8 +302,9 @@ function MultipleProjects() {
       <div className="w-full flex-row justify-between py-5 flex border-b-2">
         <div className="flex flex-1 flex-row items-center gap-3">
           <button
-            className="rounded-md border border-slate-200 py-2 px-4"
+            className="rounded-md border border-slate-200 py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed"
             onClick={() => navigate("/select-project")}
+            disabled={hasActiveTask}
           >
             <p className="text-slate-900 text-xs text-center">Add Task</p>
           </button>
@@ -333,48 +341,92 @@ function MultipleProjects() {
       </div>
       <div className="w-full py-5 flex flex-row items-start">
         <div className="flex flex-1 flex-row items-center gap-5 flex-wrap">
-          <div className="flex flex-col items-center">
-            <div className="rounded-full border border-slate-200 p-2 mb-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="#334155"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.068.157 2.148.279 3.238.364.466.037.893.281 1.153.671L12 21l2.652-3.978c.26-.39.687-.634 1.153-.67 1.09-.086 2.17-.208 3.238-.365 1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"
-                />
-              </svg>
-            </div>
-            <p className="text-xs text-gray-500">Message</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="rounded-full border border-slate-200 p-2 mb-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="#334155"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z"
-                />
-              </svg>
-            </div>
-            <p className="text-xs text-gray-500">Tickets</p>
-          </div>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button className="flex flex-col items-center">
+                  <div className="rounded-full border border-slate-200 p-2 mb-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="#334155"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.068.157 2.148.279 3.238.364.466.037.893.281 1.153.671L12 21l2.652-3.978c.26-.39.687-.634 1.153-.67 1.09-.086 2.17-.208 3.238-.365 1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"
+                      />
+                    </svg>
+                  </div>
+                  <p className="text-xs text-gray-500">Message</p>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="#dc2626"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"
+                  />
+                </svg>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button className="flex flex-col items-center">
+                  <div className="rounded-full border border-slate-200 p-2 mb-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="#334155"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z"
+                      />
+                    </svg>
+                  </div>
+                  <p className="text-xs text-gray-500">Tickets</p>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="#dc2626"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"
+                  />
+                </svg>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <a
             className="flex flex-col items-center"
             target="_blank"
-            href={portalUrl}
+            href={`${portalUrl}/admin`}
             rel="noreferrer"
           >
             <div className="rounded-full border border-slate-200 p-2 mb-2">
