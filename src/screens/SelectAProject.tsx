@@ -39,7 +39,7 @@ function SelectAProject() {
     const fetchProjects = async () => {
       try {
         const fetchProjects: Project[] = await getProjects();
-        setProjects([{ id: "", name: "All Projects" }, ...fetchProjects]);
+        setProjects([{ id: "", name: "Filter by project" }, ...fetchProjects]);
         fetch(false);
       } catch (error: AxiosError | any) {
         // console.error(error?.response?.data?.message || "Something went wrong");
@@ -107,14 +107,13 @@ function SelectAProject() {
       });
   };
 
-  // console.log('tasks', tasks)
   console.log("selected project", projectFilter);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between text-black p-5 font-inter">
       <div className="items-center text-sm flex flex-row w-full border-b border-slate-200 py-4">
         <p className="left-0 top-0 w-full text-xl flex-1 font-semibold">
-          Projects
+          Select a Task
         </p>
       </div>
 
@@ -133,19 +132,19 @@ function SelectAProject() {
         ) : (
           ""
         )}
-        {/* {(projectFilter === "" || projectFilter === null ) ? null : (
-          <div
-            className="w-full mt-4 pb-2 border-b"
+        <div className="w-full mt-4 pb-2 border-b">
+          <Button
+            variant="ghost"
+            className="border w-full"
+            onClick={() =>
+              navigate("/create-task", {
+                state: { project_id: projectFilter },
+              })
+            }
           >
-            <Button
-              variant="ghost"
-              className="border w-full"
-              onClick={() => navigate("/create-task")}
-            >
-              Create New Task
-            </Button>
-          </div>
-        )} */}
+            Create New Task
+          </Button>
+        </div>
         <div className="w-full py-2">
           {fetching && (
             <ColorRing
