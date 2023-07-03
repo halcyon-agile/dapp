@@ -95,3 +95,9 @@ export interface BreakForm {
   hours: number;
   minutes: number;
 }
+
+export interface TaskType {
+  id: number;
+  name: string;
+  description: string;
+}

@@ -1,9 +1,5 @@
-import React from "react";
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import stopTaskApi from "../api/stopTask";
 
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
@@ -20,16 +16,6 @@ function AttributeHour() {
     hour: 0,
     minute: 0,
   });
-
-  const stopTask = (taskId: number) => {
-    stopTaskApi({ taskId, hours: form.hour + form.minute / 60 })
-      .then(() => {
-        navigate("/");
-      })
-      .catch((error) => {
-        // console.error(error?.response?.data?.message || "Something went wrong");
-      });
-  };
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -81,12 +67,7 @@ function AttributeHour() {
         >
           Cancel
         </Button>
-        <Button
-          className="bg-cyan-500"
-          onClick={() => stopTask(selectedTask?.task?.id)}
-        >
-          Okay
-        </Button>
+        <Button className="bg-cyan-500">Okay</Button>
       </div>
     </main>
   );
