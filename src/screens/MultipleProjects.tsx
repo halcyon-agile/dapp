@@ -24,6 +24,7 @@ import {
 import leaveConsultation from "../api/consultations/leave-consultation";
 import portalUrl from "../lib/portalUrl";
 import { TaskTime } from "@/types";
+import stopTaskApi from "../api/stopTask";
 
 function formatHourDifference(startedAt: string) {
   const currentDate = DateTime.now();
@@ -145,7 +146,17 @@ function MultipleProjects() {
       });
   };
 
-  console.log("active", activeTasks);
+  const stopTask = (taskId: number) => {
+    stopTaskApi({ taskId })
+      .then(() => {
+        getActiveTasks().then((tasks) => {
+          setActiveTasks(tasks);
+        });
+      })
+      .catch((error) => {
+        // console.error(error?.response?.data?.message || "Something went wrong");
+      });
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -205,24 +216,11 @@ function MultipleProjects() {
                   </div>
                   {data?.consultation_id === null ? (
                     <div className="flex-9 flex-row items-center justify-end">
-                      {/* <Button
-                      variant="outline"
-                      className="font-medium text-xs ml-4"
-                      onClick={() => {
-                        setSelectedTask(data)
-                        navigate("/attribute-hour")
-                      }}
-                    >
-                      Return
-                    </Button> */}
                       <Button
                         variant="outline"
-                        className={`font-medium text-xs ml-4 ${
-                          data?.task?.timer_on ? "hidden" : ""
-                        }`}
+                        className={`font-medium text-xs ml-4`}
                         onClick={() => {
-                          setSelectedTask(data);
-                          navigate("/attribute-hour");
+                          stopTask(data?.task?.id);
                         }}
                       >
                         Stop

@@ -4,15 +4,11 @@ import { Task } from "@/types";
 
 const stopTask = async ({
   taskId,
-  hours,
 }: {
   taskId: number;
-  hours: number;
 }): Promise<Task | AxiosError | any> => {
   try {
-    const tasks = await request.post(`api/tasks/${taskId}/stop`, {
-      estimate_in_hours: hours,
-    });
+    const tasks = await request.post(`api/tasks/${taskId}/stop`);
     return tasks.data;
   } catch (error) {
     // console.log(error);
