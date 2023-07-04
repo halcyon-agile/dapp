@@ -40,15 +40,14 @@
       "csp": null
     },
     "updater": {
-        "active": true,
-        "endpoints": [
-          "https://pub-d61dd4b7a14b44ed9870515dd449d31e.r2.dev/update.json"
-        ],
-        "dialog": true,
-        "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQzMEVERjIwRUNDRUY1OUMKUldTYzljN3NJTjhPMDR0bFZ2emMrRTh4MUJuMnM0WStReWRxbFcrMVFabU1oU1lNQU1vb3FPTFkK",
-        "windows": {
-          "installMode": "passive"
-        }
+      "active": true,
+      "endpoints": [
+        "https://pub-d61dd4b7a14b44ed9870515dd449d31e.r2.dev/update.json"
+      ],
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQzMEVERjIwRUNDRUY1OUMKUldTYzljN3NJTjhPMDR0bFZ2emMrRTh4MUJuMnM0WStReWRxbFcrMVFabU1oU1lNQU1vb3FPTFkK",
+      "windows": {
+        "installMode": "passive"
       }
     },
     "windows": [
