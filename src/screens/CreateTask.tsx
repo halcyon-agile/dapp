@@ -41,6 +41,7 @@ function CreateTask() {
 
   const mutation = useMutation(
     (task) => {
+      // console.log('task', task)
       return request.post("/api/tasks", task);
     },
     {
