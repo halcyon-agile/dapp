@@ -158,6 +158,8 @@ function MultipleProjects() {
       });
   };
 
+  console.log('active', activeTasks)
+
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
       <div className="items-center justify-center text-sm flex flex-col w-full gap-2">
@@ -272,14 +274,13 @@ function MultipleProjects() {
 
                 <Graph
                   visible={isGraphVisible(data)}
+                  id={data?.task_id}
                   remainingHours={
                     data?.task?.project?.project_type?.show_remaining_hours ===
                       1 && data?.total_remaining_hours
                   }
-                  initialEstimateHours={Number(
-                    data?.task?.assignees[0]?.initial_estimate || 0
-                  )}
-                  currentEstimateHours={data?.task?.assignees[0]?.estimate || 0}
+                  initialEstimateHours={Number(data?.task?.assignees[0]?.initial_estimate || 0)}
+                  currentEstimateHours={Number(data?.task?.assignees[0]?.estimate || 0)}
                   totalRenderedHours={Number(
                     Number(data?.total_minutes_spent / 60).toFixed(2)
                   )}

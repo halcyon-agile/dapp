@@ -1,5 +1,5 @@
 [package]
-name = "halcyon-pms-desktop"
+name = "harp-desktop"
 version = "0.0.5"
 description = "A Tauri App"
 authors = ["you"]
