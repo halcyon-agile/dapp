@@ -158,7 +158,7 @@ function MultipleProjects() {
       });
   };
 
-  console.log('active', activeTasks)
+  // console.log('active', activeTasks)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
