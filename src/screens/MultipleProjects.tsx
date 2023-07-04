@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ColorRing } from "react-loader-spinner";
 import { DateTime } from "luxon";
-import moment from "moment";
 import { Terminal } from "lucide-react";
 
 import useStore from "../store";
@@ -163,7 +162,7 @@ function MultipleProjects() {
       });
   };
 
-  // console.log('user', user)
+  console.log('user', user)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -515,7 +514,7 @@ function MultipleProjects() {
           <div className="flex flex-col items-end">
             <p className="text-xs text-gray-500">Time In</p>
             <p className="font-semibold text-2xl text-slate-900">
-              {DateTime.fromISO(user?.attendance?.started_at).toLocaleString(DateTime.TIME_SIMPLE)}
+              {user?.attendance?.started_at ? DateTime.fromISO(user?.attendance?.started_at).toLocaleString(DateTime.TIME_SIMPLE) : "No active tasks."}
             </p>
           </div>
         </div>
