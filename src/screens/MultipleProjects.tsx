@@ -74,7 +74,7 @@ function MultipleProjects() {
       state.setSelectedTask,
     ]);
   const hasActiveTask = activeTasks.some(
-    (t: TaskTime) => t.task.timer_on === 0
+    (t: TaskTime) => t?.task?.timer_on === 0
   );
 
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
@@ -85,8 +85,7 @@ function MultipleProjects() {
     consultations: false,
   });
 
-  // Refactor later to only fetch once logged in
-  useEffect(() => {
+  const fetchRequiredDatas = () => {
     const userData = localStorage.getItem("token");
     if (!userData) {
       navigate("/login", {
@@ -104,6 +103,11 @@ function MultipleProjects() {
     getRedDots().then((result) => {
       setRedDots(result);
     });
+  }
+
+  // Refactor later to only fetch once logged in
+  useEffect(() => {
+    fetchRequiredDatas()
   }, []);
 
   useEffect(() => {
@@ -157,6 +161,8 @@ function MultipleProjects() {
         // console.error(error?.response?.data?.message || "Something went wrong");
       });
   };
+
+  console.log('active', activeTasks)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -272,18 +278,18 @@ function MultipleProjects() {
 
                 <Graph
                   visible={isGraphVisible(data)}
+                  id={data?.task_id}
                   remainingHours={
                     data?.task?.project?.project_type?.show_remaining_hours ===
                       1 && data?.total_remaining_hours
                   }
-                  initialEstimateHours={Number(
-                    data?.task?.assignees[0]?.initial_estimate || 0
-                  )}
-                  currentEstimateHours={data?.task?.assignees[0]?.estimate || 0}
+                  initialEstimateHours={Number(data?.task?.assignees[0]?.initial_estimate || 0)}
+                  currentEstimateHours={Number(data?.task?.assignees[0]?.estimate || 0)}
                   totalRenderedHours={Number(
                     Number(data?.total_minutes_spent / 60).toFixed(2)
                   )}
                   started_at={data?.started_at}
+                  onUpdateSuccess={fetchRequiredDatas}
                 />
               </div>
             </div>
