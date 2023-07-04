@@ -86,6 +86,7 @@ function MultipleProjects() {
   });
 
   const fetchRequiredDatas = () => {
+    console.log('run')
     const userData = localStorage.getItem("token");
     if (!userData) {
       navigate("/login", {
@@ -162,7 +163,7 @@ function MultipleProjects() {
       });
   };
 
-  console.log('active', activeTasks)
+  // console.log('user', user)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -514,7 +515,7 @@ function MultipleProjects() {
           <div className="flex flex-col items-end">
             <p className="text-xs text-gray-500">Time In</p>
             <p className="font-semibold text-2xl text-slate-900">
-              {moment(user?.attendance?.started_at).format("hh:mm A")}
+              {DateTime.fromISO(user?.attendance?.started_at).toLocaleString(DateTime.TIME_SIMPLE)}
             </p>
           </div>
         </div>
