@@ -1276,8 +1276,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "halcyon-pms-desktop"
-version = "0.0.5"
+name = "harp-desktop"
+version = "0.0.6"
 dependencies = [
  "serde",
  "serde_json",

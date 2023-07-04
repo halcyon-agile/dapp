@@ -136,6 +136,7 @@ function Consultations() {
                 name={user?.first_name}
                 tab="invites"
                 key={data?.id}
+                isFromOthers
               />
             ))
           ) : (
