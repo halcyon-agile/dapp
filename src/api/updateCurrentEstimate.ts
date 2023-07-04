@@ -11,7 +11,7 @@ const updateCurrentEstimate = async ({
 }): Promise<Task | AxiosError | any> => {
   const formData = new FormData()
   formData.append("estimate", estimate.toString())
-  const response = await request.post(`api/tasks/${taskId}/update-estimate`);
+  const response = await request.post(`api/tasks/${taskId}/update-estimate`, formData);
   return response;
 };
 

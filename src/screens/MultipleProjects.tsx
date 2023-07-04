@@ -74,7 +74,7 @@ function MultipleProjects() {
       state.setSelectedTask,
     ]);
   const hasActiveTask = activeTasks.some(
-    (t: TaskTime) => t.task.timer_on === 0
+    (t: TaskTime) => t?.task?.timer_on === 0
   );
 
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
@@ -85,8 +85,7 @@ function MultipleProjects() {
     consultations: false,
   });
 
-  // Refactor later to only fetch once logged in
-  useEffect(() => {
+  const fetchRequiredDatas = () => {
     const userData = localStorage.getItem("token");
     if (!userData) {
       navigate("/login", {
@@ -104,6 +103,11 @@ function MultipleProjects() {
     getRedDots().then((result) => {
       setRedDots(result);
     });
+  }
+
+  // Refactor later to only fetch once logged in
+  useEffect(() => {
+    fetchRequiredDatas()
   }, []);
 
   useEffect(() => {
@@ -158,7 +162,7 @@ function MultipleProjects() {
       });
   };
 
-  // console.log('active', activeTasks)
+  console.log('active', activeTasks)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -285,6 +289,7 @@ function MultipleProjects() {
                     Number(data?.total_minutes_spent / 60).toFixed(2)
                   )}
                   started_at={data?.started_at}
+                  onUpdateSuccess={fetchRequiredDatas}
                 />
               </div>
             </div>
