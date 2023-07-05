@@ -64,12 +64,7 @@ function isGraphVisible(data: any) {
 
 function MultipleProjects() {
   const navigate = useNavigate();
-  const [
-    user,
-    activeTasks,
-    setActiveTasks,
-    setUser,
-  ] = useStore((state) => [
+  const [user, activeTasks, setActiveTasks, setUser] = useStore((state) => [
     state.user,
     state.activeTasks,
     state.setActiveTasks,
@@ -99,7 +94,7 @@ function MultipleProjects() {
     getRedDots().then((result) => {
       setRedDots(result);
     });
-  }
+  };
 
   // Refactor later to only fetch once logged in
   useEffect(() => {
@@ -109,7 +104,7 @@ function MultipleProjects() {
         replace: true,
       });
     }
-  
+
     getActiveTasks().then((tasks) => {
       setActiveTasks(tasks);
     });
@@ -182,7 +177,7 @@ function MultipleProjects() {
       <div className="items-center justify-center text-sm flex flex-col w-full gap-2">
         <div className="w-full border rounded-sm">
           <div className="left-0 top-0 w-full items-center justify-between text-4xl flex-1 flex flex-row align-center py-2 px-4">
-            <p className="font-semibold text-xl">Working Hour</p>
+            <p className="font-semibold text-xl">Working Hours</p>
             <div className="pr-4" />
             <p className="font-semibold text-xl">
               {formatHourDifference(user?.attendance?.started_at)}
@@ -296,8 +291,12 @@ function MultipleProjects() {
                     data?.task?.project?.project_type?.show_remaining_hours ===
                       1 && data?.total_remaining_hours
                   }
-                  initialEstimateHours={Number(data?.task?.assignees[0]?.initial_estimate || 0)}
-                  currentEstimateHours={Number(data?.task?.assignees[0]?.estimate || 0)}
+                  initialEstimateHours={Number(
+                    data?.task?.assignees[0]?.initial_estimate || 0
+                  )}
+                  currentEstimateHours={Number(
+                    data?.task?.assignees[0]?.estimate || 0
+                  )}
                   totalRenderedHours={Number(
                     Number(data?.total_minutes_spent / 60).toFixed(2)
                   )}
@@ -527,7 +526,11 @@ function MultipleProjects() {
           <div className="flex flex-col items-end">
             <p className="text-xs text-gray-500">Time In</p>
             <p className="font-semibold text-2xl text-slate-900">
-              {user?.attendance?.started_at ? DateTime.fromISO(user?.attendance?.started_at).toLocaleString(DateTime.TIME_SIMPLE) : "No active tasks."}
+              {user?.attendance?.started_at
+                ? DateTime.fromISO(user?.attendance?.started_at).toLocaleString(
+                    DateTime.TIME_SIMPLE
+                  )
+                : "No active tasks."}
             </p>
           </div>
         </div>
