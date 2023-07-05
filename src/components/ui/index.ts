@@ -67,6 +67,12 @@ import {
   AlertDialogCancel,
 } from "./alert-dialog"
 
+import {
+  HoverCard,
+  HoverCardTrigger,
+  HoverCardContent,
+} from "./hover-card"
+
 export {
   Alert,
   AlertDescription,
@@ -128,4 +134,7 @@ export {
   AlertDialogDescription,
   AlertDialogAction,
   AlertDialogCancel,
+  HoverCard,
+  HoverCardTrigger,
+  HoverCardContent,
 }
