@@ -24,6 +24,7 @@ import leaveConsultation from "../api/consultations/leave-consultation";
 import portalUrl from "../lib/portalUrl";
 import { TaskTime } from "@/types";
 import stopTaskApi from "../api/stopTask";
+import useAttendance from "../data/use-attendance";
 
 function formatHourDifference(startedAt: string) {
   const currentDate = DateTime.now();
@@ -74,9 +75,9 @@ function MultipleProjects() {
     (t: TaskTime) => t?.task?.timer_on === 0
   );
 
+  const { data: attendance, isLoading: attendanceIsLoading } = useAttendance();
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [loggedOff, loggingOff] = useState<boolean>(false);
-  // const [leavingConsultation, leaveConsult] = useState<boolean>(false);
   const [reddot, setRedDots] = useState<any>({
     scrums: false,
     consultations: false,
@@ -85,10 +86,6 @@ function MultipleProjects() {
   const fetchRequiredDatas = () => {
     getActiveTasks().then((tasks) => {
       setActiveTasks(tasks);
-    });
-
-    getAttendance().then((data) => {
-      setUser({ ...user, attendance: data });
     });
 
     getRedDots().then((result) => {
@@ -113,10 +110,6 @@ function MultipleProjects() {
           replace: true,
         });
       }
-    });
-
-    getAttendance().then((data) => {
-      setUser({ ...user, attendance: data });
     });
 
     getRedDots().then((result) => {
@@ -531,12 +524,16 @@ function MultipleProjects() {
         <div className="flex items-end justify-end ml-2">
           <div className="flex flex-col items-end">
             <p className="text-xs text-gray-500">Time In</p>
-            <p className="font-semibold text-2xl text-slate-900">
-              {user?.attendance?.started_at
-                ? DateTime.fromISO(user?.attendance?.started_at).toLocaleString(
-                    DateTime.TIME_SIMPLE
-                  )
-                : "No active tasks."}
+            <p className="font-semibold text-2xl text-slate-900 uppercase">
+              {!attendanceIsLoading &&
+                attendance?.started_at &&
+                DateTime.fromISO(attendance?.started_at).toLocaleString({
+                  hour: "numeric",
+                  minute: "2-digit",
+                  hour12: true,
+                })}
+              {attendanceIsLoading && "Loading"}
+              {!attendanceIsLoading && !attendance && "No active tasks"}
             </p>
           </div>
         </div>
