@@ -1,7 +1,13 @@
 import { useState } from "react";
 import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
   Button,
   Calendar,
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
   Input,
   Label,
   Popover,
@@ -16,6 +22,8 @@ import useTaskTypes from "../data/use-task-types";
 import useProjects from "../data/use-projects";
 import request from "../lib/request";
 import { useMutation } from "@tanstack/react-query";
+import { ColorRing } from "react-loader-spinner";
+import { AlertCircle } from "lucide-react";
 
 function CreateTask() {
   const {
@@ -39,17 +47,30 @@ function CreateTask() {
     ended_at: "",
   });
 
+  const [loading, isLoading] = useState<boolean>(false)
+  const [errors, setErrors] = useState<any>({})
+
   const mutation = useMutation(
     (task) => {
       // console.log('task', task)
+      isLoading(true)
       return request.post("/api/tasks", task);
     },
     {
       onSuccess: () => {
+        isLoading(false)
+        setErrors({})
         navigate("/select-project");
+      },
+      onError: (error: any) => {
+        // console.log('create error', error)
+        isLoading(false)
+        setErrors(error?.response?.data?.errors)
       },
     }
   );
+
+  console.log('errors', errors)
 
   if (taskTypesError || projectsError) {
     return <>{taskTypesError || projectsError}</>;
@@ -67,30 +88,61 @@ function CreateTask() {
         <p className="left-0 top-0 w-full text-xl font-semibold">Create Task</p>
       </div>
       <div className="flex flex-1 flex-col w-full gap-4">
+        {Object.keys(errors).length > 0 && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>
+              Some errors popped up while trying to create a new task. Hover the info icon for more info.
+            </AlertDescription>
+          </Alert>
+        )}
         <div className="grid w-full items-center gap-1.5">
           <Label
             htmlFor="taskName"
-            className="text-black font-medium text-sm self-start"
+            className={`${errors.name && "text-red-500"} font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
           >
             Task Name
+            {errors.name && (
+              <HoverCard>
+                <HoverCardTrigger>
+                  <AlertCircle className="h-5 w-5" color="#ef4444" />
+                </HoverCardTrigger>
+                <HoverCardContent className="text-red-500">
+                  {errors.name[0]}
+                </HoverCardContent>
+              </HoverCard>
+            )}
           </Label>
           <Input
             type="taskName"
             id="taskName"
             placeholder="< Task Name >"
-            className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
+            className={`${errors.name && "border-red-500"} text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5`}
             autoCapitalize="none"
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             value={form.name}
           />
         </div>
         <div className="grid w-full items-center gap-1.5">
-          <Label className="text-black font-medium text-sm self-start">
+          <Label
+            className={`${errors.project_id && "text-red-500"} font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
+          >
             Project
+            {errors.project_id && (
+              <HoverCard>
+                <HoverCardTrigger>
+                  <AlertCircle className="h-5 w-5" color="#ef4444" />
+                </HoverCardTrigger>
+                <HoverCardContent className="text-red-500">
+                  {errors.project_id[0]}
+                </HoverCardContent>
+              </HoverCard>
+            )}
           </Label>
           {projectsStatus === "success" && (
             <select
-              className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              className={`${errors.project_id && "border-red-500"} flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50`}
               onChange={(e) => {
                 setForm((data: any) => ({
                   ...data,
@@ -108,12 +160,24 @@ function CreateTask() {
           )}
         </div>
         <div className="grid w-full items-center gap-1.5">
-          <Label className="text-black font-medium text-sm self-start">
+          <Label
+            className={`${errors.task_type_id && "text-red-500"} font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
+          >
             Type
+            {errors.task_type_id && (
+              <HoverCard>
+                <HoverCardTrigger>
+                  <AlertCircle className="h-5 w-5" color="#ef4444" />
+                </HoverCardTrigger>
+                <HoverCardContent className="text-red-500">
+                  {errors.task_type_id[0]}
+                </HoverCardContent>
+              </HoverCard>
+            )}
           </Label>
           {taskTypesStatus === "success" && (
             <select
-              className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              className={`${errors.task_type_id && "border-red-500"} flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50`}
               onChange={(e) => {
                 setForm((data: any) => ({
                   ...data,
@@ -131,26 +195,49 @@ function CreateTask() {
           )}
         </div>
         <div className="grid w-full items-center gap-1.5">
-          <Label className="text-black font-medium text-sm self-start">
+          <Label
+            className={`${errors.description && "text-red-500"} font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
+          >
             Description
+            {errors.description && (
+              <HoverCard>
+                <HoverCardTrigger>
+                  <AlertCircle className="h-5 w-5" color="#ef4444" />
+                </HoverCardTrigger>
+                <HoverCardContent className="text-red-500">
+                  {errors.description[0]}
+                </HoverCardContent>
+              </HoverCard>
+            )}
           </Label>
           <Textarea
             value={form.label}
             onChange={(e) => setForm({ ...form, label: e.target.value })}
+            className={errors.description && "border-red-500"}
           />
         </div>
         <div className="grid w-full items-center gap-1.5">
           <Label
             htmlFor="estimate"
-            className="text-black font-medium text-sm self-start"
+            className={`${errors.estimate && "text-red-500"} font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
           >
             Estimate
+            {errors.estimate && (
+              <HoverCard>
+                <HoverCardTrigger>
+                  <AlertCircle className="h-5 w-5" color="#ef4444" />
+                </HoverCardTrigger>
+                <HoverCardContent className="text-red-500">
+                  {errors.estimate[0]}
+                </HoverCardContent>
+              </HoverCard>
+            )}
           </Label>
           <Input
             type="number"
             id="estimate"
             placeholder="< Estimate >"
-            className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
+            className={`${errors.estimate && "border-red-500"} text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5`}
             autoCapitalize="none"
             onChange={(e) => setForm({ ...form, estimate: e.target.value })}
             value={form.estimate}
@@ -160,9 +247,19 @@ function CreateTask() {
           <div className="grid flex-1">
             <Label
               htmlFor="start"
-              className="text-black font-medium text-sm self-start"
+              className={`${errors.started_at && "text-red-500"} font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
             >
               Start Date
+              {errors.started_at && (
+                <HoverCard>
+                  <HoverCardTrigger>
+                    <AlertCircle className="h-5 w-5" color="#ef4444" />
+                  </HoverCardTrigger>
+                  <HoverCardContent className="text-red-500">
+                    {errors.started_at[0]}
+                  </HoverCardContent>
+                </HoverCard>
+              )}
             </Label>
             <Popover>
               <PopoverTrigger asChild>
@@ -170,7 +267,8 @@ function CreateTask() {
                   variant={"outline"}
                   className={cn(
                     "w-full justify-start text-left font-normal mt-1.5",
-                    !form.started_at && "text-muted-foreground"
+                    !form.started_at && "text-muted-foreground",
+                    errors.started_at && "border-red-500"
                   )}
                 >
                   {form.started_at ? (
@@ -198,9 +296,19 @@ function CreateTask() {
           <div className="grid flex-1">
             <Label
               htmlFor="end"
-              className="text-black font-medium text-sm self-start"
+              className={`${errors.ended_at && "text-red-500"} font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
             >
               End Date
+              {errors.ended_at && (
+                <HoverCard>
+                  <HoverCardTrigger>
+                    <AlertCircle className="h-5 w-5" color="#ef4444" />
+                  </HoverCardTrigger>
+                  <HoverCardContent className="text-red-500">
+                    {errors.ended_at[0]}
+                  </HoverCardContent>
+                </HoverCard>
+              )}
             </Label>
             <Popover>
               <PopoverTrigger asChild>
@@ -208,7 +316,8 @@ function CreateTask() {
                   variant={"outline"}
                   className={cn(
                     "w-full justify-start text-left font-normal mt-1.5",
-                    !form.started_at && "text-muted-foreground"
+                    !form.ended_at && "text-muted-foreground",
+                    errors.ended_at && "border-red-500"
                   )}
                 >
                   {form.ended_at ? (
@@ -243,8 +352,18 @@ function CreateTask() {
         >
           Cancel
         </Button>
-        <Button className="bg-cyan-500" type="submit">
-          Create
+        <Button className="bg-cyan-500" type="submit" disabled={loading}>
+          {loading ? (
+            <ColorRing
+              visible={loading}
+              height="24"
+              width="24"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper"
+              colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+            />
+          ) : "Create"}
         </Button>
       </div>
     </form>

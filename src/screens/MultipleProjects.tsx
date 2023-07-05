@@ -64,14 +64,17 @@ function isGraphVisible(data: any) {
 
 function MultipleProjects() {
   const navigate = useNavigate();
-  const [user, activeTasks, setActiveTasks, setUser, setSelectedTask] =
-    useStore((state) => [
-      state.user,
-      state.activeTasks,
-      state.setActiveTasks,
-      state.setUser,
-      state.setSelectedTask,
-    ]);
+  const [
+    user,
+    activeTasks,
+    setActiveTasks,
+    setUser,
+  ] = useStore((state) => [
+    state.user,
+    state.activeTasks,
+    state.setActiveTasks,
+    state.setUser,
+  ]);
   const hasActiveTask = activeTasks.some(
     (t: TaskTime) => t?.task?.timer_on === 0
   );
@@ -85,13 +88,6 @@ function MultipleProjects() {
   });
 
   const fetchRequiredDatas = () => {
-    console.log('run')
-    const userData = localStorage.getItem("token");
-    if (!userData) {
-      navigate("/login", {
-        replace: true,
-      });
-    }
     getActiveTasks().then((tasks) => {
       setActiveTasks(tasks);
     });
@@ -107,7 +103,24 @@ function MultipleProjects() {
 
   // Refactor later to only fetch once logged in
   useEffect(() => {
-    fetchRequiredDatas()
+    const userData = localStorage.getItem("token");
+    if (!userData) {
+      navigate("/login", {
+        replace: true,
+      });
+    }
+  
+    getActiveTasks().then((tasks) => {
+      setActiveTasks(tasks);
+    });
+
+    getAttendance().then((data) => {
+      setUser({ ...user, attendance: data });
+    });
+
+    getRedDots().then((result) => {
+      setRedDots(result);
+    });
   }, []);
 
   useEffect(() => {
@@ -162,7 +175,7 @@ function MultipleProjects() {
       });
   };
 
-  console.log('user', user)
+  // console.log('user', user)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
