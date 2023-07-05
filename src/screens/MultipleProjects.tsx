@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ColorRing } from "react-loader-spinner";
 import { DateTime } from "luxon";
-import moment from "moment";
 import { Terminal } from "lucide-react";
 
 import useStore from "../store";
@@ -65,14 +64,17 @@ function isGraphVisible(data: any) {
 
 function MultipleProjects() {
   const navigate = useNavigate();
-  const [user, activeTasks, setActiveTasks, setUser, setSelectedTask] =
-    useStore((state) => [
-      state.user,
-      state.activeTasks,
-      state.setActiveTasks,
-      state.setUser,
-      state.setSelectedTask,
-    ]);
+  const [
+    user,
+    activeTasks,
+    setActiveTasks,
+    setUser,
+  ] = useStore((state) => [
+    state.user,
+    state.activeTasks,
+    state.setActiveTasks,
+    state.setUser,
+  ]);
   const hasActiveTask = activeTasks.some(
     (t: TaskTime) => t?.task?.timer_on === 0
   );
@@ -86,12 +88,6 @@ function MultipleProjects() {
   });
 
   const fetchRequiredDatas = () => {
-    const userData = localStorage.getItem("token");
-    if (!userData) {
-      navigate("/login", {
-        replace: true,
-      });
-    }
     getActiveTasks().then((tasks) => {
       setActiveTasks(tasks);
     });
@@ -107,7 +103,24 @@ function MultipleProjects() {
 
   // Refactor later to only fetch once logged in
   useEffect(() => {
-    fetchRequiredDatas()
+    const userData = localStorage.getItem("token");
+    if (!userData) {
+      navigate("/login", {
+        replace: true,
+      });
+    }
+  
+    getActiveTasks().then((tasks) => {
+      setActiveTasks(tasks);
+    });
+
+    getAttendance().then((data) => {
+      setUser({ ...user, attendance: data });
+    });
+
+    getRedDots().then((result) => {
+      setRedDots(result);
+    });
   }, []);
 
   useEffect(() => {
@@ -162,7 +175,7 @@ function MultipleProjects() {
       });
   };
 
-  console.log('active', activeTasks)
+  // console.log('user', user)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -514,7 +527,7 @@ function MultipleProjects() {
           <div className="flex flex-col items-end">
             <p className="text-xs text-gray-500">Time In</p>
             <p className="font-semibold text-2xl text-slate-900">
-              {moment(user?.attendance?.started_at).format("hh:mm A")}
+              {user?.attendance?.started_at ? DateTime.fromISO(user?.attendance?.started_at).toLocaleString(DateTime.TIME_SIMPLE) : "No active tasks."}
             </p>
           </div>
         </div>

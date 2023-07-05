@@ -7,8 +7,8 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "halcyon-pms-desktop",
-    "version": "0.0.6"
+    "productName": "harp",
+    "version": "0.0.8"
   },
   "tauri": {
     "allowlist": {
@@ -40,22 +40,21 @@
       "csp": null
     },
     "updater": {
-        "active": true,
-        "endpoints": [
-          "https://releases.myapp.com/{{target}}/{{arch}}/{{current_version}}"
-        ],
-        "dialog": true,
-        "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQzMEVERjIwRUNDRUY1OUMKUldTYzljN3NJTjhPMDR0bFZ2emMrRTh4MUJuMnM0WStReWRxbFcrMVFabU1oU1lNQU1vb3FPTFkK",
-        "windows": {
-          "installMode": "passive"
-        }
+      "active": true,
+      "endpoints": [
+        "https://pub-d61dd4b7a14b44ed9870515dd449d31e.r2.dev/update.json"
+      ],
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQzMEVERjIwRUNDRUY1OUMKUldTYzljN3NJTjhPMDR0bFZ2emMrRTh4MUJuMnM0WStReWRxbFcrMVFabU1oU1lNQU1vb3FPTFkK",
+      "windows": {
+        "installMode": "passive"
       }
     },
     "windows": [
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "HARP v0.0.6",
+        "title": "HARP v0.0.8",
         "width": 800,
         "height": 600
       }
