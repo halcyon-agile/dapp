@@ -106,7 +106,13 @@ function MultipleProjects() {
     }
 
     getActiveTasks().then((tasks) => {
-      setActiveTasks(tasks);
+      if (tasks.length > 0) {
+        setActiveTasks(tasks);
+      } else {
+        navigate("/select-project", {
+          replace: true,
+        });
+      }
     });
 
     getAttendance().then((data) => {
