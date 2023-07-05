@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "harp",
-    "version": "0.0.8"
+    "version": "0.1.3"
   },
   "tauri": {
     "allowlist": {
@@ -42,10 +42,10 @@
     "updater": {
       "active": true,
       "endpoints": [
-        "https://pub-d61dd4b7a14b44ed9870515dd449d31e.r2.dev/update.json"
+        "https://github.com/halcyon-agile/dapp/releases/download/app-v{{current_version}}/latest.json"
       ],
       "dialog": true,
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQzMEVERjIwRUNDRUY1OUMKUldTYzljN3NJTjhPMDR0bFZ2emMrRTh4MUJuMnM0WStReWRxbFcrMVFabU1oU1lNQU1vb3FPTFkK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEFBQjNCNzE1ODcwRTc3MzMKUldRemR3NkhGYmV6cW44dmE0ODU3WGxKL2Z6UDIvM2VLTFJJQmRJN2pjTklMWlBHYnFhUlZRYTkK",
       "windows": {
         "installMode": "passive"
       }
@@ -54,7 +54,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "HARP v0.0.8",
+        "title": "HARP v0.1.3",
         "width": 800,
         "height": 600
       }

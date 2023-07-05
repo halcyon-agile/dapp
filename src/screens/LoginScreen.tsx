@@ -7,6 +7,7 @@ import { ColorRing } from "react-loader-spinner";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { AxiosError } from "axios";
+import { LogIn } from "lucide-react";
 
 function LoginScreen() {
   const navigate = useNavigate();
@@ -110,10 +111,12 @@ function LoginScreen() {
             colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
           />
         ) : (
+          // <Button
           <button
-            className="bg-sky-400 py-2 px-10 rounded-md font-medium"
+            className="bg-sky-400 py-2 px-5 rounded-md font-medium flex flex-row gap-3 items-center self-end"
             type="submit"
           >
+            <LogIn className="w-5 h-5" />
             Login
           </button>
         )}
