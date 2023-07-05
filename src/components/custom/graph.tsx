@@ -100,11 +100,11 @@ function Graph(props: Props) {
           <div className="flex flex-row w-full items-center py-1">
             <p className="flex-1 pr-2 text-xs text-gray-500">
               {props?.initialEstimateHours} Hrs (
-              {props?.initialEstimateHours / 8})
+              {(props?.initialEstimateHours / 8).toFixed(2)})
             </p>
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger asChild className="mr-1">
                   <button>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
@@ -133,12 +133,12 @@ function Graph(props: Props) {
 
           <div className="flex flex-row w-full items-center py-1">
             <p className="flex-1 pr-2 text-xs text-gray-500">
-              {props?.currentEstimateHours} Hrs ({props?.currentEstimateHours / 8}
+              {props?.currentEstimateHours} Hrs ({(props?.currentEstimateHours / 8).toFixed(2)}
               )
             </p>
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger asChild className="mr-1">
                   <button>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#334155" className="w-5 h-5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
@@ -222,11 +222,11 @@ function Graph(props: Props) {
 
           <div className="flex flex-row w-full items-center py-1">
             <p className="flex-1 pr-2 text-xs text-gray-500">
-              {props.totalRenderedHours} Hrs ({props.totalRenderedHours / 8})
+              {props.totalRenderedHours} Hrs ({(props.totalRenderedHours / 8).toFixed(2)})
             </p>
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger asChild className="mr-1">
                   <button>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
