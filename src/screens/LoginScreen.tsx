@@ -32,7 +32,7 @@ function LoginScreen() {
     try {
       const user = await loginUser(form.email, form.password);
       setUser(user);
-      navigate("/select-project", {
+      navigate("/", {
         replace: true,
         state: {
           screen: "login",
