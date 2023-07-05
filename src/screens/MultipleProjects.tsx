@@ -6,7 +6,6 @@ import { Terminal } from "lucide-react";
 
 import useStore from "../store";
 import getActiveTasks from "../api/getActiveTasks";
-import getAttendance from "../api/getAttendance";
 import getRedDots from "../api/getRedDots";
 import finishWork from "../api/finishWork";
 import { AddRemarksDialog, Graph, Timer } from "../components/custom";
@@ -25,8 +24,9 @@ import portalUrl from "../lib/portalUrl";
 import { TaskTime } from "@/types";
 import stopTaskApi from "../api/stopTask";
 import useAttendance from "../data/use-attendance";
+import useUser from "../data/use-user";
 
-function formatHourDifference(startedAt: string) {
+function formatHourDifference(startedAt: any) {
   const currentDate = DateTime.now();
   const startedDate = DateTime.fromISO(startedAt);
   const timeDifference = currentDate.diff(startedDate);
@@ -65,8 +65,7 @@ function isGraphVisible(data: any) {
 
 function MultipleProjects() {
   const navigate = useNavigate();
-  const [user, activeTasks, setActiveTasks, setUser] = useStore((state) => [
-    state.user,
+  const [ activeTasks, setActiveTasks, setUser] = useStore((state) => [
     state.activeTasks,
     state.setActiveTasks,
     state.setUser,
@@ -74,6 +73,8 @@ function MultipleProjects() {
   const hasActiveTask = activeTasks.some(
     (t: TaskTime) => t?.task?.timer_on === 0
   );
+
+  const { data } = useUser()
 
   const { data: attendance, isLoading: attendanceIsLoading } = useAttendance();
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
@@ -169,7 +170,7 @@ function MultipleProjects() {
       });
   };
 
-  // console.log('user', user)
+  console.log('user', data)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -179,7 +180,7 @@ function MultipleProjects() {
             <p className="font-semibold text-xl">Working Hours: </p>
             <div className="pr-4" />
             <p className="font-semibold text-xl">
-              {formatHourDifference(user?.attendance?.started_at)}
+              {formatHourDifference(attendance?.started_at)}
             </p>
           </div>
         </div>
@@ -243,7 +244,7 @@ function MultipleProjects() {
                           variant="outline"
                           className={`font-medium text-xs ml-4 ${
                             data?.task?.project?.consultation_members?.find(
-                              (member: any) => member.id === user.id
+                              (member: any) => member?.id === data?.id
                             )
                               ? ""
                               : "hidden"
