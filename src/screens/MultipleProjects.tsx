@@ -74,7 +74,7 @@ function MultipleProjects() {
     (t: TaskTime) => t?.task?.timer_on === 0
   );
 
-  const { data } = useUser()
+  const user = useUser()
 
   const { data: attendance, isLoading: attendanceIsLoading } = useAttendance();
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
@@ -170,7 +170,7 @@ function MultipleProjects() {
       });
   };
 
-  console.log('user', data)
+  console.log('user', user)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -244,7 +244,7 @@ function MultipleProjects() {
                           variant="outline"
                           className={`font-medium text-xs ml-4 ${
                             data?.task?.project?.consultation_members?.find(
-                              (member: any) => member?.id === data?.id
+                              (member: any) => member?.id === user?.data?.id
                             )
                               ? ""
                               : "hidden"
