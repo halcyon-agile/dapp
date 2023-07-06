@@ -170,7 +170,7 @@ function MultipleProjects() {
       });
   };
 
-  console.log('user', user)
+  // console.log('active', activeTasks)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -302,6 +302,7 @@ function MultipleProjects() {
                   )}
                   started_at={data?.started_at}
                   onUpdateSuccess={fetchRequiredDatas}
+                  isConsultation={data?.consultation_id !== null}
                 />
               </div>
             </div>
