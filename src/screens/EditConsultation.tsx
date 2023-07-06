@@ -17,7 +17,7 @@ import {
 import getUsers from "../api/users";
 import { cn } from "../lib/utils";
 import requestConsultation from "../api/consultations/requestConsultation";
-import useStore from "../store";
+import useUser from "../data/use-user";
 
 function EditConsultation() {
   const navigate = useNavigate();
@@ -35,19 +35,24 @@ function EditConsultation() {
     duration: "",
   });
   const [creating, create] = useState<boolean>(false);
-  const [user] =
-    useStore((state) => [
-      state.user,
-    ]);
+  const user = useUser()
+
+  const consultation = location?.state?.data;
 
   useEffect(() => {
+    setForm({
+      ...form,
+      started_at: moment(consultation?.started_at).format("MM/DD/YYYY"),
+      duration: consultation?.duration,
+    })
+    setSelected(consultation?.type === "fixed" ? 0 : 1)
     getUsers().then((data) => {
       // console.log('data', data)
       setUsers(data);
     });
   }, []);
 
-  const removeCurrentUserFromList = users.filter((item: any) => item.id !== user.id)
+  const removeCurrentUserFromList = users.filter((item: any) => item.id !== user?.data?.id)
 
   const filteredUsers = removeCurrentUserFromList.filter((userItem: any) => {
     return members.every((member: any) => {
@@ -58,10 +63,15 @@ function EditConsultation() {
   // console.log('filtered users', filteredUsers)
   // console.log('form', form)
 
+  // console.log('members', members)
+  // console.log('user', user)
+
+  console.log(consultation)
+
   return (
     <main className="flex min-h-screen flex-col p-5">
       <div className="left-0 top-0 w-full text-4xl py-2">
-        <p className="font-semibold text-xl">Create Consultation</p>
+        <p className="font-semibold text-xl">Edit {consultation?.task?.name} - Consultation</p>
       </div>
       <div className="flex flex-row w-full items-center justify-between gap-4">
         <div className="flex-1 flex-col gap-1.5">
@@ -282,19 +292,23 @@ function EditConsultation() {
           className="bg-cyan-500"
           onClick={() => {
             create(true);
+            // const list = members;
+            // list.push({ id: user?.data?.id, first_name: user?.data?.first_name, last_name: user?.data?.last_name });
             requestConsultation(
               location?.state?.id,
               form.started_at,
               form.duration,
               selected === 0 ? "fixed" : "flexible",
               members
+              // list
             ).then(() => {
               create(false);
               navigate("/", { replace: true });
             });
           }}
+          disabled
         >
-          Request
+          Save Changes
         </Button>
       </div>
     </main>

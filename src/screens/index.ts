@@ -10,6 +10,7 @@ import Consultations from "./Consultations";
 import Scrum from "./Scrum";
 import CreateConsultation from "./CreateConsultation";
 import CreateTask from "./CreateTask";
+import EditConsultation from "./EditConsultation";
 
 export {
   LoginScreen,
@@ -23,4 +24,5 @@ export {
   Scrum,
   CreateConsultation,
   CreateTask,
+  EditConsultation,
 };

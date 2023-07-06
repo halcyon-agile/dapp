@@ -62,6 +62,8 @@ export interface UserData {
     started_at: string;
     ended_at: string;
   };
+  first_name?: string;
+  last_name?: string;
 }
 
 export interface Breaks {
