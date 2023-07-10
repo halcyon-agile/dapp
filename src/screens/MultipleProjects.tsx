@@ -176,7 +176,7 @@ function MultipleProjects() {
     <main className="flex min-h-screen flex-col items-center text-black p-5">
       <div className="items-center justify-center text-sm flex flex-col w-full gap-2">
         <div className="w-full border rounded-sm">
-          <div className="left-0 top-0 w-full items-center justify-between text-4xl flex-1 flex flex-row align-center py-2 px-4">
+          <div className="left-0 top-0 w-full items-center justify-between text-4xl flex-1 flex flex-row align-center py-2 px-4 text-gray-700">
             <p className="font-semibold text-xl">Working Hours</p>
             <div className="pr-4" />
             <p className="font-semibold text-xl">

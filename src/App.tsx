@@ -9,7 +9,7 @@ import { cn } from "./lib/utils";
 
 function App() {
   const [setUser] = useStore((state) => [state.setUser]);
-  const [showUpdate, setShowUpdate] = useState(false);
+  const [showUpdate, setShowUpdate] = useState(true);
   const { status, data, error } = useUser();
 
   const handleUpdate = async () => {
@@ -44,7 +44,7 @@ function App() {
     <>
       <div
         className={cn(
-          "fixed right-2 top-1 z-50 grid gap-4 border bg-background px-4 py-2 shadow-lg rounded-lg",
+          "fixed right-2 top-1 z-50 grid gap-4 border bg-background px-3 py-1 shadow-lg rounded-lg text-xs",
           !showUpdate && "hidden"
         )}
       >
