@@ -2,12 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ColorRing } from "react-loader-spinner";
 import { DateTime } from "luxon";
-import moment from "moment";
 import { Terminal } from "lucide-react";
 
 import useStore from "../store";
 import getActiveTasks from "../api/getActiveTasks";
-import getAttendance from "../api/getAttendance";
 import getRedDots from "../api/getRedDots";
 import finishWork from "../api/finishWork";
 import { AddRemarksDialog, Graph, Timer } from "../components/custom";
@@ -24,8 +22,11 @@ import {
 import leaveConsultation from "../api/consultations/leave-consultation";
 import portalUrl from "../lib/portalUrl";
 import { TaskTime } from "@/types";
+import stopTaskApi from "../api/stopTask";
+import useAttendance from "../data/use-attendance";
+import useUser from "../data/use-user";
 
-function formatHourDifference(startedAt: string) {
+function formatHourDifference(startedAt: any) {
   const currentDate = DateTime.now();
   const startedDate = DateTime.fromISO(startedAt);
   const timeDifference = currentDate.diff(startedDate);
@@ -64,25 +65,34 @@ function isGraphVisible(data: any) {
 
 function MultipleProjects() {
   const navigate = useNavigate();
-  const [user, activeTasks, setActiveTasks, setUser, setSelectedTask] =
-    useStore((state) => [
-      state.user,
-      state.activeTasks,
-      state.setActiveTasks,
-      state.setUser,
-      state.setSelectedTask,
-    ]);
+  const [activeTasks, setActiveTasks, setUser] = useStore((state) => [
+    state.activeTasks,
+    state.setActiveTasks,
+    state.setUser,
+  ]);
   const hasActiveTask = activeTasks.some(
-    (t: TaskTime) => t.task.timer_on === 0
+    (t: TaskTime) => t?.task?.timer_on === 0
   );
 
+  const user = useUser();
+
+  const { data: attendance, isLoading: attendanceIsLoading } = useAttendance();
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [loggedOff, loggingOff] = useState<boolean>(false);
-  // const [leavingConsultation, leaveConsult] = useState<boolean>(false);
   const [reddot, setRedDots] = useState<any>({
     scrums: false,
     consultations: false,
   });
+
+  const fetchRequiredDatas = () => {
+    getActiveTasks().then((tasks) => {
+      setActiveTasks(tasks);
+    });
+
+    getRedDots().then((result) => {
+      setRedDots(result);
+    });
+  };
 
   // Refactor later to only fetch once logged in
   useEffect(() => {
@@ -92,12 +102,15 @@ function MultipleProjects() {
         replace: true,
       });
     }
-    getActiveTasks().then((tasks) => {
-      setActiveTasks(tasks);
-    });
 
-    getAttendance().then((data) => {
-      setUser({ ...user, attendance: data });
+    getActiveTasks().then((tasks) => {
+      if (tasks.length > 0) {
+        setActiveTasks(tasks);
+      } else {
+        navigate("/select-project", {
+          replace: true,
+        });
+      }
     });
 
     getRedDots().then((result) => {
@@ -145,17 +158,29 @@ function MultipleProjects() {
       });
   };
 
-  console.log("active", activeTasks);
+  const stopTask = (taskId: number) => {
+    stopTaskApi({ taskId })
+      .then(() => {
+        getActiveTasks().then((tasks) => {
+          setActiveTasks(tasks);
+        });
+      })
+      .catch((error) => {
+        // console.error(error?.response?.data?.message || "Something went wrong");
+      });
+  };
+
+  // console.log('active', activeTasks)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
       <div className="items-center justify-center text-sm flex flex-col w-full gap-2">
         <div className="w-full border rounded-sm">
           <div className="left-0 top-0 w-full items-center justify-between text-4xl flex-1 flex flex-row align-center py-2 px-4">
-            <p className="font-semibold text-xl">Working Hour</p>
+            <p className="font-semibold text-xl">Working Hours</p>
             <div className="pr-4" />
             <p className="font-semibold text-xl">
-              {formatHourDifference(user?.attendance?.started_at)}
+              {formatHourDifference(attendance?.started_at)}
             </p>
           </div>
         </div>
@@ -205,24 +230,11 @@ function MultipleProjects() {
                   </div>
                   {data?.consultation_id === null ? (
                     <div className="flex-9 flex-row items-center justify-end">
-                      {/* <Button
-                      variant="outline"
-                      className="font-medium text-xs ml-4"
-                      onClick={() => {
-                        setSelectedTask(data)
-                        navigate("/attribute-hour")
-                      }}
-                    >
-                      Return
-                    </Button> */}
                       <Button
                         variant="outline"
-                        className={`font-medium text-xs ml-4 ${
-                          data?.task?.timer_on ? "hidden" : ""
-                        }`}
+                        className={`font-medium text-xs ml-4`}
                         onClick={() => {
-                          setSelectedTask(data);
-                          navigate("/attribute-hour");
+                          stopTask(data?.task?.id);
                         }}
                       >
                         Stop
@@ -232,7 +244,7 @@ function MultipleProjects() {
                           variant="outline"
                           className={`font-medium text-xs ml-4 ${
                             data?.task?.project?.consultation_members?.find(
-                              (member: any) => member.id === user.id
+                              (member: any) => member?.id === user?.data?.id
                             )
                               ? ""
                               : "hidden"
@@ -274,6 +286,7 @@ function MultipleProjects() {
 
                 <Graph
                   visible={isGraphVisible(data)}
+                  id={data?.task_id}
                   remainingHours={
                     data?.task?.project?.project_type?.show_remaining_hours ===
                       1 && data?.total_remaining_hours
@@ -281,11 +294,15 @@ function MultipleProjects() {
                   initialEstimateHours={Number(
                     data?.task?.assignees[0]?.initial_estimate || 0
                   )}
-                  currentEstimateHours={data?.task?.assignees[0]?.estimate || 0}
+                  currentEstimateHours={Number(
+                    data?.task?.assignees[0]?.estimate || 0
+                  )}
                   totalRenderedHours={Number(
                     Number(data?.total_minutes_spent / 60).toFixed(2)
                   )}
                   started_at={data?.started_at}
+                  onUpdateSuccess={fetchRequiredDatas}
+                  isConsultation={data?.consultation_id !== null}
                 />
               </div>
             </div>
@@ -428,7 +445,7 @@ function MultipleProjects() {
           <a
             className="flex flex-col items-center"
             target="_blank"
-            href={portalUrl}
+            href={`${portalUrl}/admin`}
             rel="noreferrer"
           >
             <div className="rounded-full border border-slate-200 p-2 mb-2">
@@ -509,8 +526,16 @@ function MultipleProjects() {
         <div className="flex items-end justify-end ml-2">
           <div className="flex flex-col items-end">
             <p className="text-xs text-gray-500">Time In</p>
-            <p className="font-semibold text-2xl text-slate-900">
-              {moment(user?.attendance?.started_at).format("hh:mm A")}
+            <p className="font-semibold text-2xl text-slate-900 uppercase">
+              {!attendanceIsLoading &&
+                attendance?.started_at &&
+                DateTime.fromISO(attendance?.started_at).toLocaleString({
+                  hour: "numeric",
+                  minute: "2-digit",
+                  hour12: true,
+                })}
+              {attendanceIsLoading && "Loading"}
+              {!attendanceIsLoading && !attendance && "No active tasks"}
             </p>
           </div>
         </div>

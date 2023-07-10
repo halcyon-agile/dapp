@@ -62,6 +62,8 @@ export interface UserData {
     started_at: string;
     ended_at: string;
   };
+  first_name?: string;
+  last_name?: string;
 }
 
 export interface Breaks {
@@ -94,4 +96,10 @@ export interface BreakForm {
   reason: string;
   hours: number;
   minutes: number;
+}
+
+export interface TaskType {
+  id: number;
+  name: string;
+  description: string;
 }

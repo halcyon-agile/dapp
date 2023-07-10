@@ -19,7 +19,7 @@ import { cn } from "../lib/utils";
 import requestConsultation from "../api/consultations/requestConsultation";
 import useUser from "../data/use-user";
 
-function CreateConsultation() {
+function EditConsultation() {
   const navigate = useNavigate();
   const location = useLocation();
   const [selected, setSelected] = useState<number>(0);
@@ -37,7 +37,15 @@ function CreateConsultation() {
   const [creating, create] = useState<boolean>(false);
   const user = useUser()
 
+  const consultation = location?.state?.data;
+
   useEffect(() => {
+    setForm({
+      ...form,
+      started_at: moment(consultation?.started_at).format("MM/DD/YYYY"),
+      duration: consultation?.duration,
+    })
+    setSelected(consultation?.type === "fixed" ? 0 : 1)
     getUsers().then((data) => {
       // console.log('data', data)
       setUsers(data);
@@ -58,10 +66,12 @@ function CreateConsultation() {
   // console.log('members', members)
   // console.log('user', user)
 
+  console.log(consultation)
+
   return (
     <main className="flex min-h-screen flex-col p-5">
       <div className="left-0 top-0 w-full text-4xl py-2">
-        <p className="font-semibold text-xl">Create Consultation</p>
+        <p className="font-semibold text-xl">Edit {consultation?.task?.name} - Consultation</p>
       </div>
       <div className="flex flex-row w-full items-center justify-between gap-4">
         <div className="flex-1 flex-col gap-1.5">
@@ -296,12 +306,13 @@ function CreateConsultation() {
               navigate("/", { replace: true });
             });
           }}
+          disabled
         >
-          Request
+          Save Changes
         </Button>
       </div>
     </main>
   );
 }
 
-export default CreateConsultation;
+export default EditConsultation;

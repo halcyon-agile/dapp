@@ -1,7 +1,6 @@
 import axios from "axios";
 import portalUrl from "../lib/portalUrl";
 
-console.log({ portalUrl });
 const request = axios.create({
   baseURL: portalUrl,
   headers: {
@@ -10,8 +9,12 @@ const request = axios.create({
 });
 
 request.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // console.log('response', response)
+    return response;
+  },
   (error) => {
+    // console.log('error response', error)
     if (error.response) {
       if (error.response.status === 401 || error.response.status === 403) {
         delete request.defaults.headers.common["Authorization"];

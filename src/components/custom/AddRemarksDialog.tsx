@@ -45,7 +45,12 @@ function AddRemarksDialog(props: Props) {
       })
   }
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={(openDialog: boolean) => {
+      setOpen(openDialog)
+      if (!openDialog) {
+        setRemarks(props?.remark)
+      }
+    }}>
       <DialogTrigger asChild>
         <button>
           <svg
