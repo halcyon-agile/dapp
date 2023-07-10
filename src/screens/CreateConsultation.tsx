@@ -17,7 +17,7 @@ import {
 import getUsers from "../api/users";
 import { cn } from "../lib/utils";
 import requestConsultation from "../api/consultations/requestConsultation";
-import useStore from "../store";
+import useUser from "../data/use-user";
 
 function CreateConsultation() {
   const navigate = useNavigate();
@@ -35,10 +35,7 @@ function CreateConsultation() {
     duration: "",
   });
   const [creating, create] = useState<boolean>(false);
-  const [user] =
-    useStore((state) => [
-      state.user,
-    ]);
+  const user = useUser()
 
   useEffect(() => {
     getUsers().then((data) => {
@@ -47,7 +44,7 @@ function CreateConsultation() {
     });
   }, []);
 
-  const removeCurrentUserFromList = users.filter((item: any) => item.id !== user.id)
+  const removeCurrentUserFromList = users.filter((item: any) => item.id !== user?.data?.id)
 
   const filteredUsers = removeCurrentUserFromList.filter((userItem: any) => {
     return members.every((member: any) => {
@@ -57,6 +54,9 @@ function CreateConsultation() {
 
   // console.log('filtered users', filteredUsers)
   // console.log('form', form)
+
+  // console.log('members', members)
+  // console.log('user', user)
 
   return (
     <main className="flex min-h-screen flex-col p-5">
@@ -282,12 +282,15 @@ function CreateConsultation() {
           className="bg-cyan-500"
           onClick={() => {
             create(true);
+            // const list = members;
+            // list.push({ id: user?.data?.id, first_name: user?.data?.first_name, last_name: user?.data?.last_name });
             requestConsultation(
               location?.state?.id,
               form.started_at,
               form.duration,
               selected === 0 ? "fixed" : "flexible",
               members
+              // list
             ).then(() => {
               create(false);
               navigate("/", { replace: true });

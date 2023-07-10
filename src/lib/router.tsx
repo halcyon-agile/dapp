@@ -12,6 +12,7 @@ import {
   Scrum,
   CreateConsultation,
   CreateTask,
+  EditConsultation,
 } from "../screens";
 
 const router = createBrowserRouter([
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
   {
     path: "create-task",
     element: <CreateTask />,
+  },
+  {
+    path: "edit-consultation",
+    element: <EditConsultation />,
   }
 ]);
 
