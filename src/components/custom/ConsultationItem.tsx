@@ -38,6 +38,8 @@ function ConsultationItem(props: Props) {
 
   // console.log(props?.data)
 
+  // console.log('active', activeTasks)
+
   return (
     <div
       className="w-full flex flex-1 flex-col gap-4 mt-4"
@@ -51,13 +53,21 @@ function ConsultationItem(props: Props) {
           </div>
           {!props?.isFromOthers && (
             <div className="flex-row items-center">
-              <button className="mr-3">
+              <button
+                className="mr-3"
+                onClick={() => navigate('/edit-consultation', {
+                  state: {
+                    data: props?.data
+                  }
+                })}
+                disabled={props?.data?.status === "cancelled"}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
-                  stroke="#334155"
+                  stroke={props?.data?.status === "cancelled" ? "#cbd5e1" : "#334155"}
                   className="w-4 h-4"
                 >
                   <path
@@ -71,7 +81,9 @@ function ConsultationItem(props: Props) {
                 <AlertDialogTrigger
                   disabled={props?.data?.status === "cancelled"}
                 >
-                  <button>
+                  <button
+                    disabled={props?.data?.status === "cancelled"}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"

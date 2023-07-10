@@ -37,22 +37,10 @@ function Consultations() {
     });
   }, []);
 
-  console.log("consultations", consultations);
+  // console.log("consultations", consultations);
   // console.log('user', user)
 
   // console.log('active', activeTasks)
-
-  const tasks = activeTasks?.filter((task) => {
-    return task.consultation_id !== null;
-  });
-
-  const filteredConsultations = consultations?.filter((consult) => {
-    return tasks.every((task) => {
-      return task.consultation_id !== consult.id;
-    });
-  });
-
-  // console.log('filtered', filteredConsultations)
 
   return (
     <main className="flex min-h-screen flex-col p-5">
