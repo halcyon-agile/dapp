@@ -65,7 +65,7 @@ function isGraphVisible(data: any) {
 
 function MultipleProjects() {
   const navigate = useNavigate();
-  const [ activeTasks, setActiveTasks, setUser] = useStore((state) => [
+  const [activeTasks, setActiveTasks, setUser] = useStore((state) => [
     state.activeTasks,
     state.setActiveTasks,
     state.setUser,
@@ -74,7 +74,7 @@ function MultipleProjects() {
     (t: TaskTime) => t?.task?.timer_on === 0
   );
 
-  const user = useUser()
+  const user = useUser();
 
   const { data: attendance, isLoading: attendanceIsLoading } = useAttendance();
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
@@ -177,7 +177,7 @@ function MultipleProjects() {
       <div className="items-center justify-center text-sm flex flex-col w-full gap-2">
         <div className="w-full border rounded-sm">
           <div className="left-0 top-0 w-full items-center justify-between text-4xl flex-1 flex flex-row align-center py-2 px-4">
-            <p className="font-semibold text-xl">Working Hours: </p>
+            <p className="font-semibold text-xl">Working Hours </p>
             <div className="pr-4" />
             <p className="font-semibold text-xl">
               {formatHourDifference(attendance?.started_at)}
