@@ -1,7 +1,6 @@
 import axios from "axios";
 import portalUrl from "../lib/portalUrl";
 
-console.log({ portalUrl });
 const request = axios.create({
   baseURL: portalUrl,
   headers: {
@@ -12,7 +11,7 @@ const request = axios.create({
 request.interceptors.response.use(
   (response) => {
     // console.log('response', response)
-    return response
+    return response;
   },
   (error) => {
     // console.log('error response', error)

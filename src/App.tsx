@@ -1,14 +1,21 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import useStore from "./store";
 import router from "./lib/router";
 import { Toaster } from "./components/ui/toaster";
-
+import { checkUpdate, installUpdate } from "@tauri-apps/api/updater";
 import useUser from "./data/use-user";
-import portalUrl from "./lib/portalUrl";
+import { cn } from "./lib/utils";
+
 function App() {
   const [setUser] = useStore((state) => [state.setUser]);
+  const [showUpdate, setShowUpdate] = useState(false);
   const { status, data, error } = useUser();
+
+  const handleUpdate = async () => {
+    await installUpdate();
+    setShowUpdate(false);
+  };
 
   useEffect(() => {
     if (status === "error") {
@@ -20,9 +27,39 @@ function App() {
       setUser(data);
     }
   }, [error, status, data, setUser]);
-  console.log({ portalUrl });
+
+  useEffect(() => {
+    async function check() {
+      const update: any = await checkUpdate();
+
+      if (update.shouldUpdate) {
+        setShowUpdate(true);
+      }
+    }
+
+    check();
+  }, []);
+
   return (
     <>
+      <div
+        className={cn(
+          "fixed right-2 top-1 z-50 grid gap-4 border bg-background px-4 py-2 shadow-lg rounded-lg",
+          !showUpdate && "hidden"
+        )}
+      >
+        <div>
+          A new update is available. Click{" "}
+          <button
+            className="underline text-blue-500 inline-block"
+            onClick={() => handleUpdate()}
+          >
+            Update
+          </button>{" "}
+          to install
+        </div>
+      </div>
+
       <RouterProvider router={router} />
       <Toaster />
     </>
