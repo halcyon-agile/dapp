@@ -29,7 +29,7 @@ const router = createBrowserRouter([
     element: <TakeABreak />,
   },
   {
-    path: "select-project",
+    path: "select-task",
     element: <SelectTask />,
   },
   {
