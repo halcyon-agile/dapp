@@ -10,7 +10,7 @@ import startTaskApi from "../api/startTask";
 import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
 import { AxiosError } from "axios";
 
-function SelectAProject() {
+function SelectTask() {
   const [activeTasks, setActiveTasks] = useStore((state) => [
     state.activeTasks,
     state.setActiveTasks,
@@ -29,7 +29,6 @@ function SelectAProject() {
 
   useEffect(() => {
     const userData = localStorage.getItem("token");
-    // console.log("userData", userData)
     if (!userData) {
       navigate("/login", {
         replace: true,
@@ -42,7 +41,6 @@ function SelectAProject() {
         setProjects([{ id: "", name: "Filter by project" }, ...fetchProjects]);
         fetch(false);
       } catch (error: AxiosError | any) {
-        // console.error(error?.response?.data?.message || "Something went wrong");
         fetch(false);
       }
     };
@@ -51,7 +49,6 @@ function SelectAProject() {
 
   useEffect(() => {
     const userData = localStorage.getItem("token");
-    // console.log("userData", userData)
     if (!userData) {
       navigate("/login", {
         replace: true,
@@ -69,7 +66,6 @@ function SelectAProject() {
         );
         fetch(false);
       } catch (error: AxiosError | any) {
-        // console.error(error?.response?.data?.message || "Something went wrong");
         fetch(false);
       }
     };
@@ -106,8 +102,6 @@ function SelectAProject() {
         console.error(error?.response?.data?.message || "Something went wrong");
       });
   };
-
-  console.log("selected project", projectFilter);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between text-black p-5 font-inter">
@@ -209,7 +203,7 @@ function SelectAProject() {
             <Button
               variant="ghost"
               className="border border-slate-200"
-              onClick={() => navigate(-1)}
+              onClick={() => navigate("/")}
             >
               Cancel
             </Button>
@@ -239,4 +233,4 @@ function SelectAProject() {
   );
 }
 
-export default SelectAProject;
+export default SelectTask;

@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import {
   LoginScreen,
-  SelectAProject,
+  SelectTask,
   TakeABreak,
   MultipleProjects,
   AttributeHour,
@@ -29,8 +29,8 @@ const router = createBrowserRouter([
     element: <TakeABreak />,
   },
   {
-    path: "select-project",
-    element: <SelectAProject />,
+    path: "select-task",
+    element: <SelectTask />,
   },
   {
     path: "attribute-hour",
@@ -63,7 +63,7 @@ const router = createBrowserRouter([
   {
     path: "edit-consultation",
     element: <EditConsultation />,
-  }
+  },
 ]);
 
 export default router;

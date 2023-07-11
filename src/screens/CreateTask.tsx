@@ -47,30 +47,30 @@ function CreateTask() {
     ended_at: "",
   });
 
-  const [loading, isLoading] = useState<boolean>(false)
-  const [errors, setErrors] = useState<any>({})
+  const [loading, isLoading] = useState<boolean>(false);
+  const [errors, setErrors] = useState<any>({});
 
   const mutation = useMutation(
     (task) => {
       // console.log('task', task)
-      isLoading(true)
+      isLoading(true);
       return request.post("/api/tasks", task);
     },
     {
       onSuccess: () => {
-        isLoading(false)
-        setErrors({})
-        navigate("/select-project");
+        isLoading(false);
+        setErrors({});
+        navigate("/select-task");
       },
       onError: (error: any) => {
         // console.log('create error', error)
-        isLoading(false)
-        setErrors(error?.response?.data?.errors)
+        isLoading(false);
+        setErrors(error?.response?.data?.errors);
       },
     }
   );
 
-  console.log('errors', errors)
+  console.log("errors", errors);
 
   if (taskTypesError || projectsError) {
     return <>{taskTypesError || projectsError}</>;
@@ -93,14 +93,17 @@ function CreateTask() {
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>
-              Some errors popped up while trying to create a new task. Hover the info icon for more info.
+              Some errors popped up while trying to create a new task. Hover the
+              info icon for more info.
             </AlertDescription>
           </Alert>
         )}
         <div className="grid w-full items-center gap-1.5">
           <Label
             htmlFor="taskName"
-            className={`${errors.name && "text-red-500"} font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
+            className={`${
+              errors.name && "text-red-500"
+            } font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
           >
             Task Name
             {errors.name && (
@@ -118,7 +121,9 @@ function CreateTask() {
             type="taskName"
             id="taskName"
             placeholder="< Task Name >"
-            className={`${errors.name && "border-red-500"} text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5`}
+            className={`${
+              errors.name && "border-red-500"
+            } text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5`}
             autoCapitalize="none"
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             value={form.name}
@@ -126,7 +131,9 @@ function CreateTask() {
         </div>
         <div className="grid w-full items-center gap-1.5">
           <Label
-            className={`${errors.project_id && "text-red-500"} font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
+            className={`${
+              errors.project_id && "text-red-500"
+            } font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
           >
             Project
             {errors.project_id && (
@@ -142,7 +149,9 @@ function CreateTask() {
           </Label>
           {projectsStatus === "success" && (
             <select
-              className={`${errors.project_id && "border-red-500"} flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50`}
+              className={`${
+                errors.project_id && "border-red-500"
+              } flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50`}
               onChange={(e) => {
                 setForm((data: any) => ({
                   ...data,
@@ -161,7 +170,9 @@ function CreateTask() {
         </div>
         <div className="grid w-full items-center gap-1.5">
           <Label
-            className={`${errors.task_type_id && "text-red-500"} font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
+            className={`${
+              errors.task_type_id && "text-red-500"
+            } font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
           >
             Type
             {errors.task_type_id && (
@@ -177,7 +188,9 @@ function CreateTask() {
           </Label>
           {taskTypesStatus === "success" && (
             <select
-              className={`${errors.task_type_id && "border-red-500"} flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50`}
+              className={`${
+                errors.task_type_id && "border-red-500"
+              } flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50`}
               onChange={(e) => {
                 setForm((data: any) => ({
                   ...data,
@@ -196,7 +209,9 @@ function CreateTask() {
         </div>
         <div className="grid w-full items-center gap-1.5">
           <Label
-            className={`${errors.description && "text-red-500"} font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
+            className={`${
+              errors.description && "text-red-500"
+            } font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
           >
             Description
             {errors.description && (
@@ -219,7 +234,9 @@ function CreateTask() {
         <div className="grid w-full items-center gap-1.5">
           <Label
             htmlFor="estimate"
-            className={`${errors.estimate && "text-red-500"} font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
+            className={`${
+              errors.estimate && "text-red-500"
+            } font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
           >
             Estimate
             {errors.estimate && (
@@ -237,7 +254,9 @@ function CreateTask() {
             type="number"
             id="estimate"
             placeholder="< Estimate >"
-            className={`${errors.estimate && "border-red-500"} text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5`}
+            className={`${
+              errors.estimate && "border-red-500"
+            } text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5`}
             autoCapitalize="none"
             onChange={(e) => setForm({ ...form, estimate: e.target.value })}
             value={form.estimate}
@@ -247,7 +266,9 @@ function CreateTask() {
           <div className="grid flex-1">
             <Label
               htmlFor="start"
-              className={`${errors.started_at && "text-red-500"} font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
+              className={`${
+                errors.started_at && "text-red-500"
+              } font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
             >
               Start Date
               {errors.started_at && (
@@ -296,7 +317,9 @@ function CreateTask() {
           <div className="grid flex-1">
             <Label
               htmlFor="end"
-              className={`${errors.ended_at && "text-red-500"} font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
+              className={`${
+                errors.ended_at && "text-red-500"
+              } font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
             >
               End Date
               {errors.ended_at && (
@@ -361,9 +384,11 @@ function CreateTask() {
               ariaLabel="blocks-loading"
               wrapperStyle={{}}
               wrapperClass="blocks-wrapper"
-              colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+              colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
             />
-          ) : "Create"}
+          ) : (
+            "Create"
+          )}
         </Button>
       </div>
     </form>

@@ -4,17 +4,20 @@ import useStore from "./store";
 import router from "./lib/router";
 import { Toaster } from "./components/ui/toaster";
 import { checkUpdate, installUpdate } from "@tauri-apps/api/updater";
+import { relaunch } from "@tauri-apps/api/process";
 import useUser from "./data/use-user";
 import { cn } from "./lib/utils";
 
 function App() {
   const [setUser] = useStore((state) => [state.setUser]);
   const [showUpdate, setShowUpdate] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const { status, data, error } = useUser();
 
   const handleUpdate = async () => {
+    setIsUpdating(true);
     await installUpdate();
-    setShowUpdate(false);
+    await relaunch();
   };
 
   useEffect(() => {
@@ -31,20 +34,23 @@ function App() {
   useEffect(() => {
     async function check() {
       const update: any = await checkUpdate();
-
       if (update.shouldUpdate) {
         setShowUpdate(true);
       }
     }
 
-    check();
+    const timer = setInterval(check, 10000); // Run check every 10 seconds
+
+    return () => {
+      clearInterval(timer); // Clean up the timer on component unmount
+    };
   }, []);
 
   return (
     <>
       <div
         className={cn(
-          "fixed right-2 top-1 z-50 grid gap-4 border bg-background px-4 py-2 shadow-lg rounded-lg",
+          "fixed right-2 top-1 z-50 grid gap-4 border bg-background px-3 py-1 shadow-lg rounded-lg text-xs",
           !showUpdate && "hidden"
         )}
       >
@@ -53,8 +59,9 @@ function App() {
           <button
             className="underline text-blue-500 inline-block"
             onClick={() => handleUpdate()}
+            disabled={isUpdating}
           >
-            Update
+            {isUpdating ? "Updating..." : "here"}
           </button>{" "}
           to install
         </div>

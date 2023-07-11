@@ -1,7 +1,7 @@
 import LoginScreen from "./LoginScreen";
 
 import TakeABreak from "./TakeABreak";
-import SelectAProject from "./SelectAProject";
+import SelectTask from "./SelectTask";
 import MultipleProjects from "./MultipleProjects";
 import AttributeHour from "./AttributeHour";
 import BreakReason from "./BreakReason";
@@ -15,7 +15,7 @@ import EditConsultation from "./EditConsultation";
 export {
   LoginScreen,
   TakeABreak,
-  SelectAProject,
+  SelectTask,
   MultipleProjects,
   AttributeHour,
   BreakReason,

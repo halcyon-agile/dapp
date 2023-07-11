@@ -32,12 +32,7 @@ function LoginScreen() {
     try {
       const user = await loginUser(form.email, form.password);
       setUser(user);
-      navigate("/", {
-        replace: true,
-        state: {
-          screen: "login",
-        },
-      });
+      navigate("/select-task");
       attemptingLogin(false);
     } catch (error: AxiosError | any) {
       console.log("error", error);
