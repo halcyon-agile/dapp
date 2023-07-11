@@ -203,7 +203,7 @@ function SelectTask() {
             <Button
               variant="ghost"
               className="border border-slate-200"
-              onClick={() => navigate(-1)}
+              onClick={() => navigate("/")}
             >
               Cancel
             </Button>
