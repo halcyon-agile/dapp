@@ -27,7 +27,7 @@
     "axios": "^1.4.0",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
-    "cmdk": "^0.2.1",
+    "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
     "lucide-react": "^0.229.0",
     "luxon": "^3.3.0",
