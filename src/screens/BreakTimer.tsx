@@ -14,7 +14,7 @@ function BreakTimer() {
   const [setBreakForm] = useStore((state) => [state.setBreakForm]);
   const [_, setStartDateTime] = useState<DateTime | null>(null);
   const [timer, setTimer] = useState(0);
-  const [alertInSeconds, setAlertInSeconds] = useState(0);
+  const [alertInSeconds, setAlertInSeconds] = useState(1000);
   const [breakEnded, setBreakEnded] = useState(false);
 
   useEffect(() => {
