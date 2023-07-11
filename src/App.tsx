@@ -39,7 +39,11 @@ function App() {
       }
     }
 
-    check();
+    const timer = setInterval(check, 10000); // Run check every 10 seconds
+
+    return () => {
+      clearInterval(timer); // Clean up the timer on component unmount
+    };
   }, []);
 
   return (
