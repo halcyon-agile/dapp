@@ -73,6 +73,11 @@ export interface Breaks {
   minutes: number;
 }
 
+export interface BreaksData {
+  breaks: Breaks[];
+  total_hours: number;
+}
+
 export interface ConsultationInvites {
   id: number;
 }

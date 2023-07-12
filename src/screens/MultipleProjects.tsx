@@ -24,31 +24,10 @@ import portalUrl from "../lib/portalUrl";
 import { TaskTime } from "@/types";
 import stopTaskApi from "../api/stopTask";
 import useAttendance from "../data/use-attendance";
+import useBreaks from "../data/use-breaks";
 import useUser from "../data/use-user";
 
-function formatHourDifference(startedAt: any) {
-  const currentDate = DateTime.now();
-  const startedDate = DateTime.fromISO(startedAt);
-  const timeDifference = currentDate.diff(startedDate);
-
-  const hours = Math.floor(timeDifference.as("hours"));
-  const minutes = Math.floor(timeDifference.as("minutes") % 60);
-
-  const formattedHours = String(hours).padStart(2, "0");
-  const formattedMinutes = String(minutes).padStart(2, "0");
-
-  if (isNaN(Number(formattedHours)) || Number(formattedHours) < 0) {
-    return "00:00";
-  }
-
-  if (isNaN(Number(formattedMinutes)) || Number(formattedMinutes) < 0) {
-    return "00:00";
-  }
-  return `${formattedHours}:${formattedMinutes}`;
-  // return moment(startedAt).toNow(true)
-}
-
-function isGraphVisible(data: any) {
+const isGraphVisible = (data: any) => {
   if (
     data?.task?.project?.project_type?.show_remaining_hours !== 0 ||
     Number(data?.task?.assignees[0]?.initial_estimate) !== 0 ||
@@ -61,7 +40,17 @@ function isGraphVisible(data: any) {
   if (data?.consultation_id === null) return true;
 
   return false;
-}
+};
+
+const formatHours = (hours: number) => {
+  const absoluteHours = Math.floor(Math.abs(hours));
+  const absoluteMinutes = Math.floor((Math.abs(hours) * 60) % 60);
+  const formattedHours = String(absoluteHours).padStart(2, "0");
+  const formattedMinutes = String(absoluteMinutes).padStart(2, "0");
+  const sign = hours < 0 ? "-" : "";
+
+  return `${sign}${formattedHours}:${formattedMinutes}`;
+};
 
 function MultipleProjects() {
   const navigate = useNavigate();
@@ -76,7 +65,13 @@ function MultipleProjects() {
 
   const user = useUser();
 
-  const { data: attendance, isLoading: attendanceIsLoading } = useAttendance();
+  const {
+    data: attendance,
+    isLoading: attendanceIsLoading,
+    status: attendanceStatus,
+  } = useAttendance();
+  const { data: breaks, status: breaksStatus } = useBreaks();
+
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [loggedOff, loggingOff] = useState<boolean>(false);
   const [reddot, setRedDots] = useState<any>({
@@ -164,7 +159,22 @@ function MultipleProjects() {
       });
   };
 
-  // console.log('active', activeTasks)
+  const computeHours = () => {
+    let hours = 0;
+
+    if (breaksStatus === "success") {
+      hours -= breaks.total_hours;
+    }
+
+    if (attendanceStatus === "success") {
+      const now = new Date();
+      const attendanceStart = new Date(attendance.started_at);
+      const attendanceDuration = now.getTime() - attendanceStart.getTime();
+      hours += attendanceDuration / (1000 * 60 * 60); // Convert milliseconds to hours
+    }
+
+    return formatHours(hours);
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -173,9 +183,7 @@ function MultipleProjects() {
           <div className="left-0 top-0 w-full items-center justify-between text-4xl flex-1 flex flex-row align-center py-2 px-4">
             <p className="font-semibold text-xl">Working Hours</p>
             <div className="pr-4" />
-            <p className="font-semibold text-xl">
-              {formatHourDifference(attendance?.started_at)}
-            </p>
+            <p className="font-semibold text-xl">{computeHours()}</p>
           </div>
         </div>
         {activeTasks?.length > 0 ? (
