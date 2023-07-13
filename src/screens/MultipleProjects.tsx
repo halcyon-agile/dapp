@@ -335,7 +335,7 @@ function MultipleProjects() {
               navigate("/take-a-break");
             }}
           >
-            <p className="text-slate-900 text-xs text-center">Take a Break</p>
+            <p className="text-slate-900 text-xs text-center">Break Out</p>
           </button>
         </div>
         <div className="flex">
