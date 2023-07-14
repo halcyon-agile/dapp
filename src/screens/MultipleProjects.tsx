@@ -52,6 +52,15 @@ const formatHours = (hours: number) => {
   return `${sign}${formattedHours}:${formattedMinutes}`;
 };
 
+const getCurrentHoursSpentOnTask = (started_at: string) => {
+  const now = new Date();
+  const startedAt = new Date(started_at);
+  const duration = now.getTime() - startedAt.getTime();
+  const hours = duration / (1000 * 60 * 60); // Convert milliseconds to hours
+
+  return hours;
+};
+
 function MultipleProjects() {
   const navigate = useNavigate();
   const [activeTasks, setActiveTasks, setUser] = useStore((state) => [
@@ -299,9 +308,10 @@ function MultipleProjects() {
                   currentEstimateHours={Number(
                     data?.task?.assignees[0]?.estimate || 0
                   )}
-                  totalRenderedHours={Number(
-                    Number(data?.total_minutes_spent / 60).toFixed(2)
-                  )}
+                  totalRenderedHours={
+                    Number(Number(data?.total_minutes_spent / 60).toFixed(2)) +
+                    getCurrentHoursSpentOnTask(data?.started_at)
+                  }
                   started_at={data?.started_at}
                   onUpdateSuccess={fetchRequiredDatas}
                   isConsultation={data?.consultation_id !== null}
