@@ -5,17 +5,13 @@ import { Terminal } from "lucide-react";
 import { Task, Project } from "@/types";
 import getTasks from "../api/getTasks";
 import getProjects from "../api/getProjects";
-import useStore from "../store";
+import useActiveTasks from "../data/use-active-tasks";
 import startTaskApi from "../api/startTask";
 import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
 import { AxiosError } from "axios";
 
 function SelectTask() {
-  const [activeTasks, setActiveTasks] = useStore((state) => [
-    state.activeTasks,
-    state.setActiveTasks,
-  ]);
-
+  const { data: activeTasks, refetch: refetchActiveTasks } = useActiveTasks();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -61,7 +57,7 @@ function SelectTask() {
         setTasks(
           fetchedTasks.filter(
             (task) =>
-              !activeTasks.find((activeTask) => activeTask.task.id === task.id)
+              !activeTasks?.find((activeTask) => activeTask.task.id === task.id)
           )
         );
         fetch(false);
@@ -87,13 +83,12 @@ function SelectTask() {
 
     startingTask(true);
     startTaskApi(selectedTask.id)
-      .then((taskTime) => {
+      .then(() => {
         startingTask(false);
-        if (activeTasks?.length <= 0) {
-          setActiveTasks([taskTime]);
+        refetchActiveTasks();
+        if (activeTasks && activeTasks?.length <= 0) {
           navigate("/", { replace: true });
         } else {
-          setActiveTasks([taskTime]);
           navigate("/", { replace: true });
         }
       })

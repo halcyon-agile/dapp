@@ -9,7 +9,5 @@ export default function useAttendance(): UseQueryResult<Attendance> {
       const { data } = await request.get("/api/attendance");
       return data;
     },
-    retry: false,
-    refetchInterval: 5000,
   });
 }

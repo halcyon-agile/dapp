@@ -1,10 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { TaskTime, BreakForm, Consultations, Scrum } from "@/types";
+import { BreakForm, Consultations, Scrum } from "@/types";
 
 type State = {
   user?: any;
-  activeTasks: TaskTime[];
   notificationPermissionGranted: boolean;
   selectedTask: any;
   consultations: Consultations[];
@@ -14,7 +13,6 @@ type State = {
 
 type Action = {
   setUser: (user: State["user"]) => void;
-  setActiveTasks: (firstName: any) => void;
   setNotificationPermissionGranted: (
     notificationPermissionGranted: State["notificationPermissionGranted"]
   ) => void;
@@ -29,9 +27,6 @@ const useStore = create(
     (set) => ({
       user: undefined,
       setUser: (user) => set(() => ({ user })),
-      screen: "",
-      activeTasks: [],
-      setActiveTasks: (activeTasks: any) => set(() => ({ activeTasks })),
       notificationPermissionGranted: false,
       setNotificationPermissionGranted: (permissionGranted: boolean) =>
         set({ notificationPermissionGranted: permissionGranted }),
