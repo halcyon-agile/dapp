@@ -3,9 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ColorRing } from "react-loader-spinner";
 import { DateTime } from "luxon";
 import { Terminal } from "lucide-react";
-
 import useStore from "../store";
-import getActiveTasks from "../api/getActiveTasks";
 import getRedDots from "../api/getRedDots";
 import finishWork from "../api/finishWork";
 import { AddRemarksDialog, Graph, Timer } from "../components/custom";
@@ -26,51 +24,20 @@ import stopTaskApi from "../api/stopTask";
 import useAttendance from "../data/use-attendance";
 import useBreaks from "../data/use-breaks";
 import useUser from "../data/use-user";
-
-const isGraphVisible = (data: any) => {
-  if (
-    data?.task?.project?.project_type?.show_remaining_hours !== 0 ||
-    Number(data?.task?.assignees[0]?.initial_estimate) !== 0 ||
-    Number(data?.task?.assignees[0]?.estimate) !== 0 ||
-    data?.total_minutes_spent !== 0
-  ) {
-    return true;
-  }
-
-  if (data?.consultation_id === null) return true;
-
-  return false;
-};
-
-const formatHours = (hours: number) => {
-  const absoluteHours = Math.floor(Math.abs(hours));
-  const absoluteMinutes = Math.floor((Math.abs(hours) * 60) % 60);
-  const formattedHours = String(absoluteHours).padStart(2, "0");
-  const formattedMinutes = String(absoluteMinutes).padStart(2, "0");
-  const sign = hours < 0 ? "-" : "";
-
-  return `${sign}${formattedHours}:${formattedMinutes}`;
-};
-
-const getCurrentHoursSpentOnTask = (started_at: string) => {
-  const now = new Date();
-  const startedAt = new Date(started_at);
-  const duration = now.getTime() - startedAt.getTime();
-  const hours = duration / (1000 * 60 * 60); // Convert milliseconds to hours
-
-  return hours;
-};
+import useActiveTasks from "../data/use-active-tasks";
+import {
+  isGraphVisible,
+  formatHours,
+  getCurrentHoursSpentOnTask,
+} from "../lib/utils";
 
 function MultipleProjects() {
   const navigate = useNavigate();
-  const [activeTasks, setActiveTasks, setUser] = useStore((state) => [
-    state.activeTasks,
-    state.setActiveTasks,
-    state.setUser,
-  ]);
-  const hasActiveTask = activeTasks.some(
-    (t: TaskTime) => t?.task?.timer_on === 0
-  );
+  const [setUser] = useStore((state) => [state.setUser]);
+  const { data: activeTasks, refetch: refetchActiveTasks } = useActiveTasks();
+  const hasActiveTask = activeTasks
+    ? activeTasks.some((t: TaskTime) => t?.task?.timer_on === 0)
+    : false;
 
   const user = useUser();
 
@@ -89,9 +56,7 @@ function MultipleProjects() {
   });
 
   const fetchRequiredDatas = () => {
-    getActiveTasks().then((tasks) => {
-      setActiveTasks(tasks);
-    });
+    refetchActiveTasks();
 
     getRedDots().then((result) => {
       setRedDots(result);
@@ -107,9 +72,7 @@ function MultipleProjects() {
       });
     }
 
-    getActiveTasks().then((tasks) => {
-      setActiveTasks(tasks);
-    });
+    refetchActiveTasks();
 
     getRedDots().then((result) => {
       setRedDots(result);
@@ -144,7 +107,6 @@ function MultipleProjects() {
       .then(() => {
         loggingOff(false);
         setUser(undefined);
-        setActiveTasks([]);
         localStorage.clear();
         navigate("/login", {
           replace: true,
@@ -159,9 +121,7 @@ function MultipleProjects() {
   const stopTask = (taskId: number) => {
     stopTaskApi({ taskId })
       .then(() => {
-        getActiveTasks().then((tasks) => {
-          setActiveTasks(tasks);
-        });
+        refetchActiveTasks();
       })
       .catch((error) => {
         // console.error(error?.response?.data?.message || "Something went wrong");
@@ -195,7 +155,7 @@ function MultipleProjects() {
             <p className="font-semibold text-xl">{computeHours()}</p>
           </div>
         </div>
-        {activeTasks?.length > 0 ? (
+        {activeTasks && activeTasks?.length > 0 ? (
           activeTasks.map((data: any) => (
             <div className="w-full border rounded-sm" key={data?.id}>
               <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4">
@@ -209,9 +169,7 @@ function MultipleProjects() {
                     <AddRemarksDialog
                       id={data?.task_id}
                       onSuccess={() => {
-                        getActiveTasks().then((tasks) => {
-                          setActiveTasks(tasks);
-                        });
+                        refetchActiveTasks();
                       }}
                       remark={data?.remark ? data.remark : ""}
                     />
@@ -280,11 +238,7 @@ function MultipleProjects() {
                         onClick={() => {
                           leaveConsultation(data?.consultation_id).then(
                             (response) => {
-                              console.log("leave", response);
-                              getActiveTasks().then((tasks) => {
-                                setActiveTasks(tasks);
-                                // console.log({ activeTasks });
-                              });
+                              refetchActiveTasks();
                             }
                           );
                         }}

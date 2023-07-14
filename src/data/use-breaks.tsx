@@ -9,7 +9,5 @@ export default function useBreaks(): UseQueryResult<BreaksData> {
       const { data } = await request.get("/api/breaks");
       return data;
     },
-    retry: false,
-    refetchInterval: 5000,
   });
 }

@@ -9,7 +9,6 @@ export default function useUser(): UseQueryResult<UserData> {
       const { data } = await request.get("/api/me");
       return data;
     },
-    retry: false,
     refetchInterval: 5000,
   });
 }
