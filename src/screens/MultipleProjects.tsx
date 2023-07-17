@@ -30,6 +30,7 @@ import {
   formatHours,
   getCurrentHoursSpentOnTask,
 } from "../lib/utils";
+import checkIfTimerOnActive from "../lib/checkIfTimerOff";
 
 function MultipleProjects() {
   const navigate = useNavigate();
@@ -144,6 +145,8 @@ function MultipleProjects() {
 
     return formatHours(hours);
   };
+
+  // console.log('active', activeTasks)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -370,7 +373,7 @@ function MultipleProjects() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <button className="flex flex-col items-center">
+                <button className="flex flex-col items-center" onClick={() => checkIfTimerOnActive(activeTasks)}>
                   <div className="rounded-full border border-slate-200 p-2 mb-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

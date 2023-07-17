@@ -3,6 +3,8 @@ import { Button } from "../ui";
 import { ColorRing } from "react-loader-spinner";
 import startTaskApi from "../../api/startTask";
 import useActiveTasks from "../../data/use-active-tasks";
+import checkIfTimerOnActive from "../../lib/checkIfTimerOff";
+import stopTaskApi from "../../api/stopTask";
 
 interface Props {
   data: any;
@@ -12,10 +14,34 @@ function ScrumItem(props: Props) {
   const [joining, join] = useState<boolean>(false);
   const { data: activeTasks, refetch: refetchActiveTasks } = useActiveTasks();
 
+  const stopTask = (taskId: number) => {
+    stopTaskApi({ taskId })
+      .then(() => {
+        console.log('has run stop task first')
+        join(true);
+        startTaskApi(props?.data?.id)
+          .then(() => {
+            join(false)
+            refetchActiveTasks();
+          })
+          .catch((error: { response: { data: { message: any } } }) => {
+            join(false)
+            console.log('error',
+              error?.response?.data?.message || "Something went wrong"
+            );
+          });
+        refetchActiveTasks();
+      })
+      .catch((error) => {
+        // console.error(error?.response?.data?.message || "Something went wrong");
+      });
+  };
+
+  // console.log(activeTasks)
   return (
     <div className="w-full flex flex-col border rounded border-slate-200 p-4 gap-1">
       <p className="font-medium text-base text-gray-700">
-        {props?.data?.name} {props?.data?.id}
+        {props?.data?.project?.name} - {props?.data?.name} {props?.data?.id}
       </p>
       <p className="font-medium text-xs text-gray-500">
         {props?.data?.project?.scrums[0]?.time}{" "}
@@ -36,16 +62,41 @@ function ScrumItem(props: Props) {
             className="bg-cyan-500"
             disabled={joining}
             onClick={() => {
-              join(true);
-              startTaskApi(props?.data?.id)
-                .then(() => {
-                  refetchActiveTasks();
-                })
-                .catch((error: { response: { data: { message: any } } }) => {
-                  console.error(
-                    error?.response?.data?.message || "Something went wrong"
-                  );
-                });
+              if (activeTasks) {
+                if (activeTasks.length > 0) {
+                  const list: any = checkIfTimerOnActive(activeTasks)
+                  if (list?.length > 0) {
+                    stopTask(list[0]?.task_id)
+                  } else {
+                    join(true);
+                    startTaskApi(props?.data?.id)
+                      .then(() => {
+                        join(false)
+                        refetchActiveTasks();
+                      })
+                      .catch((error: { response: { data: { message: any } } }) => {
+                        join(false)
+                        console.log('error',
+                          error?.response?.data?.message || "Something went wrong"
+                        );
+                      });
+                  }
+                  console.log('list', list)
+                } else {
+                  join(true);
+                  startTaskApi(props?.data?.id)
+                    .then(() => {
+                      join(false)
+                      refetchActiveTasks();
+                    })
+                    .catch((error: { response: { data: { message: any } } }) => {
+                      join(false)
+                      console.log('error',
+                        error?.response?.data?.message || "Something went wrong"
+                      );
+                    });
+                }
+              }
             }}
           >
             {joining ? (
