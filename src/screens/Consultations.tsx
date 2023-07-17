@@ -21,14 +21,11 @@ import { ConsultationItem } from "../components/custom";
 function Consultations() {
   const navigate = useNavigate();
   const [fetching, isFetching] = useState<boolean>(false);
-  const [user, consultations, setConsultations, activeTasks] = useStore(
-    (state) => [
-      state.user,
-      state.consultations,
-      state.setConsultations,
-      state.activeTasks,
-    ]
-  );
+  const [user, consultations, setConsultations] = useStore((state) => [
+    state.user,
+    state.consultations,
+    state.setConsultations,
+  ]);
   useEffect(() => {
     isFetching(true);
     getConsultations().then((list) => {
@@ -36,11 +33,6 @@ function Consultations() {
       isFetching(false);
     });
   }, []);
-
-  // console.log("consultations", consultations);
-  // console.log('user', user)
-
-  // console.log('active', activeTasks)
 
   return (
     <main className="flex min-h-screen flex-col p-5">

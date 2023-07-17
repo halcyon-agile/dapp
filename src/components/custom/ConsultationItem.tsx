@@ -1,7 +1,7 @@
 import { useState } from "react";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-
+import useActiveTasks from "../../data/use-active-tasks";
 import {
   Button,
   AlertDialog,
@@ -17,7 +17,6 @@ import {
 import { ColorRing } from "react-loader-spinner";
 import joinConsultation from "../../api/consultations/join-consultation";
 import cancelConsultation from "../../api/consultations/cancel-consultation";
-import useStore from "../../store";
 import { useToast } from "../ui/use-toast";
 
 interface Props {
@@ -28,22 +27,14 @@ interface Props {
 }
 
 function ConsultationItem(props: Props) {
+  const { data: activeTasks } = useActiveTasks();
+
   const navigate = useNavigate();
   const { toast } = useToast();
   const [joining, join] = useState<boolean>(false);
 
-  const [activeTasks] = useStore((state) => [state.activeTasks]);
-
-  // console.log(activeTasks.find((item) => item.consultation_id === props?.data?.id))
-
-  // console.log(props?.data)
-
-  // console.log('active', activeTasks)
-
   return (
-    <div
-      className="w-full flex flex-1 flex-col gap-4 mt-4"
-    >
+    <div className="w-full flex flex-1 flex-col gap-4 mt-4">
       <div className="w-full flex flex-col border rounded border-slate-200 p-4 gap-1">
         <div className="w-full flex flex-row items-center justify-between">
           <div className="flex-1">
@@ -55,11 +46,13 @@ function ConsultationItem(props: Props) {
             <div className="flex-row items-center">
               <button
                 className="mr-3"
-                onClick={() => navigate('/edit-consultation', {
-                  state: {
-                    data: props?.data
-                  }
-                })}
+                onClick={() =>
+                  navigate("/edit-consultation", {
+                    state: {
+                      data: props?.data,
+                    },
+                  })
+                }
                 disabled={props?.data?.status === "cancelled"}
               >
                 <svg
@@ -67,7 +60,9 @@ function ConsultationItem(props: Props) {
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
-                  stroke={props?.data?.status === "cancelled" ? "#cbd5e1" : "#334155"}
+                  stroke={
+                    props?.data?.status === "cancelled" ? "#cbd5e1" : "#334155"
+                  }
                   className="w-4 h-4"
                 >
                   <path
@@ -81,15 +76,17 @@ function ConsultationItem(props: Props) {
                 <AlertDialogTrigger
                   disabled={props?.data?.status === "cancelled"}
                 >
-                  <button
-                    disabled={props?.data?.status === "cancelled"}
-                  >
+                  <button disabled={props?.data?.status === "cancelled"}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
-                      stroke={props?.data?.status === "cancelled" ? "#fca5a5" : "#EF4444"}
+                      stroke={
+                        props?.data?.status === "cancelled"
+                          ? "#fca5a5"
+                          : "#EF4444"
+                      }
                       className="w-4 h-4"
                     >
                       <path
@@ -102,7 +99,9 @@ function ConsultationItem(props: Props) {
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure you want to cancel?</AlertDialogTitle>
+                    <AlertDialogTitle>
+                      Are you sure you want to cancel?
+                    </AlertDialogTitle>
                     <AlertDialogDescription>
                       This action cannot be undone.
                     </AlertDialogDescription>
@@ -147,9 +146,8 @@ function ConsultationItem(props: Props) {
             {/* Expired */} Cancelled
           </p>
         </div>
-        {activeTasks.find(
-          (item) => item.consultation_id === props?.data?.id
-        ) ? (
+        {activeTasks &&
+        activeTasks.find((item) => item.consultation_id === props?.data?.id) ? (
           <div className="rounded-full px-4 py-1 bg-slate-100 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
             <p className="font-medium text-xs text-center text-slate-900">
               Joined
