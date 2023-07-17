@@ -18,6 +18,8 @@ import { ColorRing } from "react-loader-spinner";
 import joinConsultation from "../../api/consultations/join-consultation";
 import cancelConsultation from "../../api/consultations/cancel-consultation";
 import { useToast } from "../ui/use-toast";
+import checkIfTimerOnActive from "../../lib/checkIfTimerOff";
+import stopTaskApi from "../../api/stopTask";
 
 interface Props {
   data: any;
@@ -32,6 +34,28 @@ function ConsultationItem(props: Props) {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [joining, join] = useState<boolean>(false);
+
+  const stopTask = (taskId: number) => {
+    stopTaskApi({ taskId })
+      .then(() => {
+        console.log('has run stop task first')
+        join(true);
+        joinConsultation(props?.data?.id)
+          .then((response) => {
+            navigate("/", { replace: true });
+          })
+          .catch((error) => {
+            toast({
+              title: "Error",
+              description: error,
+            });
+          });
+      })
+      .catch((error) => {
+        // console.error(error?.response?.data?.message || "Something went wrong");
+      });
+  };
+
 
   return (
     <div className="w-full flex flex-1 flex-col gap-4 mt-4">
@@ -163,17 +187,38 @@ function ConsultationItem(props: Props) {
               }`}
               disabled={joining}
               onClick={() => {
-                join(true);
-                joinConsultation(props?.data?.id)
-                  .then((response) => {
-                    navigate("/", { replace: true });
-                  })
-                  .catch((error) => {
-                    toast({
-                      title: "Error",
-                      description: error,
-                    });
-                  });
+                if (activeTasks) {
+                  if (activeTasks.length > 0) {
+                    const list: any = checkIfTimerOnActive(activeTasks)
+                    if (list?.length > 0) {
+                      stopTask(list[0]?.task_id)
+                    } else {
+                      join(true);
+                      joinConsultation(props?.data?.id)
+                        .then((response) => {
+                          navigate("/", { replace: true });
+                        })
+                        .catch((error) => {
+                          toast({
+                            title: "Error",
+                            description: error,
+                          });
+                        });
+                    }
+                  } else {
+                    join(true);
+                    joinConsultation(props?.data?.id)
+                      .then((response) => {
+                        navigate("/", { replace: true });
+                      })
+                      .catch((error) => {
+                        toast({
+                          title: "Error",
+                          description: error,
+                        });
+                      });
+                  }
+                }
               }}
             >
               {joining ? (
