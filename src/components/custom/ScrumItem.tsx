@@ -4,7 +4,6 @@ import { Button } from "../ui";
 import { ColorRing } from "react-loader-spinner";
 import startTaskApi from "../../api/startTask";
 import useStore from "../../store";
-import moment from "moment";
 
 interface Props {
   data: any;

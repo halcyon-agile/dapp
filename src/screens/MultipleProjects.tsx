@@ -176,6 +176,8 @@ function MultipleProjects() {
     return formatHours(hours);
   };
 
+  console.log('active', activeTasks)
+
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
       <div className="items-center justify-center text-sm flex flex-col w-full gap-2">
