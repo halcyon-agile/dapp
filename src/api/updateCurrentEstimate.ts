@@ -9,7 +9,7 @@ const updateCurrentEstimate = async ({
 }: {
   taskId: number;
   estimate: number;
-  requiredByTime: boolean;
+  requiredByTime?: boolean;
 }): Promise<Task | AxiosError | any> => {
   const formData = new FormData()
   formData.append("estimate", estimate.toString())
