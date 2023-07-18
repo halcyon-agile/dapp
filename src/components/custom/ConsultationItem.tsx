@@ -18,7 +18,7 @@ import { ColorRing } from "react-loader-spinner";
 import joinConsultation from "../../api/consultations/join-consultation";
 import cancelConsultation from "../../api/consultations/cancel-consultation";
 import { useToast } from "../ui/use-toast";
-import checkIfTimerOnActive from "../../lib/checkIfTimerOff";
+import checkIfTimerOff from "../../lib/checkIfTimerOff";
 import stopTaskApi from "../../api/stopTask";
 
 interface Props {
@@ -189,7 +189,7 @@ function ConsultationItem(props: Props) {
               onClick={() => {
                 if (activeTasks) {
                   if (activeTasks.length > 0) {
-                    const list: any = checkIfTimerOnActive(activeTasks)
+                    const list: any = checkIfTimerOff(activeTasks)
                     if (list?.length > 0) {
                       stopTask(list[0]?.task_id)
                     } else {

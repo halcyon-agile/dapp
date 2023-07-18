@@ -3,8 +3,9 @@ import { Button } from "../ui";
 import { ColorRing } from "react-loader-spinner";
 import startTaskApi from "../../api/startTask";
 import useActiveTasks from "../../data/use-active-tasks";
-import checkIfTimerOnActive from "../../lib/checkIfTimerOff";
+import checkIfTimerOff from "../../lib/checkIfTimerOff";
 import stopTaskApi from "../../api/stopTask";
+import { useToast } from "../ui/use-toast";
 
 interface Props {
   data: any;
@@ -13,6 +14,7 @@ interface Props {
 function ScrumItem(props: Props) {
   const [joining, join] = useState<boolean>(false);
   const { data: activeTasks, refetch: refetchActiveTasks } = useActiveTasks();
+  const { toast } = useToast();
 
   const stopTask = (taskId: number) => {
     stopTaskApi({ taskId })
@@ -26,9 +28,13 @@ function ScrumItem(props: Props) {
           })
           .catch((error: { response: { data: { message: any } } }) => {
             join(false)
-            console.log('error',
-              error?.response?.data?.message || "Something went wrong"
-            );
+            toast({
+              title: "Error",
+              description: error?.response?.data?.message || "Something went wrong",
+            });
+            // console.log('error',
+            //   error?.response?.data?.message || "Something went wrong"
+            // );
           });
         refetchActiveTasks();
       })
@@ -64,7 +70,8 @@ function ScrumItem(props: Props) {
             onClick={() => {
               if (activeTasks) {
                 if (activeTasks.length > 0) {
-                  const list: any = checkIfTimerOnActive(activeTasks)
+                  const list: any = checkIfTimerOff(activeTasks)
+                  // console.log('list', list)
                   if (list?.length > 0) {
                     stopTask(list[0]?.task_id)
                   } else {
@@ -76,12 +83,13 @@ function ScrumItem(props: Props) {
                       })
                       .catch((error: { response: { data: { message: any } } }) => {
                         join(false)
-                        console.log('error',
-                          error?.response?.data?.message || "Something went wrong"
-                        );
+                        toast({
+                          title: "Error",
+                          description: error?.response?.data?.message || "Something went wrong",
+                        });
                       });
                   }
-                  console.log('list', list)
+                  // console.log('list', list)
                 } else {
                   join(true);
                   startTaskApi(props?.data?.id)
@@ -91,9 +99,10 @@ function ScrumItem(props: Props) {
                     })
                     .catch((error: { response: { data: { message: any } } }) => {
                       join(false)
-                      console.log('error',
-                        error?.response?.data?.message || "Something went wrong"
-                      );
+                      toast({
+                        title: "Error",
+                        description: error?.response?.data?.message || "Something went wrong",
+                      });
                     });
                 }
               }
