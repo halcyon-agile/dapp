@@ -24,12 +24,15 @@ function SelectTask() {
   const projectIsSelected = selectedProject !== null;
 
   useEffect(() => {
+    fetch(true)
     const userData = localStorage.getItem("token");
     if (!userData) {
       navigate("/login", {
         replace: true,
       });
     }
+
+    setTasks([])
 
     const fetchProjects = async () => {
       try {
@@ -44,12 +47,15 @@ function SelectTask() {
   }, []);
 
   useEffect(() => {
+    fetch(true)
     const userData = localStorage.getItem("token");
     if (!userData) {
       navigate("/login", {
         replace: true,
       });
     }
+
+    setTasks([])
 
     const fetchTasks = async (filter: number) => {
       try {
@@ -97,6 +103,8 @@ function SelectTask() {
         console.error(error?.response?.data?.message || "Something went wrong");
       });
   };
+
+  console.log(tasks)
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between text-black p-5 font-inter">
