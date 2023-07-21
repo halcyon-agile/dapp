@@ -75,10 +75,14 @@ function StopTaskButton(props: Props) {
             <Input
               id="estimate"
               value={currentEstimate}
-              onChange={(e: any) =>
-                setCurrentEstimate(e.target.value)
-              }
+              onChange={(e: any) => {
+                const re = /^[0-9\b]+$/;
+                if (e.target.value === '' || re.test(e.target.value)) {
+                  setCurrentEstimate(e.target.value)
+                }
+              }}
               className="col-span-3"
+              inputMode="numeric"
             />
           </div>
         </div>
