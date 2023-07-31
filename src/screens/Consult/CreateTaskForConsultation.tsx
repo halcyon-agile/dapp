@@ -21,24 +21,30 @@ import {
   SelectValue,
   Textarea,
 } from "../../components/ui";
-import { Project, Task } from "@/types";
+import { Project } from "@/types";
 import getProjects from "../../api/getProjects";
 import { AxiosError } from "axios";
-import getTasks from "../../api/getTasks";
-import useActiveTasks from "../../data/use-active-tasks";
 import { cn } from "../../lib/utils";
+import createSuddenConsultation from "../../api/consultations/create-sudden-consultation";
+import useTaskTypes from "../../data/use-task-types";
 
 function CreateTaskForConsultation() {
-  const { data: activeTasks } = useActiveTasks();
+  const {
+    status: taskTypesStatus,
+    data: taskTypes,
+    error: taskTypesError,
+  } = useTaskTypes();
   const navigate = useNavigate()
   const [loading, setLoading] = useState<boolean>(false)
   const [form, setForm] = useState<{
+    name: string,
     description: string,
     start: any,
     end: any,
     start_time: string,
     end_time: string,
   }>({
+    name: '',
     description: '',
     start: '',
     end: '',
@@ -48,8 +54,7 @@ function CreateTaskForConsultation() {
   const [fetching, fetch] = useState<boolean>(false)
   const [projects, setProjects] = useState<any>([]);
   const [selectedProject, setSelectedProject] = useState<any>();
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [selectedTask, setSelectedTask] = useState<any>();
+  const [selectedTaskType, setSelectedTaskType] = useState<any>();
 
   useEffect(() => {
     fetch(true)
@@ -65,39 +70,11 @@ function CreateTaskForConsultation() {
     fetchProjects();
   }, [])
 
-  useEffect(() => {
-    fetch(true)
-    const userData = localStorage.getItem("token");
-    if (!userData) {
-      navigate("/login", {
-        replace: true,
-      });
-    }
-
-    setTasks([])
-
-    const fetchTasks = async (filter: number) => {
-      try {
-        const fetchedTasks: Task[] = await getTasks(filter);
-        setTasks(
-          fetchedTasks.filter(
-            (task) =>
-              !activeTasks?.find((activeTask) => activeTask.task.id === task.id)
-          )
-        );
-        fetch(false);
-      } catch (error: AxiosError | any) {
-        fetch(false);
-      }
-    };
-
-    fetchTasks(selectedProject);
-  }, [selectedProject]);
-
   console.log(projects)
 
   const submit = () => {
     setLoading(true)
+    createSuddenConsultation(selectedProject, selectedTaskType, form.name, form.description, form.start, form.end, form.start_time, form.end_time)
     // suddenConsultation(task?.id, moment().set({'hour': Number(form.start.split(':')[0]), 'minute': Number(form.end.split(':')[1])}).format(), moment().set({'hour': Number(form.end.split(':')[0]), 'minute': Number(form.end.split(':')[1])}).format())
     //   .then(() => {
     //     setLoading(false)
@@ -113,10 +90,10 @@ function CreateTaskForConsultation() {
   };
 
   const handleTaskChange = (value: any) => {
-    setSelectedTask(value)
+    setSelectedTaskType(value)
   }
 
-  // console.log('selected', tasks)
+  console.log(taskTypes)
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-between text-black p-5 font-inter">
@@ -164,17 +141,17 @@ function CreateTaskForConsultation() {
             htmlFor="taskName"
             className={`font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
           >
-            Task Name
+            Task Type
           </Label>
-          {tasks.length > 0 ? (
+          {taskTypesStatus === "success" ? (
             <Select onValueChange={handleTaskChange}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a task" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>Task</SelectLabel>
-                  {tasks.map((data: any) => (
+                  <SelectLabel>Type</SelectLabel>
+                  {taskTypes.map((data: any) => (
                     <SelectItem key={data?.id} value={data?.id}>{data?.name}</SelectItem>
                   ))}
                 </SelectGroup>
@@ -264,6 +241,23 @@ function CreateTaskForConsultation() {
         </div>
         <div className="grid w-full items-center gap-1.5">
           <Label
+            htmlFor="taskName"
+            className="font-medium text-sm self-start flex flex-row gap-2.5 items-center"
+          >
+            Task Name
+          </Label>
+          <Input
+            type="taskName"
+            id="taskName"
+            placeholder="< Task Name >"
+            className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
+            autoCapitalize="none"
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            value={form.name}
+          />
+        </div>
+        <div className="grid w-full items-center gap-1.5">
+          <Label
             className="font-medium text-sm self-start flex flex-row gap-2.5 items-center"
           >
             Description
@@ -333,9 +327,9 @@ function CreateTaskForConsultation() {
           type="submit"
           onClick={submit}
         >
-          {loading ? (
+          {(loading || fetching) ? (
             <ColorRing
-              visible={loading}
+              visible={(loading || fetching)}
               height="24"
               width="24"
               ariaLabel="blocks-loading"
