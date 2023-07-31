@@ -273,45 +273,50 @@ function CreateTaskForConsultation() {
             onChange={(e) => setForm({ ...form, description: e.target.value })}
           />
         </div>
-        <div className="w-full flex flex-row items-center justify-between gap-4">
-          <div className="flex-1 flex-col gap-1.5">
-            <Label
-              htmlFor="startTime"
-              className="font-medium text-sm text-slate-900 self-start"
-            >
-              Start Time
-            </Label>
-            <Input
-              type="time"
-              id="startTime"
-              placeholder="< Start Time >"
-              className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
-              autoCapitalize="none"
-              onChange={(e) => {
-                setForm({...form, start: e?.currentTarget?.value})
-              }}
-              value={form.start}
-            />
+        <div className="rounded-lg p-4 border border-slate-200">
+          <div className="border-b border-slate-200 pb-4 mb-4">
+            <p className="text-base text-gray-700">Consultation</p>
           </div>
-          <div className="flex-1 flex-col gap-1.5">
-            <Label
-              htmlFor="endTime"
-              className="font-medium text-sm text-slate-900 self-start"
-            >
-              End Time
-            </Label>
-            <Input
-              type="time"
-              id="endTime"
-              placeholder="< End Time >"
-              className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
-              autoCapitalize="none"
-              onChange={(e) => {
-                setForm({...form, end: e?.currentTarget?.value})
-              }}
-              // onChange={(event: any) => console.log(moment(event?.target?.valueAsDate).set({'year': moment().year(), 'day': moment().day(), 'month': moment().month()}).format('HH:mm'))}
-              value={form.end}
-            />
+          <div className="w-full flex flex-row items-center justify-between gap-4">
+            <div className="flex-1 flex-col gap-1.5">
+              <Label
+                htmlFor="startTime"
+                className="font-medium text-sm text-slate-900 self-start"
+              >
+                Start Time
+              </Label>
+              <Input
+                type="time"
+                id="startTime"
+                placeholder="< Start Time >"
+                className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
+                autoCapitalize="none"
+                onChange={(e) => {
+                  setForm({...form, start: e?.currentTarget?.value})
+                }}
+                value={form.start}
+              />
+            </div>
+            <div className="flex-1 flex-col gap-1.5">
+              <Label
+                htmlFor="endTime"
+                className="font-medium text-sm text-slate-900 self-start"
+              >
+                End Time
+              </Label>
+              <Input
+                type="time"
+                id="endTime"
+                placeholder="< End Time >"
+                className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
+                autoCapitalize="none"
+                onChange={(e) => {
+                  setForm({...form, end: e?.currentTarget?.value})
+                }}
+                // onChange={(event: any) => console.log(moment(event?.target?.valueAsDate).set({'year': moment().year(), 'day': moment().day(), 'month': moment().month()}).format('HH:mm'))}
+                value={form.end}
+              />
+            </div>
           </div>
         </div>
       </div>
