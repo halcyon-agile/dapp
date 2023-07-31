@@ -45,6 +45,7 @@ function EditConsultation() {
       started_at: moment(consultation?.started_at).format("MM/DD/YYYY"),
       duration: consultation?.duration,
     })
+    setMembers(consultation?.assignees)
     setSelected(consultation?.type === "fixed" ? 0 : 1)
     getUsers().then((data) => {
       // console.log('data', data)
@@ -295,7 +296,7 @@ function EditConsultation() {
             // const list = members;
             // list.push({ id: user?.data?.id, first_name: user?.data?.first_name, last_name: user?.data?.last_name });
             requestConsultation(
-              location?.state?.id,
+              consultation?.id,
               form.started_at,
               form.duration,
               selected === 0 ? "fixed" : "flexible",
@@ -306,7 +307,7 @@ function EditConsultation() {
               navigate("/", { replace: true });
             });
           }}
-          disabled
+          disabled={members.length <= 0}
         >
           Save Changes
         </Button>

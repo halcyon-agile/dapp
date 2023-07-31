@@ -6,7 +6,7 @@ import { Terminal } from "lucide-react";
 import useStore from "../store";
 import getRedDots from "../api/getRedDots";
 import finishWork from "../api/finishWork";
-import { AddRemarksDialog, Graph, StopTaskButton, Timer } from "../components/custom";
+import { AddRemarksDialog, ConsultDialog, Graph, StopTaskButton, Timer } from "../components/custom";
 import {
   Alert,
   AlertDescription,
@@ -463,7 +463,10 @@ function MultipleProjects() {
             </div>
             <p className="text-xs text-gray-500">Portal</p>
           </a>
-          <button
+          <ConsultDialog
+            reddot={reddot?.consultations}
+          />
+          {/* <button
             className="flex flex-col items-center relative"
             onClick={() => navigate("/consultations")}
           >
@@ -490,7 +493,7 @@ function MultipleProjects() {
               </svg>
             </div>
             <p className="text-xs text-gray-500">Consult</p>
-          </button>
+          </button> */}
           <button
             className="flex flex-col items-center relative"
             onClick={() => navigate("/scrum")}

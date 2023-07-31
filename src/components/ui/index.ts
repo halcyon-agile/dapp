@@ -9,6 +9,17 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "./tabs"
 import { RadioGroup, RadioGroupItem } from "./radio-group"
 
 import {
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectLabel,
+  SelectItem,
+  SelectSeparator,
+} from "./select"
+
+import {
   Command,
   CommandDialog,
   CommandInput,
@@ -137,4 +148,12 @@ export {
   HoverCard,
   HoverCardTrigger,
   HoverCardContent,
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectLabel,
+  SelectItem,
+  SelectSeparator,
 }
