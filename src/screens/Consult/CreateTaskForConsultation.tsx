@@ -70,11 +70,17 @@ function CreateTaskForConsultation() {
     fetchProjects();
   }, [])
 
-  console.log(projects)
-
   const submit = () => {
     setLoading(true)
-    createSuddenConsultation(selectedProject, selectedTaskType, form.name, form.description, form.start, form.end, form.start_time, form.end_time)
+    createSuddenConsultation(selectedProject, selectedTaskType, form.name, form.description, moment(form.start).format(), moment(form.end).format(), moment().set({'hour': Number(form.start_time.split(':')[0]), 'minute': Number(form.start_time.split(':')[1])}).format(), moment().set({'hour': Number(form.end_time.split(':')[0]), 'minute': Number(form.end_time.split(':')[1])}).format())
+      .then(() => {
+        setLoading(false)
+        navigate('/')
+      })
+      .catch((e: any) => {
+        console.log(e)
+        setLoading(false)
+      })
     // suddenConsultation(task?.id, moment().set({'hour': Number(form.start.split(':')[0]), 'minute': Number(form.end.split(':')[1])}).format(), moment().set({'hour': Number(form.end.split(':')[0]), 'minute': Number(form.end.split(':')[1])}).format())
     //   .then(() => {
     //     setLoading(false)
@@ -92,8 +98,6 @@ function CreateTaskForConsultation() {
   const handleTaskChange = (value: any) => {
     setSelectedTaskType(value)
   }
-
-  console.log(taskTypes)
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-between text-black p-5 font-inter">
@@ -146,7 +150,7 @@ function CreateTaskForConsultation() {
           {taskTypesStatus === "success" ? (
             <Select onValueChange={handleTaskChange}>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a task" />
+                <SelectValue placeholder="Select type" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>

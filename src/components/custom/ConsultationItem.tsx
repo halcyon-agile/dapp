@@ -56,7 +56,6 @@ function ConsultationItem(props: Props) {
       });
   };
 
-
   return (
     <div className="w-full flex flex-1 flex-col gap-4 mt-4">
       <div className="w-full flex flex-col border rounded border-slate-200 p-4 gap-1">
@@ -157,9 +156,9 @@ function ConsultationItem(props: Props) {
         </div>
         <p className="font-medium text-xs text-gray-500">
           {props?.data?.type} |{" "}
-          {moment(props?.data?.started_at).format("MMM DD, YYYY")}
+          {moment(props?.data?.started_at).format("MMM DD, YYYY hh:mm A")}
         </p>
-        <p className="font-medium text-xs text-gray-500">from {props?.name}</p>
+        {/* <p className="font-medium text-xs text-gray-500">from {props?.name}</p> */}
         {/* display if consultation is expired */}
         <div
           className={`rounded-full px-4 py-1 bg-slate-100 max-w-[100px] mt-3.5 h-[24px] ${
@@ -185,7 +184,7 @@ function ConsultationItem(props: Props) {
                   ? "hidden"
                   : ""
               }`}
-              disabled={joining}
+              disabled={joining || moment(props?.data?.started_at).diff(moment(), 'd') < 0}
               onClick={() => {
                 if (activeTasks) {
                   if (activeTasks.length > 0) {
