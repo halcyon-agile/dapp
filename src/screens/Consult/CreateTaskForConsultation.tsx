@@ -292,9 +292,9 @@ function CreateTaskForConsultation() {
                 className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
                 autoCapitalize="none"
                 onChange={(e) => {
-                  setForm({...form, start: e?.currentTarget?.value})
+                  setForm({...form, start_time: e?.currentTarget?.value})
                 }}
-                value={form.start}
+                value={form.start_time}
               />
             </div>
             <div className="flex-1 flex-col gap-1.5">
@@ -311,10 +311,10 @@ function CreateTaskForConsultation() {
                 className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
                 autoCapitalize="none"
                 onChange={(e) => {
-                  setForm({...form, end: e?.currentTarget?.value})
+                  setForm({...form, end_time: e?.currentTarget?.value})
                 }}
                 // onChange={(event: any) => console.log(moment(event?.target?.valueAsDate).set({'year': moment().year(), 'day': moment().day(), 'month': moment().month()}).format('HH:mm'))}
-                value={form.end}
+                value={form.end_time}
               />
             </div>
           </div>
