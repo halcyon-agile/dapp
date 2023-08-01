@@ -158,7 +158,7 @@ function ConsultationItem(props: Props) {
           {props?.data?.type} |{" "}
           {moment(props?.data?.started_at).format("MMM DD, YYYY hh:mm A")}
         </p>
-        {/* <p className="font-medium text-xs text-gray-500">from {props?.name}</p> */}
+        <p className="font-medium text-xs text-gray-500">from {!props?.isFromOthers ? "You" : `${props?.data?.admin?.first_name} ${props?.data?.admin?.last_name}`}</p>
         {/* display if consultation is expired */}
         <div
           className={`rounded-full px-4 py-1 bg-slate-100 max-w-[100px] mt-3.5 h-[24px] ${
