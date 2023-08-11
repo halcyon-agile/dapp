@@ -56,7 +56,7 @@ function Graph(props: Props) {
   useEffect(() => {
     const interval = setInterval(() => {
       const timeDiff = moment.duration(
-        moment().diff(moment(props?.started_at))
+        moment().utc(true).diff(moment(props?.started_at).utc(true))
       );
       const hour = timeDiff.hours();
       const formatHour = Math.floor(hour);

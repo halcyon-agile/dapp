@@ -154,18 +154,17 @@ function SelectTask() {
           )}
           {tasks.length > 0 ? (
             tasks.map((data: any, index: number) => (
-              <div className="flex w-full py-4 border-b" key={data?.id}>
-                <button
-                  className={`py-1.5 px-2 w-full rounded-md flex flex-row items-center justify-between ${
-                    selectedProject === index && "bg-slate-100"
-                  }`}
-                  onClick={() => {
-                    if (projectIsSelected) {
-                      setCurrentProject(null);
-                    } else {
-                      setCurrentProject(index);
-                    }
-                  }}
+              <button
+                className={`flex w-full py-2 border-b ${
+                  selectedProject === index && "bg-slate-100"
+                }`}
+                key={data?.id}
+                onClick={() => {
+                  setCurrentProject(index);
+                }}
+              >
+                <div
+                  className={`py-1.5 px-2 w-full rounded-md flex flex-row items-center justify-between`}
                 >
                   <p
                     className={`left-0 top-0 w-full text-1xl flex-1 text-left font-normal text-base text-slate-700`}
@@ -186,8 +185,8 @@ function SelectTask() {
                       d="M8.25 4.5l7.5 7.5-7.5 7.5"
                     />
                   </svg>
-                </button>
-              </div>
+                </div>
+              </button>
             ))
           ) : !fetching ? (
             <Alert>

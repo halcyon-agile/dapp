@@ -55,8 +55,10 @@
         "fullscreen": false,
         "resizable": true,
         "title": "HARP v0.3.2",
-        "width": 800,
-        "height": 600
+        "width": 650,
+        "height": 700,
+        "minWidth": 650,
+        "minHeight": 700
       }
     ],
     "systemTray": {

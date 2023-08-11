@@ -156,7 +156,7 @@ function ConsultationItem(props: Props) {
         </div>
         <p className="font-medium text-xs text-gray-500">
           {props?.data?.type} |{" "}
-          {moment(props?.data?.started_at).format("MMM DD, YYYY hh:mm A")}
+          {moment(props?.data?.started_at).utc(true).format("MMM DD, YYYY hh:mm A")}
         </p>
         <p className="font-medium text-xs text-gray-500">from {!props?.isFromOthers ? "You" : `${props?.data?.admin?.first_name} ${props?.data?.admin?.last_name}`}</p>
         {/* display if consultation is expired */}
@@ -184,7 +184,7 @@ function ConsultationItem(props: Props) {
                   ? "hidden"
                   : ""
               }`}
-              disabled={joining || moment(props?.data?.started_at).diff(moment(), 'd') < 0}
+              disabled={joining || moment(props?.data?.started_at).utc(true).diff(moment(), 'd') < 0}
               onClick={() => {
                 if (activeTasks) {
                   if (activeTasks.length > 0) {

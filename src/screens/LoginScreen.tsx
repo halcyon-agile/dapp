@@ -42,7 +42,6 @@ function LoginScreen() {
       );
     }
   };
-
   return (
     <main className="flex flex-col items-center justify-center text-black min-h-screen -mt-32 gap-2 p-14">
       <div className="items-center justify-center font-mono text-sm px-10 pt-8 flex flex-row">

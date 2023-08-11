@@ -9,8 +9,7 @@ export interface RedDot {
 
 const getRedDots = async (): Promise<RedDot[] | AxiosError | any> => {
   try {
-
-    let dayOfTheWeek = moment().format('dddd')
+    let dayOfTheWeek = moment().utc(true).format('dddd')
     const redDot = await request.get(`/api/red-dots?day=${dayOfTheWeek.toLowerCase()}`);
     return redDot.data;
   } catch (error) {

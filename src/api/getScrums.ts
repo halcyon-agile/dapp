@@ -5,7 +5,7 @@ import { Scrum } from "../types";
 
 const getScrums = async (): Promise<Scrum[] | AxiosError | any> => {
   try {
-    let dayOfTheWeek = moment().format("dddd");
+    let dayOfTheWeek = moment().utc(true).format("dddd");
     const scrums = await request.get(
       `/api/scrums?day=${dayOfTheWeek.toLowerCase()}`
     );

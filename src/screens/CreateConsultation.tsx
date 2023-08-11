@@ -88,7 +88,7 @@ function CreateConsultation() {
                 onSelect={(value) =>
                   setForm({
                     ...form,
-                    started_at: moment(value).format("MM/DD/YYYY"),
+                    started_at: moment(value).utc(true).format("MM/DD/YYYY"),
                   })
                 }
                 initialFocus
