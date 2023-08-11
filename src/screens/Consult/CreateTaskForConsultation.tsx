@@ -48,8 +48,8 @@ function CreateTaskForConsultation() {
     description: '',
     start: '',
     end: '',
-    start_time: moment().utc().format('HH:mm'),
-    end_time: moment().utc().format('HH:mm'),
+    start_time: moment().format('HH:mm'),
+    end_time: moment().format('HH:mm'),
   })
   const [fetching, fetch] = useState<boolean>(false)
   const [projects, setProjects] = useState<any>([]);

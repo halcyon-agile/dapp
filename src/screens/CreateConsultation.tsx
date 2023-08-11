@@ -29,9 +29,11 @@ function CreateConsultation() {
   const [members, setMembers] = useState<any>([]);
   const [form, setForm] = useState<{
     started_at: any;
+    time: any;
     duration: string;
   }>({
-    started_at: "",
+    started_at: moment().utc().format('MM/DD/YYYY'),
+    time: moment().format('HH:mm'),
     duration: "",
   });
   const [creating, create] = useState<boolean>(false);
@@ -109,8 +111,10 @@ function CreateConsultation() {
             placeholder="< Time >"
             className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
             autoCapitalize="none"
-            // onChange={(e) => setForm({ ...form, password: e.target.value })}
-            // value={form.password}
+            onChange={(e) => {
+              setForm({...form, time: e?.currentTarget?.value})
+            }}
+            value={form.time}
           />
         </div>
       </div>
@@ -286,7 +290,7 @@ function CreateConsultation() {
             // list.push({ id: user?.data?.id, first_name: user?.data?.first_name, last_name: user?.data?.last_name });
             requestConsultation(
               location?.state?.id,
-              form.started_at,
+              moment(form.started_at).utc().set({'hour': Number(form.time.split(':')[0]), 'minute': Number(form.time.split(':')[1])}).format(),
               form.duration,
               selected === 0 ? "fixed" : "flexible",
               members

@@ -16,8 +16,8 @@ function LogConsultation() {
   const location = useLocation()
   const [loading, setLoading] = useState<boolean>(false)
   const [form, setForm] = useState<{start: string, end: string}>({
-    start: moment().utc().format('HH:mm'),
-    end: moment().utc().format('HH:mm'),
+    start: moment().format('HH:mm'),
+    end: moment().format('HH:mm'),
   })
 
   const task = location?.state?.task
