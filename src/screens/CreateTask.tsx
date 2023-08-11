@@ -312,7 +312,7 @@ function CreateTask() {
                   onSelect={(value) =>
                     setForm({
                       ...form,
-                      started_at: moment(value).utc(true).format("MM/DD/YYYY"),
+                      started_at: moment(value).utc().format("MM/DD/YYYY"),
                     })
                   }
                   initialFocus
@@ -363,7 +363,7 @@ function CreateTask() {
                   onSelect={(value) =>
                     setForm({
                       ...form,
-                      ended_at: moment(value).utc(true).format("MM/DD/YYYY"),
+                      ended_at: moment(value).utc().format("MM/DD/YYYY"),
                     })
                   }
                   initialFocus

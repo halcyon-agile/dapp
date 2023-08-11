@@ -48,8 +48,8 @@ function CreateTaskForConsultation() {
     description: '',
     start: '',
     end: '',
-    start_time: moment().utc(true).format('HH:mm'),
-    end_time: moment().utc(true).format('HH:mm'),
+    start_time: moment().utc().format('HH:mm'),
+    end_time: moment().utc().format('HH:mm'),
   })
   const [fetching, fetch] = useState<boolean>(false)
   const [projects, setProjects] = useState<any>([]);
@@ -72,7 +72,7 @@ function CreateTaskForConsultation() {
 
   const submit = () => {
     setLoading(true)
-    createSuddenConsultation(selectedProject, selectedTaskType, form.name, form.description, moment(form.start).utc(true).format(), moment(form.end).utc(true).format(), moment().utc(true).set({'hour': Number(form.start_time.split(':')[0]), 'minute': Number(form.start_time.split(':')[1])}).format(), moment().utc(true).set({'hour': Number(form.end_time.split(':')[0]), 'minute': Number(form.end_time.split(':')[1])}).format())
+    createSuddenConsultation(selectedProject, selectedTaskType, form.name, form.description, moment(form.start).utc().format(), moment(form.end).utc().format(), moment().utc().set({'hour': Number(form.start_time.split(':')[0]), 'minute': Number(form.start_time.split(':')[1])}).format(), moment().utc().set({'hour': Number(form.end_time.split(':')[0]), 'minute': Number(form.end_time.split(':')[1])}).format())
       .then(() => {
         setLoading(false)
         navigate('/')
@@ -196,7 +196,7 @@ function CreateTaskForConsultation() {
                   onSelect={(value) =>
                     setForm({
                       ...form,
-                      start: moment(value).utc(true).format("MM/DD/YYYY"),
+                      start: moment(value).utc().format("MM/DD/YYYY"),
                     })
                   }
                   initialFocus
@@ -234,7 +234,7 @@ function CreateTaskForConsultation() {
                   onSelect={(value) =>
                     setForm({
                       ...form,
-                      end: moment(value).utc(true).format("MM/DD/YYYY"),
+                      end: moment(value).utc().format("MM/DD/YYYY"),
                     })
                   }
                   initialFocus

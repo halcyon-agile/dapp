@@ -42,7 +42,7 @@ function EditConsultation() {
   useEffect(() => {
     setForm({
       ...form,
-      started_at: moment(consultation?.started_at).utc(true).format("MM/DD/YYYY"),
+      started_at: moment(consultation?.started_at).utc().format("MM/DD/YYYY"),
       duration: consultation?.duration,
     })
     setMembers(consultation?.assignees)
@@ -99,7 +99,7 @@ function EditConsultation() {
                 onSelect={(value) =>
                   setForm({
                     ...form,
-                    started_at: moment(value).utc(true).format("MM/DD/YYYY"),
+                    started_at: moment(value).utc().format("MM/DD/YYYY"),
                   })
                 }
                 initialFocus

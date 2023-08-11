@@ -5,7 +5,7 @@ function Timer(props: { started_at: string }) {
   const [time, setTime] = useState("")
   useEffect(() => {
     const interval = setInterval(() => {
-      const timeDiff = moment.duration(moment().utc(true).diff(moment(props?.started_at).utc(true)))
+      const timeDiff = moment.duration(moment().utc().diff(moment(props?.started_at).utc()))
       const hour = timeDiff.hours()
       const formatHour = Math.floor(hour)
       const minute = timeDiff.minutes()
