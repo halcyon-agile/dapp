@@ -56,7 +56,7 @@ function Graph(props: Props) {
   useEffect(() => {
     const interval = setInterval(() => {
       const timeDiff = moment.duration(
-        moment().diff(moment(props?.started_at))
+        moment().utc().diff(moment(props?.started_at).utc())
       );
       const hour = timeDiff.hours();
       const formatHour = Math.floor(hour);
@@ -221,10 +221,14 @@ function Graph(props: Props) {
                           <Input
                             id="estimate"
                             value={currentEstimate}
-                            onChange={(e: any) =>
-                              setCurrentEstimate(e.target.value)
-                            }
+                            onChange={(e: any) => {
+                              const re = /^[0-9\b]+$/;
+                              if (e.target.value === '' || re.test(e.target.value)) {
+                                setCurrentEstimate(e.target.value)
+                              }
+                            }}
                             className="col-span-3"
+                            inputMode="numeric"
                           />
                         </div>
                       </div>

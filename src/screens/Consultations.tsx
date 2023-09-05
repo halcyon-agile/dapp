@@ -34,6 +34,8 @@ function Consultations() {
     });
   }, []);
 
+  console.log('consultations', consultations)
+
   return (
     <main className="flex min-h-screen flex-col p-5">
       <div className="left-0 top-0 w-full text-4xl py-2">

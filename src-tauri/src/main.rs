@@ -6,6 +6,17 @@ use tauri::{
 };
 
 fn main() {
+    let client = sentry_tauri::sentry::init((
+        "https://f7bceb39d153704ec84680b4bdc62ae6@o4505162703699968.ingest.sentry.io/4505683751403520",
+        sentry_tauri::sentry::ClientOptions {
+            release: sentry_tauri::sentry::release_name!(),
+            ..Default::default()
+        },
+    ));
+    // Everything before here runs in both app and crash reporter processes
+    let _guard = sentry_tauri::minidump::init(&client);
+    // Everything after here runs in only the app process
+
     // here `"quit".to_string()` defines the menu item id, and the second parameter is the menu item label.
     // let quit = CustomMenuItem::new("quit".to_string(), "Quit");
     let hide = CustomMenuItem::new("hide".to_string(), "Hide");
@@ -51,6 +62,7 @@ fn main() {
             },
             _ => {}
         })
+        .plugin(sentry_tauri::plugin())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

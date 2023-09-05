@@ -13,6 +13,9 @@ import {
   CreateConsultation,
   CreateTask,
   EditConsultation,
+  SelectTaskForConsult,
+  LogConsultation,
+  CreateTaskForConsultation,
 } from "../screens";
 
 const router = createBrowserRouter([
@@ -63,6 +66,18 @@ const router = createBrowserRouter([
   {
     path: "edit-consultation",
     element: <EditConsultation />,
+  },
+  {
+    path: "select-task-for-consultation",
+    element: <SelectTaskForConsult />,
+  },
+  {
+    path: "log-consultation",
+    element: <LogConsultation />,
+  },
+  {
+    path: "create-task-for-consultation",
+    element: <CreateTaskForConsultation />,
   },
 ]);
 

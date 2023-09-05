@@ -6,7 +6,7 @@ import { Terminal } from "lucide-react";
 import useStore from "../store";
 import getRedDots from "../api/getRedDots";
 import finishWork from "../api/finishWork";
-import { AddRemarksDialog, Graph, Timer } from "../components/custom";
+import { AddRemarksDialog, ConsultDialog, Graph, StopTaskButton, Timer } from "../components/custom";
 import {
   Alert,
   AlertDescription,
@@ -30,6 +30,8 @@ import {
   formatHours,
   getCurrentHoursSpentOnTask,
 } from "../lib/utils";
+import checkIfTimerOnActive from "../lib/checkIfTimerOff";
+import checkIfRequiredToUpdateEstimate from "../lib/checkIfRequiredToUpdateEstimate";
 
 function MultipleProjects() {
   const navigate = useNavigate();
@@ -124,7 +126,7 @@ function MultipleProjects() {
         refetchActiveTasks();
       })
       .catch((error) => {
-        // console.error(error?.response?.data?.message || "Something went wrong");
+        console.error(error?.response?.data?.message || "Something went wrong");
       });
   };
 
@@ -144,6 +146,26 @@ function MultipleProjects() {
 
     return formatHours(hours);
   };
+
+  const requiredByTime = (userID: string | undefined, list: any[], data: any) => {
+    const getUserFromList = list.find((x: any) => x.admin_id === userID)
+    if (data?.task?.require_estimate_time === 1) {
+      const totalRenderedHours = Number(Number(data?.total_minutes_spent / 60).toFixed(2)) + getCurrentHoursSpentOnTask(data?.started_at)
+      // console.log('total rendered', totalRenderedHours)
+      if (getUserFromList) {
+        // console.log(Math.floor(totalRenderedHours / Number(data?.task.estimate_time)) > getUserFromList?.estimate_update_counter)
+        if (Math.floor(totalRenderedHours / Number(data?.task.estimate_time)) > getUserFromList?.estimate_update_counter) {
+          return true
+        } else {
+          return false
+        }
+      }
+    }
+    return false
+  }
+
+  // console.log('user', user)
+  console.log('active', activeTasks)
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
@@ -199,7 +221,7 @@ function MultipleProjects() {
                   </div>
                   {data?.consultation_id === null ? (
                     <div className="flex-9 flex-row items-center justify-end">
-                      <Button
+                      {/* <Button
                         variant="outline"
                         className={`font-medium text-xs ml-4`}
                         onClick={() => {
@@ -207,7 +229,16 @@ function MultipleProjects() {
                         }}
                       >
                         Stop
-                      </Button>
+                      </Button> */}
+                      <StopTaskButton
+                        id={data?.task?.id}
+                        currentEstimate={Number(
+                          data?.task?.assignees[0]?.estimate || 0
+                        )}
+                        stopTask={() => stopTask(data?.task?.id)}
+                        isRequiredToUpdateEstimate={checkIfRequiredToUpdateEstimate(user?.data?.id, data?.task?.assignees, data)}
+                        isRequiredByTime={requiredByTime(user?.data?.id, data?.task?.assignees, data)}
+                      />
                       {data?.task?.project?.allow_consultation === 1 && (
                         <Button
                           variant="outline"
@@ -370,7 +401,7 @@ function MultipleProjects() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <button className="flex flex-col items-center">
+                <button className="flex flex-col items-center" onClick={() => checkIfTimerOnActive(activeTasks)}>
                   <div className="rounded-full border border-slate-200 p-2 mb-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -432,7 +463,10 @@ function MultipleProjects() {
             </div>
             <p className="text-xs text-gray-500">Portal</p>
           </a>
-          <button
+          <ConsultDialog
+            reddot={reddot?.consultations}
+          />
+          {/* <button
             className="flex flex-col items-center relative"
             onClick={() => navigate("/consultations")}
           >
@@ -459,7 +493,7 @@ function MultipleProjects() {
               </svg>
             </div>
             <p className="text-xs text-gray-500">Consult</p>
-          </button>
+          </button> */}
           <button
             className="flex flex-col items-center relative"
             onClick={() => navigate("/scrum")}

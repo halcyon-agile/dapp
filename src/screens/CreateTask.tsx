@@ -42,7 +42,7 @@ function CreateTask() {
     project_id: null,
     task_type_id: null,
     label: "",
-    estimate: "",
+    estimate: 0,
     started_at: "",
     ended_at: "",
   });
@@ -258,7 +258,13 @@ function CreateTask() {
               errors.estimate && "border-red-500"
             } text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5`}
             autoCapitalize="none"
-            onChange={(e) => setForm({ ...form, estimate: e.target.value })}
+            onChange={(e: any) => {
+              console.log('e', e)
+              const re = /^[0-9\b]+$/;
+              if (e.target.value === '' || re.test(e.target.value)) {
+                setForm({ ...form, estimate: e.target.value })
+              }
+            }}
             value={form.estimate}
           />
         </div>
@@ -306,7 +312,7 @@ function CreateTask() {
                   onSelect={(value) =>
                     setForm({
                       ...form,
-                      started_at: moment(value).format("MM/DD/YYYY"),
+                      started_at: moment(value).utc().format("MM/DD/YYYY"),
                     })
                   }
                   initialFocus
@@ -357,7 +363,7 @@ function CreateTask() {
                   onSelect={(value) =>
                     setForm({
                       ...form,
-                      ended_at: moment(value).format("MM/DD/YYYY"),
+                      ended_at: moment(value).utc().format("MM/DD/YYYY"),
                     })
                   }
                   initialFocus
