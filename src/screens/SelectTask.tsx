@@ -152,7 +152,7 @@ function SelectTask() {
             tasks.map((data: any, index: number) => (
               <button
                 className={`flex w-full py-2 border-b ${
-                  selectedProject === index && "bg-slate-100"
+                  selectedProject === index && "bg-slate-300"
                 }`}
                 key={data?.id}
                 onClick={() => {

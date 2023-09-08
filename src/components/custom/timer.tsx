@@ -1,7 +1,7 @@
 import moment from "moment";
 import { useEffect, useState } from "react";
 
-function Timer(props: { started_at: string }) {
+function Timer(props: { started_at: string, text_style?: string }) {
   const [time, setTime] = useState("")
   useEffect(() => {
     const interval = setInterval(() => {
@@ -15,7 +15,7 @@ function Timer(props: { started_at: string }) {
     return () => clearInterval(interval)
   }, [time])
   return (
-    <p className="font-medium text-base text-gray-700">
+    <p className={props?.text_style || "font-medium text-base text-gray-700"}>
       {time}
     </p>
   )
