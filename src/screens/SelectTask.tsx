@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ColorRing } from "react-loader-spinner";
 import { Terminal } from "lucide-react";
@@ -7,7 +7,7 @@ import getTasks from "../api/getTasks";
 import getProjects from "../api/getProjects";
 import useActiveTasks from "../data/use-active-tasks";
 import startTaskApi from "../api/startTask";
-import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
+import { Alert, AlertDescription, AlertTitle, Button, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../components/ui";
 import { AxiosError } from "axios";
 
 function SelectTask() {
@@ -37,7 +37,7 @@ function SelectTask() {
     const fetchProjects = async () => {
       try {
         const fetchProjects: Project[] = await getProjects();
-        setProjects([{ id: "", name: "Filter by project" }, ...fetchProjects]);
+        setProjects(fetchProjects);
         fetch(false);
       } catch (error: AxiosError | any) {
         fetch(false);
@@ -75,11 +75,6 @@ function SelectTask() {
     fetchTasks(projectFilter);
   }, [projectFilter]);
 
-  const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = event.target.value;
-    setProjectFilter(selectedValue);
-  };
-
   const selectedTask = selectedProject !== null ? tasks[selectedProject] : null;
 
   const startTask = () => {
@@ -113,19 +108,20 @@ function SelectTask() {
       </div>
 
       <div className="flex flex-col flex-1 bg-white w-full h-full text-black mt-5">
-        {projects.length > 0 ? (
-          <select
-            className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            onChange={handleSelectChange}
-          >
-            {projects.map((data: any) => (
-              <option key={`${data.id}`} value={`${data.id}`}>
-                {data.name}
-              </option>
-            ))}
-          </select>
-        ) : (
-          ""
+        {projects.length > 0 && (
+          <Select onValueChange={(value: any) => setProjectFilter(value)}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Filter by project" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Projects</SelectLabel>
+                {projects.map((data: any) => (
+                  <SelectItem key={data?.id} value={data?.id}>{data?.name}</SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         )}
         <div className="w-full mt-4 pb-2 border-b">
           <Button
