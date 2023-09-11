@@ -224,7 +224,7 @@ function Graph(props: Props) {
               {(props.totalRenderedHours / 8).toFixed(2)})
             </p>
             <div className="flex-[5] relative">
-              <p className="flex-1 pr-2 text-xs text-gray-500">Actual rendered hours</p>
+              <p className="flex-1 pr-2 text-xs text-gray-500">Actual Rendered Hours</p>
               <div
                 style={{
                   width: `${Math.min(

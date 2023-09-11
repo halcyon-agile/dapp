@@ -103,7 +103,7 @@ function SelectTaskForConsult() {
               <SelectValue placeholder="Select a project" />
             </SelectTrigger>
             <SelectContent>
-              <SelectGroup>
+              <SelectGroup className="max-h-[200px]">
                 <SelectLabel>Project</SelectLabel>
                 {projects.map((data: any) => (
                   <SelectItem key={data?.id} value={data?.id}>{data?.name}</SelectItem>

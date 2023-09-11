@@ -160,7 +160,7 @@ function CreateTask() {
                 <SelectValue placeholder="Select a project" />
               </SelectTrigger>
               <SelectContent>
-                <SelectGroup>
+                <SelectGroup className="max-h-[200px]">
                   <SelectLabel>Projects</SelectLabel>
                   {projects.map((project: any) => (
                     <SelectItem key={`${project?.id}`} value={`${project?.id}`}>{project?.name}</SelectItem>
@@ -194,7 +194,7 @@ function CreateTask() {
                 <SelectValue placeholder="Select a type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectGroup>
+                <SelectGroup className="max-h-[200px]">
                   <SelectLabel>Project Types</SelectLabel>
                   {taskTypes.map((type: any) => (
                     <SelectItem key={`${type?.id}`} value={`${type?.id}`}>{type?.name}</SelectItem>

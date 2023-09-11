@@ -106,7 +106,6 @@ function SelectTask() {
           Select a Task
         </p>
       </div>
-
       <div className="flex flex-col flex-1 bg-white w-full h-full text-black mt-5">
         {projects.length > 0 && (
           <Select onValueChange={(value: any) => setProjectFilter(value)}>
@@ -114,7 +113,7 @@ function SelectTask() {
               <SelectValue placeholder="Filter by project" />
             </SelectTrigger>
             <SelectContent>
-              <SelectGroup>
+              <SelectGroup className="max-h-[200px]">
                 <SelectLabel>Projects</SelectLabel>
                 {projects.map((data: any) => (
                   <SelectItem key={data?.id} value={data?.id}>{data?.name}</SelectItem>
@@ -194,36 +193,36 @@ function SelectTask() {
             </Alert>
           ) : null}
         </div>
-        <div className="w-full my-4 items-end flex flex-row justify-end gap-4">
-          {location?.state?.screen !== "login" && (
-            <Button
-              variant="ghost"
-              className="border border-slate-200"
-              onClick={() => navigate("/")}
-            >
-              Cancel
-            </Button>
-          )}
+      </div>
+      <div className="w-full my-4 items-end flex flex-row justify-end gap-4">
+        {location?.state?.screen !== "login" && (
           <Button
-            className="bg-cyan-500"
-            onClick={startTask}
-            disabled={startedTask || !projectIsSelected}
+            variant="ghost"
+            className="border border-slate-200"
+            onClick={() => navigate("/")}
           >
-            {startedTask ? (
-              <ColorRing
-                visible={startedTask}
-                height="24"
-                width="24"
-                ariaLabel="blocks-loading"
-                wrapperStyle={{}}
-                wrapperClass="blocks-wrapper"
-                colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
-              />
-            ) : (
-              "Okay"
-            )}
+            Cancel
           </Button>
-        </div>
+        )}
+        <Button
+          className="bg-cyan-500"
+          onClick={startTask}
+          disabled={startedTask || !projectIsSelected}
+        >
+          {startedTask ? (
+            <ColorRing
+              visible={startedTask}
+              height="24"
+              width="24"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper"
+              colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+            />
+          ) : (
+            "Okay"
+          )}
+        </Button>
       </div>
     </main>
   );

@@ -351,7 +351,7 @@ function MultipleProjects() {
                   colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
                 />
               ) : (
-                <p className="text-slate-900 text-xs text-center">Finish Work</p>
+                <p className="text-slate-900 font-bold text-xs text-center">Finish Work</p>
               )}
             </button>
           </div>
