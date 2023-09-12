@@ -13,6 +13,13 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
   Textarea,
 } from "../components/ui";
 import { useNavigate } from "react-router-dom";
@@ -70,7 +77,7 @@ function CreateTask() {
     }
   );
 
-  console.log("errors", errors);
+  console.log("form", form);
 
   if (taskTypesError || projectsError) {
     return <>{taskTypesError || projectsError}</>;
@@ -148,24 +155,19 @@ function CreateTask() {
             )}
           </Label>
           {projectsStatus === "success" && (
-            <select
-              className={`${
-                errors.project_id && "border-red-500"
-              } flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50`}
-              onChange={(e) => {
-                setForm((data: any) => ({
-                  ...data,
-                  project_id: e.target.value,
-                }));
-              }}
-            >
-              <option value={""}>Select a project</option>
-              {projects.map((project) => (
-                <option key={project.id} value={project.id}>
-                  {project.name}
-                </option>
-              ))}
-            </select>
+            <Select onValueChange={(value: any) => setForm({...form, project_id: value})}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a project" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup className="max-h-[200px]">
+                  <SelectLabel>Projects</SelectLabel>
+                  {projects.map((project: any) => (
+                    <SelectItem key={`${project?.id}`} value={`${project?.id}`}>{project?.name}</SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           )}
         </div>
         <div className="grid w-full items-center gap-1.5">
@@ -187,24 +189,19 @@ function CreateTask() {
             )}
           </Label>
           {taskTypesStatus === "success" && (
-            <select
-              className={`${
-                errors.task_type_id && "border-red-500"
-              } flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50`}
-              onChange={(e) => {
-                setForm((data: any) => ({
-                  ...data,
-                  task_type_id: e.target.value,
-                }));
-              }}
-            >
-              <option value={""}>Select a type</option>
-              {taskTypes.map((type) => (
-                <option key={type.id} value={type.id}>
-                  {type.name}
-                </option>
-              ))}
-            </select>
+            <Select onValueChange={(value: any) => setForm({...form, task_type_id: value})}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup className="max-h-[200px]">
+                  <SelectLabel>Project Types</SelectLabel>
+                  {taskTypes.map((type: any) => (
+                    <SelectItem key={`${type?.id}`} value={`${type?.id}`}>{type?.name}</SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           )}
         </div>
         <div className="grid w-full items-center gap-1.5">
@@ -238,7 +235,7 @@ function CreateTask() {
               errors.estimate && "text-red-500"
             } font-medium text-sm self-start flex flex-row gap-2.5 items-center`}
           >
-            Estimate
+            Estimate (MH)
             {errors.estimate && (
               <HoverCard>
                 <HoverCardTrigger>

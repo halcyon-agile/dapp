@@ -128,7 +128,7 @@ function CreateTaskForConsultation() {
                 <SelectValue placeholder="Select a project" />
               </SelectTrigger>
               <SelectContent>
-                <SelectGroup>
+                <SelectGroup className="max-h-[200px]">
                   <SelectLabel>Project</SelectLabel>
                   {projects.map((data: any) => (
                     <SelectItem key={data?.id} value={data?.id}>{data?.name}</SelectItem>
@@ -153,7 +153,7 @@ function CreateTaskForConsultation() {
                 <SelectValue placeholder="Select type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectGroup>
+                <SelectGroup className="max-h-[200px]">
                   <SelectLabel>Type</SelectLabel>
                   {taskTypes.map((data: any) => (
                     <SelectItem key={data?.id} value={data?.id}>{data?.name}</SelectItem>
@@ -192,11 +192,11 @@ function CreateTaskForConsultation() {
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
-                  selected={form.start}
+                  selected={new Date(form.start)}
                   onSelect={(value) =>
                     setForm({
                       ...form,
-                      start: moment(value).utc().format("MM/DD/YYYY"),
+                      start: moment(value).format("MM/DD/YYYY"),
                     })
                   }
                   initialFocus
@@ -230,11 +230,11 @@ function CreateTaskForConsultation() {
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
-                  selected={form.end}
+                  selected={new Date(form.end)}
                   onSelect={(value) =>
                     setForm({
                       ...form,
-                      end: moment(value).utc().format("MM/DD/YYYY"),
+                      end: moment(value).format("MM/DD/YYYY"),
                     })
                   }
                   initialFocus

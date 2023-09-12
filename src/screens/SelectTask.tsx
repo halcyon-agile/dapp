@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ColorRing } from "react-loader-spinner";
 import { Terminal } from "lucide-react";
@@ -7,7 +7,7 @@ import getTasks from "../api/getTasks";
 import getProjects from "../api/getProjects";
 import useActiveTasks from "../data/use-active-tasks";
 import startTaskApi from "../api/startTask";
-import { Alert, AlertDescription, AlertTitle, Button } from "../components/ui";
+import { Alert, AlertDescription, AlertTitle, Button, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../components/ui";
 import { AxiosError } from "axios";
 
 function SelectTask() {
@@ -37,7 +37,7 @@ function SelectTask() {
     const fetchProjects = async () => {
       try {
         const fetchProjects: Project[] = await getProjects();
-        setProjects([{ id: "", name: "Filter by project" }, ...fetchProjects]);
+        setProjects(fetchProjects);
         fetch(false);
       } catch (error: AxiosError | any) {
         fetch(false);
@@ -75,11 +75,6 @@ function SelectTask() {
     fetchTasks(projectFilter);
   }, [projectFilter]);
 
-  const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = event.target.value;
-    setProjectFilter(selectedValue);
-  };
-
   const selectedTask = selectedProject !== null ? tasks[selectedProject] : null;
 
   const startTask = () => {
@@ -111,21 +106,21 @@ function SelectTask() {
           Select a Task
         </p>
       </div>
-
       <div className="flex flex-col flex-1 bg-white w-full h-full text-black mt-5">
-        {projects.length > 0 ? (
-          <select
-            className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            onChange={handleSelectChange}
-          >
-            {projects.map((data: any) => (
-              <option key={`${data.id}`} value={`${data.id}`}>
-                {data.name}
-              </option>
-            ))}
-          </select>
-        ) : (
-          ""
+        {projects.length > 0 && (
+          <Select onValueChange={(value: any) => setProjectFilter(value)}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Filter by project" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup className="max-h-[200px]">
+                <SelectLabel>Projects</SelectLabel>
+                {projects.map((data: any) => (
+                  <SelectItem key={data?.id} value={data?.id}>{data?.name}</SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         )}
         <div className="w-full mt-4 pb-2 border-b">
           <Button
@@ -156,7 +151,7 @@ function SelectTask() {
             tasks.map((data: any, index: number) => (
               <button
                 className={`flex w-full py-2 border-b ${
-                  selectedProject === index && "bg-slate-100"
+                  selectedProject === index && "bg-slate-300"
                 }`}
                 key={data?.id}
                 onClick={() => {
@@ -198,36 +193,36 @@ function SelectTask() {
             </Alert>
           ) : null}
         </div>
-        <div className="w-full my-4 items-end flex flex-row justify-end gap-4">
-          {location?.state?.screen !== "login" && (
-            <Button
-              variant="ghost"
-              className="border border-slate-200"
-              onClick={() => navigate("/")}
-            >
-              Cancel
-            </Button>
-          )}
+      </div>
+      <div className="w-full my-4 items-end flex flex-row justify-end gap-4">
+        {location?.state?.screen !== "login" && (
           <Button
-            className="bg-cyan-500"
-            onClick={startTask}
-            disabled={startedTask || !projectIsSelected}
+            variant="ghost"
+            className="border border-slate-200"
+            onClick={() => navigate("/")}
           >
-            {startedTask ? (
-              <ColorRing
-                visible={startedTask}
-                height="24"
-                width="24"
-                ariaLabel="blocks-loading"
-                wrapperStyle={{}}
-                wrapperClass="blocks-wrapper"
-                colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
-              />
-            ) : (
-              "Okay"
-            )}
+            Cancel
           </Button>
-        </div>
+        )}
+        <Button
+          className="bg-cyan-500"
+          onClick={startTask}
+          disabled={startedTask || !projectIsSelected}
+        >
+          {startedTask ? (
+            <ColorRing
+              visible={startedTask}
+              height="24"
+              width="24"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper"
+              colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+            />
+          ) : (
+            "Okay"
+          )}
+        </Button>
       </div>
     </main>
   );

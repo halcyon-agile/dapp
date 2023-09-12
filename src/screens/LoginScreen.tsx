@@ -43,8 +43,8 @@ function LoginScreen() {
     }
   };
   return (
-    <main className="flex flex-col items-center justify-center text-black min-h-screen -mt-32 gap-2 p-14">
-      <div className="items-center justify-center font-mono text-sm px-10 pt-8 flex flex-row">
+    <main className="flex flex-1 flex-col items-center justify-center text-black min-h-screen gap-2 p-14">
+      <div className="items-center justify-center font-mono text-sm px-10 flex flex-row">
         <img src={logo} style={{ height: 25, width: 75 }} alt="Logo" />
         <div className="left-0 top-0 w-full justify-center text-4xl flex-1 font-bold flex flex-row ml-4">
           <p className="text-blue-600">HARP</p>

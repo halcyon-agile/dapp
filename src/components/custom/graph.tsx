@@ -101,30 +101,8 @@ function Graph(props: Props) {
               {props?.initialEstimateHours.toFixed(2)} Hrs (
               {(props?.initialEstimateHours / 8).toFixed(2)})
             </p>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild className="mr-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
-                    />
-                  </svg>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Gantt Estimate</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
             <div className="flex-[5] relative">
+              <p className="flex-1 pr-2 text-xs text-gray-500">Gantt Estimate</p>
               <div
                 style={{
                   width: `${Math.min(
@@ -134,7 +112,7 @@ function Graph(props: Props) {
                 }}
                 className={cn("rounded-full bg-teal-500 grow h-4")}
               >
-                <div className="w-[100%] h-4 rounded-full bg-slate-100 absolute  -z-10" />
+                <div className="w-[100%] h-4 rounded-full bg-gray-300 absolute  -z-10" />
               </div>
             </div>
           </div>
@@ -144,30 +122,8 @@ function Graph(props: Props) {
               {props?.currentEstimateHours.toFixed(2)} Hrs (
               {(props?.currentEstimateHours / 8).toFixed(2)})
             </p>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild className="mr-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="#334155"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
-                    />
-                  </svg>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Current Estimate</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
             <div className="flex-[5] relative">
+            <p className="flex-1 pr-2 text-xs text-gray-500">Current Estimate</p>
               <div
                 style={{
                   width: `${Math.min(
@@ -184,11 +140,11 @@ function Graph(props: Props) {
                     : "bg-green-500"
                 )}
               >
-                <div className="w-[100%] h-4 rounded-full bg-slate-100 absolute  -z-10" />
+                <div className="w-[100%] h-4 rounded-full bg-gray-300 absolute  -z-10" />
                 {!props?.isConsultation && (
                   <Dialog open={dialogOpen} onOpenChange={isDialogOpen}>
                     <DialogTrigger asChild>
-                      <button className="absolute z-10 -right-3 top-[-12px] rounded-full bg-white p-1">
+                      <button className="absolute z-10 -right-3 top-[-1px] rounded-full bg-white p-1">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -267,30 +223,8 @@ function Graph(props: Props) {
               {props.totalRenderedHours.toFixed(2)} Hrs (
               {(props.totalRenderedHours / 8).toFixed(2)})
             </p>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild className="mr-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
-                    />
-                  </svg>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Actual rendered hours</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
             <div className="flex-[5] relative">
+              <p className="flex-1 pr-2 text-xs text-gray-500">Actual Rendered Hours</p>
               <div
                 style={{
                   width: `${Math.min(
@@ -305,7 +239,7 @@ function Graph(props: Props) {
                     : "bg-cyan-500"
                 )}
               >
-                <div className="w-[100%] h-4 rounded-full bg-slate-100 absolute  -z-10" />
+                <div className="w-[100%] h-4 rounded-full bg-gray-300 absolute  -z-10" />
               </div>
             </div>
           </div>

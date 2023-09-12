@@ -13,6 +13,13 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
 } from "../components/ui";
 import getUsers from "../api/users";
 import { cn } from "../lib/utils";
@@ -86,11 +93,11 @@ function CreateConsultation() {
             <PopoverContent className="w-auto p-0">
               <Calendar
                 mode="single"
-                selected={form.started_at}
+                selected={new Date(form.started_at)}
                 onSelect={(value) =>
                   setForm({
                     ...form,
-                    started_at: moment(value).utc().format("MM/DD/YYYY"),
+                    started_at: moment(value).format("MM/DD/YYYY"),
                   })
                 }
                 initialFocus
@@ -186,7 +193,20 @@ function CreateConsultation() {
             className="text-black p-1 rounded-md border px-3 font-normal text-base w-full"
             autoCapitalize="none"
           /> */}
-          <Popover open={open} onOpenChange={setOpen}>
+          <Select onValueChange={(value: any) => setValue(value)}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select member..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup className="max-h-[200px]">
+                <SelectLabel>Projects</SelectLabel>
+                {filteredUsers.map((user: any) => (
+                  <SelectItem key={`${user?.id}`} value={`${user?.id}`}>{user.first_name} {user.last_name}</SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          {/* <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
@@ -230,7 +250,7 @@ function CreateConsultation() {
                 </CommandGroup>
               </Command>
             </PopoverContent>
-          </Popover>
+          </Popover> */}
           <Button
             className="bg-cyan-500"
             onClick={() => {
