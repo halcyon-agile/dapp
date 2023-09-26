@@ -32,12 +32,15 @@ function TakeABreak() {
               placeholder="Hour"
               className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
               autoCapitalize="none"
-              onChange={(e) =>
-                setBreakForm({
-                  ...breakForm,
-                  hours: parseInt(e.target.value, 10),
-                })
-              }
+              onChange={(e) => {
+                const re = /^[0-9\b]+$/;
+                if (e.target.value === '' || re.test(e.target.value)) {
+                  setBreakForm({
+                    ...breakForm,
+                    hours: e.target.value,
+                  })
+                }
+              }}
               value={breakForm.hours !== null ? breakForm.hours : ""}
             />
           </div>
@@ -49,12 +52,15 @@ function TakeABreak() {
               placeholder="Minute"
               className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
               autoCapitalize="none"
-              onChange={(e) =>
-                setBreakForm({
-                  ...breakForm,
-                  minutes: parseInt(e.target.value, 10),
-                })
-              }
+              onChange={(e) => {
+                const re = /^[0-9\b]+$/;
+                if (e.target.value === '' || re.test(e.target.value)) {
+                  setBreakForm({
+                    ...breakForm,
+                    minutes: e.target.value,
+                  })
+                }
+              }}
               value={breakForm.minutes !== null ? breakForm.minutes : ""}
             />
           </div>

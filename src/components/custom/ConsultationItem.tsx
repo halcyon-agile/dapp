@@ -18,6 +18,8 @@ import { ColorRing } from "react-loader-spinner";
 import joinConsultation from "../../api/consultations/join-consultation";
 import cancelConsultation from "../../api/consultations/cancel-consultation";
 import { useToast } from "../ui/use-toast";
+import checkIfTimerOff from "../../lib/checkIfTimerOff";
+import stopTaskApi from "../../api/stopTask";
 
 interface Props {
   data: any;
@@ -32,6 +34,27 @@ function ConsultationItem(props: Props) {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [joining, join] = useState<boolean>(false);
+
+  const stopTask = (taskId: number) => {
+    stopTaskApi({ taskId })
+      .then(() => {
+        console.log('has run stop task first')
+        join(true);
+        joinConsultation(props?.data?.id)
+          .then((response) => {
+            navigate("/", { replace: true });
+          })
+          .catch((error) => {
+            toast({
+              title: "Error",
+              description: error,
+            });
+          });
+      })
+      .catch((error) => {
+        // console.error(error?.response?.data?.message || "Something went wrong");
+      });
+  };
 
   return (
     <div className="w-full flex flex-1 flex-col gap-4 mt-4">
@@ -133,9 +156,9 @@ function ConsultationItem(props: Props) {
         </div>
         <p className="font-medium text-xs text-gray-500">
           {props?.data?.type} |{" "}
-          {moment(props?.data?.started_at).format("MMM DD, YYYY")}
+          {moment(props?.data?.started_at).utc().format("MMM DD, YYYY hh:mm A")}
         </p>
-        <p className="font-medium text-xs text-gray-500">from {props?.name}</p>
+        <p className="font-medium text-xs text-gray-500">from {!props?.isFromOthers ? "You" : `${props?.data?.admin?.first_name} ${props?.data?.admin?.last_name}`}</p>
         {/* display if consultation is expired */}
         <div
           className={`rounded-full px-4 py-1 bg-slate-100 max-w-[100px] mt-3.5 h-[24px] ${
@@ -161,19 +184,40 @@ function ConsultationItem(props: Props) {
                   ? "hidden"
                   : ""
               }`}
-              disabled={joining}
+              disabled={joining || moment(props?.data?.started_at).utc().diff(moment(), 'd') < 0}
               onClick={() => {
-                join(true);
-                joinConsultation(props?.data?.id)
-                  .then((response) => {
-                    navigate("/", { replace: true });
-                  })
-                  .catch((error) => {
-                    toast({
-                      title: "Error",
-                      description: error,
-                    });
-                  });
+                if (activeTasks) {
+                  if (activeTasks.length > 0) {
+                    const list: any = checkIfTimerOff(activeTasks)
+                    if (list?.length > 0) {
+                      stopTask(list[0]?.task_id)
+                    } else {
+                      join(true);
+                      joinConsultation(props?.data?.id)
+                        .then((response) => {
+                          navigate("/", { replace: true });
+                        })
+                        .catch((error) => {
+                          toast({
+                            title: "Error",
+                            description: error,
+                          });
+                        });
+                    }
+                  } else {
+                    join(true);
+                    joinConsultation(props?.data?.id)
+                      .then((response) => {
+                        navigate("/", { replace: true });
+                      })
+                      .catch((error) => {
+                        toast({
+                          title: "Error",
+                          description: error,
+                        });
+                      });
+                  }
+                }
               }}
             >
               {joining ? (

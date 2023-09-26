@@ -6,7 +6,7 @@ import { Terminal } from "lucide-react";
 import useStore from "../store";
 import getRedDots from "../api/getRedDots";
 import finishWork from "../api/finishWork";
-import { AddRemarksDialog, Graph, Timer } from "../components/custom";
+import { AddRemarksDialog, ConsultDialog, Graph, StopTaskButton, Timer } from "../components/custom";
 import {
   Alert,
   AlertDescription,
@@ -30,6 +30,8 @@ import {
   formatHours,
   getCurrentHoursSpentOnTask,
 } from "../lib/utils";
+import checkIfTimerOnActive from "../lib/checkIfTimerOff";
+import checkIfRequiredToUpdateEstimate from "../lib/checkIfRequiredToUpdateEstimate";
 
 function MultipleProjects() {
   const navigate = useNavigate();
@@ -124,7 +126,7 @@ function MultipleProjects() {
         refetchActiveTasks();
       })
       .catch((error) => {
-        // console.error(error?.response?.data?.message || "Something went wrong");
+        console.error(error?.response?.data?.message || "Something went wrong");
       });
   };
 
@@ -145,183 +147,214 @@ function MultipleProjects() {
     return formatHours(hours);
   };
 
+  const requiredByTime = (userID: string | undefined, list: any[], data: any) => {
+    const getUserFromList = list.find((x: any) => x.admin_id === userID)
+    if (data?.task?.require_estimate_time === 1) {
+      const totalRenderedHours = Number(Number(data?.total_minutes_spent / 60).toFixed(2)) + getCurrentHoursSpentOnTask(data?.started_at)
+      // console.log('total rendered', totalRenderedHours)
+      if (getUserFromList) {
+        // console.log(Math.floor(totalRenderedHours / Number(data?.task.estimate_time)) > getUserFromList?.estimate_update_counter)
+        if (Math.floor(totalRenderedHours / Number(data?.task.estimate_time)) > getUserFromList?.estimate_update_counter) {
+          return true
+        } else {
+          return false
+        }
+      }
+    }
+    return false
+  }
+
+  // console.log('user', user)
+  console.log('active', activeTasks)
+
   return (
     <main className="flex min-h-screen flex-col items-center text-black p-5">
-      <div className="items-center justify-center text-sm flex flex-col w-full gap-2">
-        <div className="w-full border rounded-sm">
-          <div className="left-0 top-0 w-full items-center justify-between text-4xl flex-1 flex flex-row align-center py-2 px-4">
-            <p className="font-semibold text-xl">Working Hours</p>
-            <div className="pr-4" />
-            <p className="font-semibold text-xl">{computeHours()}</p>
+      <div className="flex-1 w-full">
+        <div className="items-center justify-center text-sm flex flex-col w-full gap-2">
+          <div className="w-full border rounded-sm">
+            <div className="left-0 top-0 w-full items-center justify-between text-4xl flex-1 flex flex-row align-center py-2 px-4">
+              <p className="font-semibold text-xl">Working Hours</p>
+              <div className="pr-4" />
+              <p className="font-semibold text-xl">{computeHours()}</p>
+            </div>
           </div>
-        </div>
-        {activeTasks && activeTasks?.length > 0 ? (
-          activeTasks.map((data: any) => (
-            <div className="w-full border rounded-sm" key={data?.id}>
-              <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4">
-                <div className="flex flex-row justify-between">
-                  <p className="font-medium text-xs text-slate-500">
-                    {data?.consultation_id === null
-                      ? data?.task?.project?.project_type?.name
-                      : "Consultation"}
-                  </p>
-                  {data?.task?.project?.project_type?.can_add_remarks === 1 && (
-                    <AddRemarksDialog
-                      id={data?.task_id}
-                      onSuccess={() => {
-                        refetchActiveTasks();
-                      }}
-                      remark={data?.remark ? data.remark : ""}
-                    />
-                  )}
-                </div>
-                <div className="flex flex-row align-center justify-between">
-                  <p className="font-medium text-base text-gray-700">
-                    {data?.task?.project?.name} - {data?.task?.name}
-                  </p>
-                  <Timer started_at={data?.started_at} />
-                </div>
-                <div className="flex flex-row items-center justify-between py-4 border-b border-slate-200">
-                  <div className="flex flex-1">
-                    {data?.ended_at === null ? (
-                      <div className="rounded-full px-4 py-1 bg-green-500 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
-                        <p className="font-medium text-xs text-white text-center">
-                          Running
-                        </p>
+          {activeTasks && activeTasks?.length > 0 ? (
+            activeTasks.map((data: any) => (
+              <div className="w-full border rounded-sm" key={data?.id}>
+                <div className="px-4 w-full text-4xl flex-1 flex flex-col align-center py-4">
+                  <div className="flex flex-row justify-between">
+                    <p className="font-medium text-xs text-slate-500">
+                      {data?.consultation_id === null
+                        ? data?.task?.project?.project_type?.name
+                        : "Consultation"}
+                    </p>
+                    {data?.task?.project?.project_type?.can_add_remarks === 1 && (
+                      <AddRemarksDialog
+                        id={data?.task_id}
+                        onSuccess={() => {
+                          refetchActiveTasks();
+                        }}
+                        remark={data?.remark ? data.remark : ""}
+                      />
+                    )}
+                  </div>
+                  <div className="flex flex-row align-center justify-between">
+                    <p className="font-medium text-base text-gray-700">
+                      {data?.task?.project?.name} - {data?.task?.name}
+                    </p>
+                    <Timer started_at={data?.started_at} />
+                  </div>
+                  <div className="flex flex-row items-center justify-between py-4 border-b border-slate-200">
+                    <div className="flex flex-1">
+                      {data?.ended_at === null ? (
+                        <div className="rounded-full px-4 py-1 bg-green-500 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
+                          <p className="font-medium text-xs text-white text-center">
+                            Running
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="rounded-full px-4 py-1 bg-red-600 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
+                          <p className="font-medium text-xs text-white text-center">
+                            Stopped
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    {data?.consultation_id === null ? (
+                      <div className="flex-9 flex-row items-center justify-end">
+                        {/* <Button
+                          variant="outline"
+                          className={`font-medium text-xs ml-4`}
+                          onClick={() => {
+                            stopTask(data?.task?.id);
+                          }}
+                        >
+                          Stop
+                        </Button> */}
+                        <StopTaskButton
+                          id={data?.task?.id}
+                          currentEstimate={Number(
+                            data?.task?.assignees[0]?.estimate || 0
+                          )}
+                          stopTask={() => stopTask(data?.task?.id)}
+                          isRequiredToUpdateEstimate={checkIfRequiredToUpdateEstimate(user?.data?.id, data?.task?.assignees, data)}
+                          isRequiredByTime={requiredByTime(user?.data?.id, data?.task?.assignees, data)}
+                        />
+                        {data?.task?.project?.allow_consultation === 1 && (
+                          <Button
+                            variant="outline"
+                            className={`font-medium text-xs ml-4 ${
+                              data?.task?.project?.consultation_members?.find(
+                                (member: any) => member?.id === user?.data?.id
+                              )
+                                ? ""
+                                : "hidden"
+                            }`}
+                            onClick={() => {
+                              navigate("/create-consultation", {
+                                state: {
+                                  id: data?.task_id,
+                                },
+                              });
+                            }}
+                          >
+                            Consult
+                          </Button>
+                        )}
                       </div>
                     ) : (
-                      <div className="rounded-full px-4 py-1 bg-red-600 w-[79px] max-w-[100px] mt-3.5 h-[24px]">
-                        <p className="font-medium text-xs text-white text-center">
-                          Stopped
-                        </p>
+                      <div className="flex-9 flex-row items-center justify-end">
+                        <Button
+                          variant="outline"
+                          className="font-medium text-xs ml-4"
+                          onClick={() => {
+                            leaveConsultation(data?.consultation_id).then(
+                              (response) => {
+                                refetchActiveTasks();
+                              }
+                            );
+                          }}
+                        >
+                          Leave
+                        </Button>
                       </div>
                     )}
                   </div>
-                  {data?.consultation_id === null ? (
-                    <div className="flex-9 flex-row items-center justify-end">
-                      <Button
-                        variant="outline"
-                        className={`font-medium text-xs ml-4`}
-                        onClick={() => {
-                          stopTask(data?.task?.id);
-                        }}
-                      >
-                        Stop
-                      </Button>
-                      {data?.task?.project?.allow_consultation === 1 && (
-                        <Button
-                          variant="outline"
-                          className={`font-medium text-xs ml-4 ${
-                            data?.task?.project?.consultation_members?.find(
-                              (member: any) => member?.id === user?.data?.id
-                            )
-                              ? ""
-                              : "hidden"
-                          }`}
-                          onClick={() => {
-                            navigate("/create-consultation", {
-                              state: {
-                                id: data?.task_id,
-                              },
-                            });
-                          }}
-                        >
-                          Consult
-                        </Button>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="flex-9 flex-row items-center justify-end">
-                      <Button
-                        variant="outline"
-                        className="font-medium text-xs ml-4"
-                        onClick={() => {
-                          leaveConsultation(data?.consultation_id).then(
-                            (response) => {
-                              refetchActiveTasks();
-                            }
-                          );
-                        }}
-                      >
-                        Leave
-                      </Button>
-                    </div>
-                  )}
-                </div>
 
-                <Graph
-                  visible={isGraphVisible(data)}
-                  id={data?.task_id}
-                  remainingHours={
-                    data?.task?.project?.project_type?.show_remaining_hours ===
-                      1 && data?.total_remaining_hours
-                  }
-                  initialEstimateHours={Number(
-                    data?.task?.assignees[0]?.initial_estimate || 0
-                  )}
-                  currentEstimateHours={Number(
-                    data?.task?.assignees[0]?.estimate || 0
-                  )}
-                  totalRenderedHours={
-                    Number(Number(data?.total_minutes_spent / 60).toFixed(2)) +
-                    getCurrentHoursSpentOnTask(data?.started_at)
-                  }
-                  started_at={data?.started_at}
-                  onUpdateSuccess={fetchRequiredDatas}
-                  isConsultation={data?.consultation_id !== null}
-                />
+                  <Graph
+                    visible={isGraphVisible(data)}
+                    id={data?.task_id}
+                    remainingHours={
+                      data?.task?.project?.project_type?.show_remaining_hours ===
+                        1 && data?.total_remaining_hours
+                    }
+                    initialEstimateHours={Number(
+                      data?.task?.assignees[0]?.initial_estimate || 0
+                    )}
+                    currentEstimateHours={Number(
+                      data?.task?.assignees[0]?.estimate || 0
+                    )}
+                    totalRenderedHours={
+                      Number(Number(data?.total_minutes_spent / 60).toFixed(2)) +
+                      getCurrentHoursSpentOnTask(data?.started_at)
+                    }
+                    started_at={data?.started_at}
+                    onUpdateSuccess={fetchRequiredDatas}
+                    isConsultation={data?.consultation_id !== null}
+                  />
+                </div>
               </div>
-            </div>
-          ))
-        ) : (
-          <Alert>
-            <Terminal className="h-4 w-4" />
-            <AlertTitle>Heads up!</AlertTitle>
-            <AlertDescription>
-              You have no active tasks running right now.
-              <br></br>Please add one.
-            </AlertDescription>
-          </Alert>
-        )}
-      </div>
-      <div className="w-full flex-row justify-between py-5 flex border-b-2">
-        <div className="flex flex-1 flex-row items-center gap-3">
-          <button
-            className="rounded-md border border-slate-200 py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed"
-            onClick={() => navigate("/select-task")}
-            disabled={hasActiveTask}
-          >
-            <p className="text-slate-900 text-xs text-center">Add Task</p>
-          </button>
-          <button
-            className="rounded-md border border-slate-200 py-2 px-4"
-            onClick={() => {
-              navigate("/take-a-break");
-            }}
-          >
-            <p className="text-slate-900 text-xs text-center">Break Out</p>
-          </button>
+            ))
+          ) : (
+            <Alert>
+              <Terminal className="h-4 w-4" />
+              <AlertTitle>Heads up!</AlertTitle>
+              <AlertDescription>
+                You have no active tasks running right now.
+                <br></br>Please add one.
+              </AlertDescription>
+            </Alert>
+          )}
         </div>
-        <div className="flex">
-          <button
-            className="rounded-md border border-slate-200 py-2 px-4"
-            onClick={logoff}
-            disabled={loggedOff}
-          >
-            {loggedOff ? (
-              <ColorRing
-                visible={loggedOff}
-                height="24"
-                width="24"
-                ariaLabel="blocks-loading"
-                wrapperStyle={{}}
-                wrapperClass="blocks-wrapper"
-                colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
-              />
-            ) : (
-              <p className="text-slate-900 text-xs text-center">Finish Work</p>
-            )}
-          </button>
+        <div className="w-full flex-row justify-between py-5 flex border-b-2">
+          <div className="flex flex-1 flex-row items-center gap-3">
+            <button
+              className="rounded-md border border-slate-200 py-2 px-4 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              onClick={() => navigate("/select-task")}
+              disabled={hasActiveTask}
+            >
+              <p className="text-slate-900 text-xs text-center">Add Task</p>
+            </button>
+            <button
+              className="rounded-md border border-slate-200 py-2 px-4"
+              onClick={() => {
+                navigate("/take-a-break");
+              }}
+            >
+              <p className="text-slate-900 text-xs text-center">Break Out</p>
+            </button>
+          </div>
+          <div className="flex">
+            <button
+              className="rounded-md border border-slate-200 py-2 px-4"
+              onClick={logoff}
+              disabled={loggedOff}
+            >
+              {loggedOff ? (
+                <ColorRing
+                  visible={loggedOff}
+                  height="24"
+                  width="24"
+                  ariaLabel="blocks-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="blocks-wrapper"
+                  colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+                />
+              ) : (
+                <p className="text-slate-900 font-bold text-xs text-center">Finish Work</p>
+              )}
+            </button>
+          </div>
         </div>
       </div>
       <div className="w-full py-5 flex flex-row items-start">
@@ -370,7 +403,7 @@ function MultipleProjects() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <button className="flex flex-col items-center">
+                <button className="flex flex-col items-center" onClick={() => checkIfTimerOnActive(activeTasks)}>
                   <div className="rounded-full border border-slate-200 p-2 mb-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -432,7 +465,10 @@ function MultipleProjects() {
             </div>
             <p className="text-xs text-gray-500">Portal</p>
           </a>
-          <button
+          <ConsultDialog
+            reddot={reddot?.consultations}
+          />
+          {/* <button
             className="flex flex-col items-center relative"
             onClick={() => navigate("/consultations")}
           >
@@ -459,7 +495,7 @@ function MultipleProjects() {
               </svg>
             </div>
             <p className="text-xs text-gray-500">Consult</p>
-          </button>
+          </button> */}
           <button
             className="flex flex-col items-center relative"
             onClick={() => navigate("/scrum")}

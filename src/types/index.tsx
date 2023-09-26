@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface Attendance {
   id: number;
   started_at: string;
