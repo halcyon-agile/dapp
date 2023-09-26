@@ -5,6 +5,12 @@ use tauri::{
     CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
 };
 
+#[derive(Clone, serde::Serialize)]
+struct Payload {
+    args: Vec<String>,
+    cwd: String,
+}
+
 fn main() {
     let client = sentry_tauri::sentry::init((
         "https://f7bceb39d153704ec84680b4bdc62ae6@o4505162703699968.ingest.sentry.io/4505683751403520",
@@ -63,6 +69,12 @@ fn main() {
             _ => {}
         })
         .plugin(sentry_tauri::plugin())
+        .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
+            println!("{}, {argv:?}, {cwd}", app.package_info().name);
+
+            app.emit_all("single-instance", Payload { args: argv, cwd })
+                .unwrap();
+        }))
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
