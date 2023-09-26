@@ -5,10 +5,12 @@ import router from "./lib/router";
 import { Toaster } from "./components/ui/toaster";
 import useUser from "./data/use-user";
 import Updater from "./components/custom/Updater";
+import useWindowDragAndMinimize from "./hooks/useWindowDragAndMinimize";
 
 function App() {
   const [setUser] = useStore((state) => [state.setUser]);
   const { status, data, error } = useUser();
+  const { minimal, toggleMinimize } = useWindowDragAndMinimize();
 
   useEffect(() => {
     if (status === "error") {
