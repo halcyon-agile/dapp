@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "harp",
-    "version": "0.4.0"
+    "version": "0.4.1"
   },
   "tauri": {
     "allowlist": {
@@ -67,10 +67,10 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "HARP v0.4.0",
-        "width": 650,
+        "title": "HARP v0.4.1",
+        "width": 680,
         "height": 500,
-        "minWidth": 650,
+        "minWidth": 680,
         "minHeight": 500,
         "alwaysOnTop": true
       }
