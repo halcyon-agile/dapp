@@ -30,7 +30,7 @@ function Scrum() {
     state.setScrums,
   ]);
 
-  // console.log(scrums)
+  console.log(scrums)
 
   return (
     <main className="flex min-h-screen flex-col p-5">
