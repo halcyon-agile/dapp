@@ -179,6 +179,8 @@ function MultipleProjects() {
     return false;
   };
 
+  // console.log(activeTasks)
+
   return (
     <div>
       <button

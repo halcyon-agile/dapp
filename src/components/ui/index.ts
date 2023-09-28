@@ -84,6 +84,12 @@ import {
   HoverCardContent,
 } from "./hover-card"
 
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from "./avatar"
+
 export {
   Alert,
   AlertDescription,
@@ -156,4 +162,7 @@ export {
   SelectLabel,
   SelectItem,
   SelectSeparator,
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
 }

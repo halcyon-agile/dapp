@@ -66,10 +66,12 @@
     "windows": [
       {
         "fullscreen": false,
-        "resizable": false,
+        "resizable": true,
         "title": "HARP v0.4.0",
         "width": 650,
         "height": 500,
+        "minWidth": 650,
+        "minHeight": 500,
         "alwaysOnTop": true
       }
     ],
