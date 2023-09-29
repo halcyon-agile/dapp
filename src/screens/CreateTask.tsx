@@ -61,7 +61,11 @@ function CreateTask() {
     (task) => {
       // console.log('task', task)
       isLoading(true);
-      return request.post("/api/tasks", task);
+      return request.post("/api/tasks", {
+        ...form,
+        started_at: moment(form.started_at).utc().format("MM/DD/YYYY"),
+        ended_at: moment(form.ended_at).utc().format("MM/DD/YYYY"),
+      });
     },
     {
       onSuccess: () => {
@@ -305,11 +309,11 @@ function CreateTask() {
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
-                  selected={form.started_at}
+                  selected={new Date(form.started_at)}
                   onSelect={(value) =>
                     setForm({
                       ...form,
-                      started_at: moment(value).utc().format("MM/DD/YYYY"),
+                      started_at: moment(value).format("MM/DD/YYYY"),
                     })
                   }
                   initialFocus
@@ -356,11 +360,11 @@ function CreateTask() {
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
-                  selected={form.ended_at}
+                  selected={new Date(form.ended_at)}
                   onSelect={(value) =>
                     setForm({
                       ...form,
-                      ended_at: moment(value).utc().format("MM/DD/YYYY"),
+                      ended_at: moment(value).format("MM/DD/YYYY"),
                     })
                   }
                   initialFocus
