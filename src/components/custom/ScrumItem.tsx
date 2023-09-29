@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Button } from "../ui";
+import { Avatar, AvatarFallback, AvatarImage, Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui";
 import { ColorRing } from "react-loader-spinner";
 import startTaskApi from "../../api/startTask";
 import useActiveTasks from "../../data/use-active-tasks";
 import checkIfTimerOff from "../../lib/checkIfTimerOff";
 import stopTaskApi from "../../api/stopTask";
 import { useToast } from "../ui/use-toast";
+import useUser from "../../data/use-user";
 
 interface Props {
   data: any;
@@ -15,6 +16,7 @@ function ScrumItem(props: Props) {
   const [joining, join] = useState<boolean>(false);
   const { data: activeTasks, refetch: refetchActiveTasks } = useActiveTasks();
   const { toast } = useToast();
+  const user = useUser();
 
   const stopTask = (taskId: number) => {
     stopTaskApi({ taskId })
@@ -43,7 +45,7 @@ function ScrumItem(props: Props) {
       });
   };
 
-  // console.log(activeTasks)
+  console.log(user.data)
   return (
     <div className="w-full flex flex-col border rounded border-slate-200 p-4 gap-1">
       <p className="font-medium text-base text-gray-700">
@@ -55,6 +57,25 @@ function ScrumItem(props: Props) {
           ? "AM"
           : "PM"}
       </p>
+      <div className="flex flex-row items-center gap-1">
+        {props?.data?.assignees.map((assignee: any) => (
+          <TooltipProvider key={assignee.id}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" className="p-0 rounded-full">
+                  <Avatar>
+                    {/* <AvatarImage src="" alt="@shadcn" /> */}
+                    <AvatarFallback>{user.data?.id === assignee.id ? "Me" : assignee.first_name.match(/(\b\S)?/g).join("").toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{user.data?.id === assignee.id ? "Me" : `${assignee.first_name} ${assignee.last_name}`}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ))}
+      </div>
       <div className="w-full flex flex-row items-center mt-2 gap-4">
         {activeTasks &&
         activeTasks.find((item) => item.task.id === props?.data?.id) ? (

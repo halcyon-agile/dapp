@@ -8,6 +8,7 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { AxiosError } from "axios";
 import { LogIn } from "lucide-react";
+import { Button } from "../components/ui";
 
 function LoginScreen() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ function LoginScreen() {
   });
   const [attempting, attemptingLogin] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [secure, setSecure] = useState<boolean>(true);
 
   useEffect(() => {
     setErrorMessage("");
@@ -85,14 +87,21 @@ function LoginScreen() {
           >
             Password
           </Label>
-          <Input
-            type="password"
-            id="password"
-            className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
-            autoCapitalize="none"
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-            value={form.password}
-          />
+          <div className="flex w-full items-center mt-1.5 gap-1">
+            <Input
+              type={secure ? "password" : "text"}
+              id="password"
+              className="text-black p-1 rounded-md px-3 font-normal text-base w-full"
+              autoCapitalize="none"
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              value={form.password}
+            />
+            {secure ? (
+              <Button type="button" onClick={() => setSecure(false)}>View</Button>
+            ) : (
+              <Button type="button" onClick={() => setSecure(true)}>Hide</Button>
+            )}
+          </div>
         </div>
         {attempting ? (
           <ColorRing

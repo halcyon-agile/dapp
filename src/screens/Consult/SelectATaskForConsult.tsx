@@ -6,7 +6,7 @@ import { Task, Project } from "@/types";
 import getTasks from "../../api/getTasks";
 import getProjects from "../../api/getProjects";
 import useActiveTasks from "../../data/use-active-tasks";
-import { Alert, AlertDescription, AlertTitle, Button, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../../components/ui";
+import { Alert, AlertDescription, AlertTitle, Button, Input, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../../components/ui";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { AxiosError } from "axios";
 
@@ -20,6 +20,7 @@ function SelectTaskForConsult() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [projectFilter, setProjectFilter] = useState<any>(null);
   const [projects, setProjects] = useState<any>([]);
+  const [search, setSearch] = useState<string>("");
   const projectIsSelected = selectedProject !== null;
 
   useEffect(() => {
@@ -125,6 +126,13 @@ function SelectTaskForConsult() {
             Create New Task
           </Button>
         </div>
+        <div className="flex flex-row items-center justify-between w-full rounded-md gap-2.5 my-2.5">
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search for a task"
+          />
+        </div>
         <div className="w-full py-2">
           {fetching && (
             <ColorRing
@@ -138,7 +146,7 @@ function SelectTaskForConsult() {
             />
           )}
           {tasks.length > 0 ? (
-            tasks.map((data: any, index: number) => (
+            tasks.filter((x: any) => x.name.includes(search) || x.project.name.includes(search)).map((data: any, index: number) => (
               <div className="flex w-full py-4 border-b" key={data?.id}>
                 <button
                   className={`py-1.5 px-2 w-full rounded-md flex flex-row items-center justify-between ${

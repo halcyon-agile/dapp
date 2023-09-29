@@ -7,7 +7,7 @@ import getTasks from "../api/getTasks";
 import getProjects from "../api/getProjects";
 import useActiveTasks from "../data/use-active-tasks";
 import startTaskApi from "../api/startTask";
-import { Alert, AlertDescription, AlertTitle, Button, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../components/ui";
+import { Alert, AlertDescription, AlertTitle, Button, Input, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../components/ui";
 import { AxiosError } from "axios";
 
 function SelectTask() {
@@ -21,6 +21,8 @@ function SelectTask() {
   const [startedTask, startingTask] = useState<boolean>(false);
   const [projectFilter, setProjectFilter] = useState<any>(null);
   const [projects, setProjects] = useState<any>([]);
+  const [search, setSearch] = useState<string>("");
+
   const projectIsSelected = selectedProject !== null;
 
   useEffect(() => {
@@ -135,7 +137,14 @@ function SelectTask() {
             Create New Task
           </Button>
         </div>
-        <div className="w-full py-2">
+        <div className="flex flex-row items-center justify-between w-full rounded-md gap-2.5 my-2.5">
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search for a task"
+          />
+        </div>
+        <div className="w-full py-2 border-t">
           {fetching && (
             <ColorRing
               visible={fetching}
@@ -148,7 +157,7 @@ function SelectTask() {
             />
           )}
           {tasks.length > 0 ? (
-            tasks.map((data: any, index: number) => (
+            tasks.filter((x: any) => x.name.includes(search) || x.project.name.includes(search)).map((data: any, index: number) => (
               <button
                 className={`flex w-full py-2 border-b ${
                   selectedProject === index && "bg-slate-300"

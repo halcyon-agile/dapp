@@ -16,6 +16,15 @@ import {
 import {
   Alert,
   AlertDescription,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
   AlertTitle,
   Button,
   Tooltip,
@@ -178,6 +187,8 @@ function MultipleProjects() {
     }
     return false;
   };
+
+  // console.log(activeTasks)
 
   return (
     <div>
@@ -385,33 +396,53 @@ function MultipleProjects() {
                 </button>
               </div>
               <div className="flex">
-                <button
-                  className="rounded-md border border-slate-200 py-2 px-4"
-                  onClick={logoff}
-                  disabled={loggedOff}
-                >
-                  {loggedOff ? (
-                    <ColorRing
-                      visible={loggedOff}
-                      height="24"
-                      width="24"
-                      ariaLabel="blocks-loading"
-                      wrapperStyle={{}}
-                      wrapperClass="blocks-wrapper"
-                      colors={[
-                        "#e15b64",
-                        "#f47e60",
-                        "#f8b26a",
-                        "#abbd81",
-                        "#849b87",
-                      ]}
-                    />
-                  ) : (
-                    <p className="text-slate-900 font-bold text-xs text-center">
-                      Finish Work
-                    </p>
-                  )}
-                </button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <button
+                      className="rounded-md border border-slate-200 py-2 px-4"
+                      disabled={loggedOff}
+                    >
+                      {loggedOff ? (
+                        <ColorRing
+                          visible={loggedOff}
+                          height="24"
+                          width="24"
+                          ariaLabel="blocks-loading"
+                          wrapperStyle={{}}
+                          wrapperClass="blocks-wrapper"
+                          colors={[
+                            "#e15b64",
+                            "#f47e60",
+                            "#f8b26a",
+                            "#abbd81",
+                            "#849b87",
+                          ]}
+                        />
+                      ) : (
+                        <p className="text-slate-900 font-bold text-xs text-center">
+                          Finish Work
+                        </p>
+                      )}
+                    </button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will log you off with your attendance and active tasks.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={logoff}
+                        disabled={loggedOff}
+                      >
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </div>
           </div>
