@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "harp",
-    "version": "0.4.1"
+    "version": "0.4.2"
   },
   "tauri": {
     "allowlist": {
@@ -23,7 +23,8 @@
         "setSize": true,
         "setDecorations": true,
         "center": true,
-        "setPosition": true
+        "setPosition": true,
+        "setAlwaysOnTop": true
       },
       "process": {
         "all": true
@@ -67,12 +68,12 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "HARP v0.4.1",
+        "title": "HARP v0.4.2",
         "width": 680,
         "height": 500,
         "minWidth": 680,
         "minHeight": 500,
-        "alwaysOnTop": true
+        "alwaysOnTop": false
       }
     ],
     "systemTray": {
