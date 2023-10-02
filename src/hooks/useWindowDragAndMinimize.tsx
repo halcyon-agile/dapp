@@ -14,7 +14,7 @@ function useWindowDragAndMinimize() {
     await appWindow.innerSize();
 
     if (minimal) {
-      appWindow.setDecorations(true);
+      await appWindow.setDecorations(true);
       appWindow.setSize(new LogicalSize(650, 500)).then(async () => {
         setMinimal(false);
         await appWindow.center();
@@ -22,8 +22,8 @@ function useWindowDragAndMinimize() {
       });
     } else {
       const newWidth = 200;
-      appWindow.setDecorations(false);
-      appWindow.setSize(new LogicalSize(newWidth, 70)).then(async () => {
+      await appWindow.setDecorations(false);
+      appWindow.setSize(new LogicalSize(newWidth, 100)).then(async () => {
         setMinimal(true);
         await appWindow.setPosition(
           new PhysicalPosition(

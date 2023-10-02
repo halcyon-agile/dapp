@@ -191,25 +191,26 @@ function MultipleProjects() {
   // console.log(activeTasks)
 
   return (
-    <div>
+    <div className="overflow-hidden">
       <button
         onClick={toggleMinimize}
-        className="text-blue-600 font-bold fixed right-2 text-xl"
+        className="text-blue-600 font-bold fixed right-4 text-xl"
+        style={{ zIndex: 9999 }}
       >
         {minimal ? "+" : "-"}
       </button>
       {minimal && (
-        <div className="flex justify-center items-center">
+        <div className="w-full ml-2 mt-4">
           {activeTasks &&
             activeTasks.map((data: any) => (
-              <div className="w-full flex mt-6 justify-center" key={data?.id}>
-                <p className="font-medium text-xs text-gray-700 mr-2">
-                  {data?.task?.name}
-                </p>
-                <Timer
-                  started_at={data?.started_at}
-                  text_style="text-xs text-gray-700"
-                />
+              <div className="w-full" key={data?.id}>
+                <p className="text-xs text-gray-700 mr-2">{data?.task?.name}</p>
+                <div className="flex space-x-1 items-center">
+                  <Timer
+                    started_at={data?.started_at}
+                    text_style="text-xs text-gray-700 font-semibold"
+                  />
+                </div>
               </div>
             ))}
         </div>
@@ -427,17 +428,17 @@ function MultipleProjects() {
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
                       <AlertDialogDescription>
-                        This action cannot be undone. This will log you off with your attendance and active tasks.
+                        This action cannot be undone. This will log you off with
+                        your attendance and active tasks.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={logoff}
-                        disabled={loggedOff}
-                      >
+                      <AlertDialogAction onClick={logoff} disabled={loggedOff}>
                         Continue
                       </AlertDialogAction>
                     </AlertDialogFooter>
