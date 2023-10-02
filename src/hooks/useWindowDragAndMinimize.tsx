@@ -15,21 +15,24 @@ function useWindowDragAndMinimize() {
 
     if (minimal) {
       appWindow.setDecorations(true);
-      appWindow.setSize(new LogicalSize(650, 500)).then(() => {
-        setMinimal(!minimal);
-        appWindow.center();
+      appWindow.setSize(new LogicalSize(650, 500)).then(async () => {
+        setMinimal(false);
+        await appWindow.center();
+        await appWindow.setAlwaysOnTop(false);
       });
     } else {
       const newWidth = 200;
       appWindow.setDecorations(false);
       appWindow.setSize(new LogicalSize(newWidth, 70)).then(async () => {
         setMinimal(true);
-        appWindow.setPosition(
+        await appWindow.setPosition(
           new PhysicalPosition(
             monitor ? monitor.size.width - newWidth * 2 : 0,
             0
           )
         );
+
+        await appWindow.setAlwaysOnTop(true);
       });
     }
   };

@@ -5,6 +5,8 @@ use tauri::{
     CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
 };
 
+use tauri_plugin_autostart::MacosLauncher;
+
 #[derive(Clone, serde::Serialize)]
 struct Payload {
     args: Vec<String>,
@@ -69,6 +71,7 @@ fn main() {
             _ => {}
         })
         .plugin(sentry_tauri::plugin())
+        .plugin(tauri_plugin_autostart::init(MacosLauncher::LaunchAgent, Some(vec!["--flag1", "--flag2"])))
         .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
             println!("{}, {argv:?}, {cwd}", app.package_info().name);
 
