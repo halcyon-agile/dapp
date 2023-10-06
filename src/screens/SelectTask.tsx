@@ -7,7 +7,20 @@ import getTasks from "../api/getTasks";
 import getProjects from "../api/getProjects";
 import useActiveTasks from "../data/use-active-tasks";
 import startTaskApi from "../api/startTask";
-import { Alert, AlertDescription, AlertTitle, Button, Input, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../components/ui";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+  Input,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui";
 import { AxiosError } from "axios";
 
 function SelectTask() {
@@ -26,7 +39,7 @@ function SelectTask() {
   const projectIsSelected = selectedProject !== null;
 
   useEffect(() => {
-    fetch(true)
+    fetch(true);
     const userData = localStorage.getItem("token");
     if (!userData) {
       navigate("/login", {
@@ -34,7 +47,7 @@ function SelectTask() {
       });
     }
 
-    setTasks([])
+    setTasks([]);
 
     const fetchProjects = async () => {
       try {
@@ -49,7 +62,7 @@ function SelectTask() {
   }, []);
 
   useEffect(() => {
-    fetch(true)
+    fetch(true);
     const userData = localStorage.getItem("token");
     if (!userData) {
       navigate("/login", {
@@ -57,7 +70,7 @@ function SelectTask() {
       });
     }
 
-    setTasks([])
+    setTasks([]);
 
     const fetchTasks = async (filter: number) => {
       try {
@@ -118,7 +131,9 @@ function SelectTask() {
               <SelectGroup className="max-h-[200px]">
                 <SelectLabel>Projects</SelectLabel>
                 {projects.map((data: any) => (
-                  <SelectItem key={data?.id} value={data?.id}>{data?.name}</SelectItem>
+                  <SelectItem key={data?.id} value={data?.id}>
+                    {data?.name}
+                  </SelectItem>
                 ))}
               </SelectGroup>
             </SelectContent>
@@ -157,41 +172,49 @@ function SelectTask() {
             />
           )}
           {tasks.length > 0 ? (
-            tasks.filter((x: any) => x.name.includes(search) || x.project.name.includes(search)).map((data: any, index: number) => (
-              <button
-                className={`flex w-full py-2 border-b ${
-                  selectedProject === index && "bg-slate-300"
-                }`}
-                key={data?.id}
-                onClick={() => {
-                  setCurrentProject(index);
-                }}
-              >
-                <div
-                  className={`py-1.5 px-2 w-full rounded-md flex flex-row items-center justify-between`}
+            tasks
+              .filter(
+                (x: any) =>
+                  x.name.toLowerCase().includes(search.toLocaleLowerCase()) ||
+                  x.project.name
+                    .toLowerCase()
+                    .includes(search.toLocaleLowerCase())
+              )
+              .map((data: any, index: number) => (
+                <button
+                  className={`flex w-full py-2 border-b ${
+                    selectedProject === index && "bg-slate-300"
+                  }`}
+                  key={data?.id}
+                  onClick={() => {
+                    setCurrentProject(index);
+                  }}
                 >
-                  <p
-                    className={`left-0 top-0 w-full text-1xl flex-1 text-left font-normal text-base text-slate-700`}
+                  <div
+                    className={`py-1.5 px-2 w-full rounded-md flex flex-row items-center justify-between`}
                   >
-                    {data.project.name} - {data.name}
-                  </p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="#334155"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
-                </div>
-              </button>
-            ))
+                    <p
+                      className={`left-0 top-0 w-full text-1xl flex-1 text-left font-normal text-base text-slate-700`}
+                    >
+                      {data.project.name} - {data.name}
+                    </p>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="#334155"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                      />
+                    </svg>
+                  </div>
+                </button>
+              ))
           ) : !fetching ? (
             <Alert>
               <Terminal className="h-4 w-4" />
