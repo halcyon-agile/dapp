@@ -189,6 +189,12 @@ function SelectTask() {
                   onClick={() => {
                     setCurrentProject(index);
                   }}
+                  onDoubleClick={() => {
+                    setCurrentProject(index);
+                    if (!startedTask || projectIsSelected) {
+                      startTask();
+                    }
+                  }}
                 >
                   <div
                     className={`py-1.5 px-2 w-full rounded-md flex flex-row items-center justify-between`}
