@@ -89,16 +89,13 @@ function SelectTask() {
 
     fetchTasks(projectFilter);
   }, [projectFilter]);
-
-  const selectedTask = selectedProject !== null ? tasks[selectedProject] : null;
-
   const startTask = () => {
-    if (!selectedTask?.id) {
+    if (!selectedProject) {
       return;
     }
 
     startingTask(true);
-    startTaskApi(selectedTask.id)
+    startTaskApi(selectedProject)
       .then(() => {
         startingTask(false);
         refetchActiveTasks();
@@ -183,14 +180,14 @@ function SelectTask() {
               .map((data: any, index: number) => (
                 <button
                   className={`flex w-full py-2 border-b ${
-                    selectedProject === index && "bg-slate-300"
+                    selectedProject === data?.id && "bg-slate-300"
                   }`}
                   key={data?.id}
                   onClick={() => {
-                    setCurrentProject(index);
+                    setCurrentProject(data?.id);
                   }}
                   onDoubleClick={() => {
-                    setCurrentProject(index);
+                    setCurrentProject(data?.id);
                     if (!startedTask || projectIsSelected) {
                       startTask();
                     }

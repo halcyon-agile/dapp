@@ -80,13 +80,11 @@ function SelectTaskForConsult() {
     setProjectFilter(value);
   };
 
-  const selectedTask = selectedProject !== null ? tasks[selectedProject] : null;
-
   const onContinue = () => {
     navigate("/log-consultation", {
       replace: false,
       state: {
-        task: selectedTask,
+        task: selectedProject,
       },
     })
   };
@@ -150,14 +148,14 @@ function SelectTaskForConsult() {
             tasks.filter((x: any) => x.name.includes(search) || x.project.name.includes(search)).map((data: any, index: number) => (
               <button
                 className={`flex w-full py-2 border-b ${
-                  selectedProject === index && "bg-slate-300"
+                  selectedProject === data.id && "bg-slate-300"
                 }`}
                 key={data?.id}
                 onClick={() => {
-                  setCurrentProject(index);
+                  setCurrentProject(data.id);
                 }}
                 onDoubleClick={() => {
-                  setCurrentProject(index);
+                  setCurrentProject(data.id);
                   onContinue();
                 }}
               >
