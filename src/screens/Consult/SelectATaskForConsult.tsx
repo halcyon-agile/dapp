@@ -116,7 +116,7 @@ function SelectTaskForConsult() {
         ) : (
           ""
         )}
-        <div className="w-full mt-4 pb-2 border-b">
+        {/* <div className="w-full mt-4 pb-2 border-b">
           <Button
             variant="ghost"
             className="border w-full"
@@ -126,7 +126,7 @@ function SelectTaskForConsult() {
           >
             Create New Task
           </Button>
-        </div>
+        </div> */}
         <div className="flex flex-row items-center justify-between w-full rounded-md gap-2.5 my-2.5">
           <Input
             value={search}
