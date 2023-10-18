@@ -21,7 +21,7 @@ function ScrumItem(props: Props) {
   const stopTask = (taskId: number) => {
     stopTaskApi({ taskId })
       .then(() => {
-        console.log('has run stop task first')
+        // console.log('has run stop task first')
         join(true);
         startTaskApi(props?.data?.id)
           .then(() => {
@@ -65,7 +65,7 @@ function ScrumItem(props: Props) {
                 <Button variant="ghost" className="p-0 rounded-full">
                   <Avatar>
                     {/* <AvatarImage src="" alt="@shadcn" /> */}
-                    <AvatarFallback>{user.data?.id === assignee.id ? "Me" : assignee.first_name.match(/(\b\S)?/g).join("").toUpperCase()}</AvatarFallback>
+                    <AvatarFallback>{user.data?.id === assignee.id ? "Me" : `${assignee.first_name.match(/(\b\S)?/g).join("").toUpperCase()}${assignee.last_name.match(/(\b\S)?/g).join("").toUpperCase()}`}</AvatarFallback>
                   </Avatar>
                 </Button>
               </TooltipTrigger>

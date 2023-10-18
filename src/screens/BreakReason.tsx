@@ -32,7 +32,7 @@ function BreakReason() {
         <div className="w-full py-4 border-b border-slate-200">
           <p className="font-semibold text-xl text-gray-900">Break Reason</p>
         </div>
-        <div className="w-full py-4 border-b border-slate-200">
+        {/* <div className="w-full py-4 border-b border-slate-200">
           <p className="font-normal text-base text-slate-700">Reason 1</p>
         </div>
         <div className="w-full py-4 border-b border-slate-200">
@@ -40,7 +40,7 @@ function BreakReason() {
         </div>
         <div className="w-full py-4 border-b border-slate-200">
           <p className="font-normal text-base text-slate-700">Reason 3</p>
-        </div>
+        </div> */}
         <div className="w-full py-4">
           <Label
             htmlFor="reason"

@@ -89,16 +89,13 @@ function SelectTask() {
 
     fetchTasks(projectFilter);
   }, [projectFilter]);
-
-  const selectedTask = selectedProject !== null ? tasks[selectedProject] : null;
-
   const startTask = () => {
-    if (!selectedTask?.id) {
+    if (!selectedProject) {
       return;
     }
 
     startingTask(true);
-    startTaskApi(selectedTask.id)
+    startTaskApi(selectedProject)
       .then(() => {
         startingTask(false);
         refetchActiveTasks();
@@ -139,7 +136,7 @@ function SelectTask() {
             </SelectContent>
           </Select>
         )}
-        <div className="w-full mt-4 pb-2 border-b">
+        {/* <div className="w-full mt-4 pb-2 border-b">
           <Button
             variant="ghost"
             className="border w-full"
@@ -151,7 +148,7 @@ function SelectTask() {
           >
             Create New Task
           </Button>
-        </div>
+        </div> */}
         <div className="flex flex-row items-center justify-between w-full rounded-md gap-2.5 my-2.5">
           <Input
             value={search}
@@ -183,11 +180,17 @@ function SelectTask() {
               .map((data: any, index: number) => (
                 <button
                   className={`flex w-full py-2 border-b ${
-                    selectedProject === index && "bg-slate-300"
+                    selectedProject === data?.id && "bg-slate-300"
                   }`}
                   key={data?.id}
                   onClick={() => {
-                    setCurrentProject(index);
+                    setCurrentProject(data?.id);
+                  }}
+                  onDoubleClick={() => {
+                    setCurrentProject(data?.id);
+                    if (!startedTask || projectIsSelected) {
+                      startTask();
+                    }
                   }}
                 >
                   <div
