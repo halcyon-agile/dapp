@@ -22,6 +22,7 @@ const requestConsultation = async (
       `/api/tasks/${id}/request-consultation`,
       formData
     );
+    // console.log('response', consultations);
     return consultations.data;
   } catch (error) {
     console.error(error);

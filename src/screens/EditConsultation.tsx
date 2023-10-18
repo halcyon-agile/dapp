@@ -13,6 +13,13 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
 } from "../components/ui";
 import getUsers from "../api/users";
 import { cn } from "../lib/utils";
@@ -67,7 +74,7 @@ function EditConsultation() {
   // console.log('members', members)
   // console.log('user', user)
 
-  console.log(consultation)
+  // console.log('consultation', consultation)
 
   return (
     <main className="flex min-h-screen flex-col p-5">
@@ -193,59 +200,28 @@ function EditConsultation() {
             className="text-black p-1 rounded-md border px-3 font-normal text-base w-full"
             autoCapitalize="none"
           /> */}
-          <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={open}
-                className="w-full justify-between"
-              >
-                {value
-                  ? `${
-                      users.find((user: any) => user.id === value)?.first_name
-                    } ${
-                      users.find((user: any) => user.id === value)?.last_name
-                    }`
-                  : "Select member..."}
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-full p-0">
-              <Command className="w-full">
-                <CommandGroup className="w-full">
-                  {filteredUsers.length > 0 ? (
-                    filteredUsers.map((user: any) => (
-                      <button
-                        key={user?.id}
-                        className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
-                        onClick={() => {
-                          setValue(user.id);
-                          setOpen(false);
-                        }}
-                      >
-                        <p>
-                          {user.first_name} {user.last_name}
-                        </p>
-                      </button>
-                    ))
-                  ) : (
-                    <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
-                      <p>No users.</p>
-                    </div>
-                  )}
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
-          </Popover>
+          <Select onValueChange={(value: any) => setValue(value)}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select member..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup className="max-h-[200px]">
+                <SelectLabel>Projects</SelectLabel>
+                {filteredUsers?.map((user: any) => (
+                  <SelectItem key={`${user?.id}`} value={`${user?.id}`}>{user?.first_name} {user?.last_name}</SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
           <Button
             className="bg-cyan-500"
-            onClick={() => {
+            onClick={async () => {
               if (value) {
                 const list = members;
-                list.push(users.find((user: any) => user.id === value));
+                const selectedUser = users.find((findUser: any) => findUser?.id === Number(value))
+                await list.push(selectedUser);
                 setMembers(list);
-                setValue(null);
+                setValue(null)
               }
             }}
           >
