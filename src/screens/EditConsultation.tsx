@@ -23,8 +23,8 @@ import {
 } from "../components/ui";
 import getUsers from "../api/users";
 import { cn } from "../lib/utils";
-import requestConsultation from "../api/consultations/requestConsultation";
 import useUser from "../data/use-user";
+import updateConsultation from "../api/consultations/edit-consultations";
 
 function EditConsultation() {
   const navigate = useNavigate();
@@ -36,9 +36,11 @@ function EditConsultation() {
   const [members, setMembers] = useState<any>([]);
   const [form, setForm] = useState<{
     started_at: any;
+    time: any
     duration: string;
   }>({
     started_at: "",
+    time: "",
     duration: "",
   });
   const [creating, create] = useState<boolean>(false);
@@ -50,6 +52,7 @@ function EditConsultation() {
     setForm({
       ...form,
       started_at: moment(consultation?.started_at).utc().format("MM/DD/YYYY"),
+      time: moment(consultation?.started_at).utc().format("HH:mm"),
       duration: consultation?.duration,
     })
     setMembers(consultation?.assignees)
@@ -74,7 +77,7 @@ function EditConsultation() {
   // console.log('members', members)
   // console.log('user', user)
 
-  // console.log('consultation', consultation)
+  console.log('consultation', consultation)
 
   return (
     <main className="flex min-h-screen flex-col p-5">
@@ -127,8 +130,10 @@ function EditConsultation() {
             placeholder="< Time >"
             className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
             autoCapitalize="none"
-            // onChange={(e) => setForm({ ...form, password: e.target.value })}
-            // value={form.password}
+            onChange={(e) => {
+              setForm({...form, time: e?.currentTarget?.value})
+            }}
+            value={form.time}
           />
         </div>
       </div>
@@ -271,9 +276,9 @@ function EditConsultation() {
             create(true);
             // const list = members;
             // list.push({ id: user?.data?.id, first_name: user?.data?.first_name, last_name: user?.data?.last_name });
-            requestConsultation(
+            updateConsultation(
               consultation?.id,
-              form.started_at,
+              moment(form.started_at).set({'hour': Number(form.time.split(':')[0]), 'minute': Number(form.time.split(':')[1])}).format(),
               form.duration,
               selected === 0 ? "fixed" : "flexible",
               members

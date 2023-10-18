@@ -98,7 +98,7 @@ function CreateConsultation() {
                 onSelect={(value) =>
                   setForm({
                     ...form,
-                    started_at: moment(value).format("MM/DD/YYYY"),
+                    started_at: moment(value).utc().format("MM/DD/YYYY"),
                   })
                 }
                 initialFocus
@@ -312,7 +312,7 @@ function CreateConsultation() {
             // list.push({ id: user?.data?.id, first_name: user?.data?.first_name, last_name: user?.data?.last_name });
             requestConsultation(
               location?.state?.id,
-              moment(form.started_at).utc().set({'hour': Number(form.time.split(':')[0]), 'minute': Number(form.time.split(':')[1])}).format(),
+              moment(form.started_at).set({'hour': Number(form.time.split(':')[0]), 'minute': Number(form.time.split(':')[1])}).format(),
               form.duration,
               selected === 0 ? "fixed" : "flexible",
               members
