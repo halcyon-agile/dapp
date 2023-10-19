@@ -338,7 +338,6 @@ function MultipleProjects() {
                           </div>
                         )}
                       </div>
-
                       <Graph
                         visible={isGraphVisible(data)}
                         id={data?.task_id}
@@ -361,6 +360,7 @@ function MultipleProjects() {
                         started_at={data?.started_at}
                         onUpdateSuccess={fetchRequiredDatas}
                         isConsultation={data?.consultation_id !== null}
+                        ganttEnabled={data?.task?.project?.project_type?.gantt_project_duration === 1}
                       />
                     </div>
                   </div>
