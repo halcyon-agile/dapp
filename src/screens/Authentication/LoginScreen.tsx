@@ -8,8 +8,8 @@ import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { AxiosError } from "axios";
 import { LogIn } from "lucide-react";
-import { Button } from "../../components/ui";
-import { cn } from "../../lib/utils";
+import useActiveTasks from "../../data/use-active-tasks";
+import { TaskTime } from "../../types";
 
 function LoginScreen() {
   const navigate = useNavigate();
@@ -25,6 +25,10 @@ function LoginScreen() {
   const [errorMessage, setErrorMessage] = useState("");
   const [secure, setSecure] = useState<boolean>(true);
   const [passwordFocused, setPasswordFocused] = useState<boolean>(false);
+  const { data: activeTasks, refetch: refetchActiveTasks } = useActiveTasks();
+  const hasActiveTask = activeTasks
+    ? activeTasks.some((t: TaskTime) => t?.task?.timer_on === 0)
+    : false;
 
   useEffect(() => {
     setErrorMessage("");
@@ -36,8 +40,15 @@ function LoginScreen() {
     try {
       const user = await loginUser(form.email, form.password);
       setUser(user);
-      navigate("/select-task");
-      attemptingLogin(false);
+      refetchActiveTasks().then(() => {
+        // console.log(hasActiveTask)
+        if (hasActiveTask) {
+          navigate("/");
+        } else {
+          navigate("/select-task");
+          attemptingLogin(false);
+        }
+      });
     } catch (error: AxiosError | any) {
       console.log("error", error);
       attemptingLogin(false);
