@@ -8,7 +8,7 @@ const startBreak = async (
   try {
     const response = await request.post(`api/break/start`, {
       reason: breakForm.reason,
-      minutes: Number(breakForm.hours) / 60 + Number(breakForm.minutes),
+      minutes: Number((60 / Number(breakForm.hours)) + Number(breakForm.minutes)),
     });
 
     return response.data;
