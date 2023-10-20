@@ -84,7 +84,7 @@ function SelectTaskForConsult() {
     navigate("/log-consultation", {
       replace: false,
       state: {
-        task: selectedProject,
+        task: tasks.find((task) => task.id === selectedProject),
       },
     })
   };
