@@ -33,7 +33,7 @@ import {
   TooltipTrigger,
 } from "../components/ui";
 import leaveConsultation from "../api/consultations/leave-consultation";
-import portalUrl from "../lib/portalUrl";
+import portalUrl from "../../portalUrl";
 import { TaskTime } from "@/types";
 import stopTaskApi from "../api/stopTask";
 import useAttendance from "../data/use-attendance";
@@ -192,13 +192,13 @@ function MultipleProjects() {
 
   return (
     <div className="overflow-hidden">
-      {/* <button
+      <button
         onClick={toggleMinimize}
         className="text-blue-600 font-bold fixed right-4 text-xl"
         style={{ zIndex: 9999 }}
       >
         {minimal ? "+" : "-"}
-      </button> */}
+      </button>
       {minimal && (
         <div className="w-full ml-2 mt-4">
           {activeTasks &&
@@ -360,10 +360,7 @@ function MultipleProjects() {
                         started_at={data?.started_at}
                         onUpdateSuccess={fetchRequiredDatas}
                         isConsultation={data?.consultation_id !== null}
-                        ganttEnabled={
-                          data?.task?.project?.project_type
-                            ?.gantt_project_duration === 1
-                        }
+                        ganttEnabled={data?.task?.project?.project_type?.gantt_project_duration === 1}
                       />
                     </div>
                   </div>
