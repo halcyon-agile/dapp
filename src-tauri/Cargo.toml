@@ -1,6 +1,6 @@
 [package]
 name = "harp-desktop"
-version = "1.0.7"
+version = "1.1.2"
 description = "HARP App"
 authors = ["you"]
 license = ""

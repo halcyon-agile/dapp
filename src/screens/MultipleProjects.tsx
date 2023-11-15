@@ -66,6 +66,13 @@ function MultipleProjects() {
     status: attendanceStatus,
   } = useAttendance();
   const { data: breaks, status: breaksStatus } = useBreaks();
+  console.log('breaks', breaks)
+
+  useEffect(() => {
+    if (breaks?.breaks && breaks?.breaks?.length > 0) {
+      navigate("/break-timer")
+    }
+  }, [])
 
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [loggedOff, loggingOff] = useState<boolean>(false);
@@ -192,14 +199,14 @@ function MultipleProjects() {
 
   return (
     <div className="overflow-hidden">
-      <button
+      {/* <button
         onClick={toggleMinimize}
         className="text-blue-600 font-bold fixed right-4 text-xl"
         style={{ zIndex: 9999 }}
       >
         {minimal ? "+" : "-"}
-      </button>
-      {minimal && (
+      </button> */}
+      {/* {minimal && (
         <div className="w-full ml-2 mt-4">
           {activeTasks &&
             activeTasks.map((data: any) => (
@@ -214,7 +221,7 @@ function MultipleProjects() {
               </div>
             ))}
         </div>
-      )}
+      )} */}
       {!minimal && (
         <main className="flex min-h-screen flex-col items-center text-black p-5">
           <div className="flex-1 w-full">
@@ -360,7 +367,7 @@ function MultipleProjects() {
                         started_at={data?.started_at}
                         onUpdateSuccess={fetchRequiredDatas}
                         isConsultation={data?.consultation_id !== null}
-                        ganttEnabled={data?.task?.project?.project_type?.gantt_project_duration === 1}
+                        ganttEnabled={data?.task?.project?.project_type?.gantt_project_duration}
                       />
                     </div>
                   </div>
