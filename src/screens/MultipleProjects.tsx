@@ -66,11 +66,15 @@ function MultipleProjects() {
     status: attendanceStatus,
   } = useAttendance();
   const { data: breaks, status: breaksStatus } = useBreaks();
-  console.log('breaks', breaks)
+  // console.log('breaks', breaks)
 
   useEffect(() => {
-    if (breaks?.breaks && breaks?.breaks?.length > 0) {
-      navigate("/break-timer")
+    if (breaks?.breaks) {
+      if (breaks?.breaks?.length > 0) {
+        if (breaks?.breaks?.filter((x: any) => x.ended_at === null).length > 0) {
+          navigate("/break-timer")
+        }
+      }
     }
   }, [])
 
