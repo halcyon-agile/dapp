@@ -1,20 +1,16 @@
 import { useState, useEffect } from "react";
-import {
-  appWindow,
-  PhysicalPosition,
-  LogicalSize,
-  currentMonitor,
-} from "@tauri-apps/api/window";
+import { appWindow, LogicalSize } from "@tauri-apps/api/window";
+import { platform } from "@tauri-apps/api/os";
 
 function useWindowDragAndMinimize() {
+  const [platformName, setPlatformName] = useState("");
   const [minimal, setMinimal] = useState(false);
 
   const toggleMinimize = async () => {
-    const monitor = await currentMonitor();
-    await appWindow.innerSize();
+    if (platformName !== "darwin") return;
 
     if (minimal) {
-      await appWindow.setDecorations(true);
+      appWindow.setDecorations(true);
       appWindow.setSize(new LogicalSize(650, 500)).then(async () => {
         setMinimal(false);
         await appWindow.center();
@@ -22,15 +18,9 @@ function useWindowDragAndMinimize() {
       });
     } else {
       const newWidth = 200;
-      await appWindow.setDecorations(false);
-      appWindow.setSize(new LogicalSize(newWidth, 100)).then(async () => {
+      appWindow.setDecorations(false);
+      appWindow.setSize(new LogicalSize(newWidth, 90)).then(async () => {
         setMinimal(true);
-        await appWindow.setPosition(
-          new PhysicalPosition(
-            monitor ? monitor.size.width - newWidth * 2 : 0,
-            0
-          )
-        );
 
         await appWindow.setAlwaysOnTop(true);
       });
@@ -50,7 +40,13 @@ function useWindowDragAndMinimize() {
     }
   }, [minimal]);
 
-  return { minimal, toggleMinimize };
+  useEffect(() => {
+    platform().then((name: string) => {
+      setPlatformName(name);
+    });
+  }, []);
+
+  return { minimal, toggleMinimize, platformName };
 }
 
 export default useWindowDragAndMinimize;
