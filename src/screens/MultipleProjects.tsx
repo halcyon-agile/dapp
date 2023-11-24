@@ -33,7 +33,7 @@ import {
   TooltipTrigger,
 } from "../components/ui";
 import leaveConsultation from "../api/consultations/leave-consultation";
-import portalUrl from "../lib/portalUrl";
+import portalUrl from "../../portalUrl";
 import { TaskTime } from "@/types";
 import stopTaskApi from "../api/stopTask";
 import useAttendance from "../data/use-attendance";
@@ -66,6 +66,17 @@ function MultipleProjects() {
     status: attendanceStatus,
   } = useAttendance();
   const { data: breaks, status: breaksStatus } = useBreaks();
+  // console.log('breaks', breaks)
+
+  useEffect(() => {
+    if (breaks?.breaks) {
+      if (breaks?.breaks?.length > 0) {
+        if (breaks?.breaks?.filter((x: any) => x.ended_at === null).length > 0) {
+          navigate("/break-timer")
+        }
+      }
+    }
+  }, [])
 
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [loggedOff, loggingOff] = useState<boolean>(false);
@@ -192,14 +203,14 @@ function MultipleProjects() {
 
   return (
     <div className="overflow-hidden">
-      <button
+      {/* <button
         onClick={toggleMinimize}
         className="text-blue-600 font-bold fixed right-4 text-xl"
         style={{ zIndex: 9999 }}
       >
         {minimal ? "+" : "-"}
-      </button>
-      {minimal && (
+      </button> */}
+      {/* {minimal && (
         <div className="w-full ml-2 mt-4">
           {activeTasks &&
             activeTasks.map((data: any) => (
@@ -214,7 +225,7 @@ function MultipleProjects() {
               </div>
             ))}
         </div>
-      )}
+      )} */}
       {!minimal && (
         <main className="flex min-h-screen flex-col items-center text-black p-5">
           <div className="flex-1 w-full">
@@ -338,7 +349,6 @@ function MultipleProjects() {
                           </div>
                         )}
                       </div>
-
                       <Graph
                         visible={isGraphVisible(data)}
                         id={data?.task_id}
@@ -361,6 +371,7 @@ function MultipleProjects() {
                         started_at={data?.started_at}
                         onUpdateSuccess={fetchRequiredDatas}
                         isConsultation={data?.consultation_id !== null}
+                        ganttEnabled={data?.task?.project?.project_type?.gantt_project_duration}
                       />
                     </div>
                   </div>
@@ -385,16 +396,38 @@ function MultipleProjects() {
                 >
                   <p className="text-slate-900 text-xs text-center">Add Task</p>
                 </button>
-                <button
-                  className="rounded-md border border-slate-200 py-2 px-4"
-                  onClick={() => {
-                    navigate("/take-a-break");
-                  }}
-                >
-                  <p className="text-slate-900 text-xs text-center">
-                    Break Out
-                  </p>
-                </button>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        className="rounded-md border border-slate-200 py-2 px-4 bg-slate-200"
+                        // onClick={() => {
+                        //   navigate("/take-a-break");
+                        // }}
+                      >
+                        <p className="text-slate-900 text-xs text-center">
+                          Break Out
+                        </p>
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="#dc2626"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"
+                        />
+                      </svg>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
               <div className="flex">
                 <AlertDialog>

@@ -26,7 +26,12 @@ function LogConsultation() {
 
   const submit = () => {
     setLoading(true)
-    suddenConsultation(task?.id, moment().utc().set({'hour': Number(form.start.split(':')[0]), 'minute': Number(form.start.split(':')[1])}).format(), moment().utc().set({'hour': Number(form.end.split(':')[0]), 'minute': Number(form.end.split(':')[1])}).format())
+    // console.log('data', {
+    //   task_id: task?.id,
+    //   start: moment().set({'hour': Number(form.start.split(':')[0]), 'minute': Number(form.start.split(':')[1])}).utc().format(),
+    //   end: moment().set({'hour': Number(form.end.split(':')[0]), 'minute': Number(form.end.split(':')[1])}).utc().format(),
+    // })
+    suddenConsultation(task?.id, moment().set({'hour': Number(form.start.split(':')[0]), 'minute': Number(form.start.split(':')[1])}).format(), moment().set({'hour': Number(form.end.split(':')[0]), 'minute': Number(form.end.split(':')[1])}).format())
       .then(() => {
         setLoading(false)
         navigate('/')
@@ -104,6 +109,9 @@ function LogConsultation() {
               autoCapitalize="none"
               onChange={(e) => {
                 setForm({...form, start: e?.currentTarget?.value})
+                if (moment().utc().set({'hour': Number(e?.currentTarget?.value.split(':')[0]), 'minute': Number(e?.currentTarget?.value.split(':')[1])}).diff(moment().utc().set({'hour': Number(form.end.split(':')[0]), 'minute': Number(form.end.split(':')[1])})) > 0) {
+                  setForm({...form, end: e?.currentTarget?.value })
+                }
               }}
               value={form.start}
             />
@@ -122,7 +130,9 @@ function LogConsultation() {
               className="text-black p-1 rounded-md border px-3 font-normal text-base w-full mt-1.5"
               autoCapitalize="none"
               onChange={(e) => {
-                setForm({...form, end: e?.currentTarget?.value})
+                if (moment().utc().set({'hour': Number(e?.currentTarget?.value.split(':')[0]), 'minute': Number(e?.currentTarget?.value.split(':')[1])}).diff(moment().utc().set({'hour': Number(form.start.split(':')[0]), 'minute': Number(form.start.split(':')[1])})) > 0) {
+                  setForm({...form, end: e?.currentTarget?.value})
+                }
               }}
               // onChange={(event: any) => console.log(moment(event?.target?.valueAsDate).set({'year': moment().year(), 'day': moment().day(), 'month': moment().month()}).format('HH:mm'))}
               value={form.end}

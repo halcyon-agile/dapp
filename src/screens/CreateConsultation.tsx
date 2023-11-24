@@ -57,7 +57,7 @@ function CreateConsultation() {
 
   const filteredUsers = removeCurrentUserFromList.filter((userItem: any) => {
     return members.every((member: any) => {
-      return member.id !== userItem.id
+      return member?.id !== userItem.id
     });
   });
 
@@ -65,7 +65,8 @@ function CreateConsultation() {
   // console.log('form', form)
 
   // console.log('members', members)
-  // console.log('user', user)
+  // console.log('value', value)
+  // console.log('users', users)
 
   return (
     <main className="flex min-h-screen flex-col p-5">
@@ -97,7 +98,7 @@ function CreateConsultation() {
                 onSelect={(value) =>
                   setForm({
                     ...form,
-                    started_at: moment(value).format("MM/DD/YYYY"),
+                    started_at: moment(value).utc().format("MM/DD/YYYY"),
                   })
                 }
                 initialFocus
@@ -200,8 +201,8 @@ function CreateConsultation() {
             <SelectContent>
               <SelectGroup className="max-h-[200px]">
                 <SelectLabel>Projects</SelectLabel>
-                {filteredUsers.map((user: any) => (
-                  <SelectItem key={`${user?.id}`} value={`${user?.id}`}>{user.first_name} {user.last_name}</SelectItem>
+                {filteredUsers?.map((user: any) => (
+                  <SelectItem key={`${user?.id}`} value={`${user?.id}`}>{user?.first_name} {user?.last_name}</SelectItem>
                 ))}
               </SelectGroup>
             </SelectContent>
@@ -227,8 +228,8 @@ function CreateConsultation() {
             <PopoverContent className="w-full p-0">
               <Command className="w-full">
                 <CommandGroup className="w-full">
-                  {filteredUsers.length > 0 ? (
-                    filteredUsers.map((user: any) => (
+                  {filteredUsers?.length > 0 ? (
+                    filteredUsers?.map((user: any) => (
                       <button
                         key={user?.id}
                         className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
@@ -253,12 +254,13 @@ function CreateConsultation() {
           </Popover> */}
           <Button
             className="bg-cyan-500"
-            onClick={() => {
+            onClick={async () => {
               if (value) {
                 const list = members;
-                list.push(users.find((user: any) => user.id === value));
+                const selectedUser = users.find((findUser: any) => findUser?.id === Number(value))
+                await list.push(selectedUser);
                 setMembers(list);
-                setValue(null);
+                setValue(null)
               }
             }}
           >
@@ -270,10 +272,10 @@ function CreateConsultation() {
         {members.map((item: any, index: number) => (
           <div
             className="w-full py-3.5 border-b flex flex-row items-center justify-between"
-            key={item.id}
+            key={item?.id}
           >
             <p className="font-medium text-sm text-slate-700">
-              {item.first_name} {item.last_name}
+              {item?.first_name} {item?.last_name}
             </p>
             <button
               onClick={() => {
@@ -310,7 +312,7 @@ function CreateConsultation() {
             // list.push({ id: user?.data?.id, first_name: user?.data?.first_name, last_name: user?.data?.last_name });
             requestConsultation(
               location?.state?.id,
-              moment(form.started_at).utc().set({'hour': Number(form.time.split(':')[0]), 'minute': Number(form.time.split(':')[1])}).format(),
+              moment(form.started_at).set({'hour': Number(form.time.split(':')[0]), 'minute': Number(form.time.split(':')[1])}).utc().format(),
               form.duration,
               selected === 0 ? "fixed" : "flexible",
               members

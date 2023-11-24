@@ -37,11 +37,12 @@ function TakeABreak() {
                 if (e.target.value === '' || re.test(e.target.value)) {
                   setBreakForm({
                     ...breakForm,
-                    hours: e.target.value,
+                    hours: `${e.target.value}`,
                   })
                 }
               }}
               value={breakForm.hours !== null ? breakForm.hours : ""}
+              maxLength={1}
             />
           </div>
           <div className="flex-col flex-1 gap-1.5">
@@ -57,11 +58,12 @@ function TakeABreak() {
                 if (e.target.value === '' || re.test(e.target.value)) {
                   setBreakForm({
                     ...breakForm,
-                    minutes: e.target.value,
+                    minutes: `${e.target.value}`,
                   })
                 }
               }}
               value={breakForm.minutes !== null ? breakForm.minutes : ""}
+              maxLength={2}
             />
           </div>
         </div>

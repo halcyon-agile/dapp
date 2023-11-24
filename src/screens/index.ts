@@ -1,4 +1,4 @@
-import LoginScreen from "./LoginScreen";
+import LoginScreen from "./Authentication/LoginScreen";
 
 import TakeABreak from "./TakeABreak";
 import SelectTask from "./SelectTask";

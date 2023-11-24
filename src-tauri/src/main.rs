@@ -36,6 +36,14 @@ fn main() {
         .add_item(hide);
     let system_tray = SystemTray::new().with_menu(tray_menu);
     tauri::Builder::default()
+        .plugin(sentry_tauri::plugin())
+        .plugin(tauri_plugin_autostart::init(MacosLauncher::LaunchAgent, Some(vec!["--flag1", "--flag2"])))
+        .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
+            println!("{}, {argv:?}, {cwd}", app.package_info().name);
+
+            app.emit_all("single-instance", Payload { args: argv, cwd })
+                .unwrap();
+        }))
         .on_window_event(|event| match event.event() {
             tauri::WindowEvent::CloseRequested { api, .. } => {
                 event.window().hide().unwrap();
@@ -51,6 +59,15 @@ fn main() {
                 ..
             } => {
                 // println!("system tray received a left click");
+                let window = app.get_window("main").unwrap();
+                window.show().unwrap();
+            }
+            SystemTrayEvent::DoubleClick {
+                position: _,
+                size: _,
+                ..
+            } => {
+                // println!("system tray received a double click");
                 let window = app.get_window("main").unwrap();
                 window.show().unwrap();
             }
@@ -70,14 +87,6 @@ fn main() {
             },
             _ => {}
         })
-        .plugin(sentry_tauri::plugin())
-        .plugin(tauri_plugin_autostart::init(MacosLauncher::LaunchAgent, Some(vec!["--flag1", "--flag2"])))
-        .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
-            println!("{}, {argv:?}, {cwd}", app.package_info().name);
-
-            app.emit_all("single-instance", Payload { args: argv, cwd })
-                .unwrap();
-        }))
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
