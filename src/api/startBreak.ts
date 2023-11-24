@@ -5,10 +5,11 @@ import { Breaks, BreakForm } from "@/types";
 const startBreak = async (
   breakForm: BreakForm
 ): Promise<Breaks | AxiosError | any> => {
+  const hourToMinutes = 60 * parseInt(breakForm?.hours.length > 0 ? breakForm.hours : "0")
   try {
     const response = await request.post(`api/break/start`, {
       reason: breakForm.reason,
-      minutes: Number(60 / breakForm.hours > 0 ? Number(breakForm.hours) : 0 + breakForm.minutes > 0 ? Number(breakForm.minutes) : 0),
+      minutes: hourToMinutes + breakForm.minutes !== "" ? Number(breakForm.minutes) : 0,
     });
 
     return response.data;
